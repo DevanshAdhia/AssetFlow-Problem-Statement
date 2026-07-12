@@ -15,8 +15,9 @@ The AssetFlow Admin Dashboard is an enterprise-grade UI prototype built using Re
 
 ### 1. Advanced Authentication Flow
 - **Login/Signup:** Includes a modern UI with split-screen layouts.
+- **Social Login:** Integrated UI for "Continue with Google" including native SVG iconography and dividers.
 - **Email Verification:** Interactive "Send OTP" mechanics that lock input fields upon successful verification.
-- **International Phone Support:** Custom dropdown component supporting country flags via FlagCDN.
+- **International Phone Support:** Custom dropdown component supporting country flags via FlagCDN (bypassing native Windows emoji limitations).
 
 ### 2. Administrator Terms & Conditions
 - **Enterprise Policy Gate:** Administrators must agree to the Terms & Conditions before accessing the dashboard.
