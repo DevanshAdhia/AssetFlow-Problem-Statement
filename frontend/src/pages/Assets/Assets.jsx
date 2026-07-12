@@ -15,6 +15,7 @@ const Assets = () => {
   const [categoryFilter, setCategoryFilter] = useState('All');
   const [statusFilter, setStatusFilter] = useState('All');
   const [showModal, setShowModal] = useState(false);
+  const [newAssetStatus, setNewAssetStatus] = useState('Available');
 
   const filteredAssets = mockAssets.filter(asset => {
     const matchesSearch = asset.tag.toLowerCase().includes(searchTerm.toLowerCase()) || 
@@ -150,12 +151,28 @@ const Assets = () => {
               </div>
               <div className="form-group mt-3">
                 <label className="form-label">Initial Status</label>
-                <select className="form-control">
-                  <option>Available</option>
-                  <option>Allocated</option>
-                  <option>In Repair</option>
+                <select 
+                  className="form-control" 
+                  value={newAssetStatus}
+                  onChange={(e) => setNewAssetStatus(e.target.value)}
+                >
+                  <option value="Available">Available</option>
+                  <option value="Allocated">Allocated</option>
+                  <option value="In Repair">In Repair</option>
                 </select>
               </div>
+
+              {newAssetStatus === 'Allocated' && (
+                <div className="form-group mt-3" style={{ animation: 'fadeIn 0.2s ease' }}>
+                  <label className="form-label text-primary">Assign To (Employee / Asset Manager)</label>
+                  <select className="form-control border-primary">
+                    <option value="">Select recipient...</option>
+                    <option value="emp1">Alex Johnson (Dept Head - IT)</option>
+                    <option value="emp2">Sarah Smith (Asset Manager - HR)</option>
+                    <option value="emp3">Michael Chang (Employee - Dev)</option>
+                  </select>
+                </div>
+              )}
             </div>
             <div className="modal-footer mt-4 flex gap-2">
               <button className="btn btn-primary flex-1" onClick={() => setShowModal(false)}>Register Asset</button>
