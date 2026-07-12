@@ -14,6 +14,7 @@ const initialAuditData = [
 const Audit = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filter, setFilter] = useState('All');
+  const [showModal, setShowModal] = useState(false);
 
   const filteredData = initialAuditData.filter(item => {
     const matchesSearch = item.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
@@ -46,11 +47,49 @@ const Audit = () => {
           <button className="btn btn-outline">
             <Filter size={18} /> Filter
           </button>
-          <button className="btn btn-primary">
-            Start New Scan
+          <button className="btn btn-primary" onClick={() => setShowModal(true)}>
+            Create Audit Cycle
           </button>
         </div>
       </div>
+
+      {showModal && (
+        <div className="modal-overlay" onClick={() => setShowModal(false)}>
+          <div className="modal-content" onClick={e => e.stopPropagation()}>
+            <div className="modal-header">
+              <h2>Create New Audit Cycle</h2>
+              <button className="close-btn" onClick={() => setShowModal(false)}>&times;</button>
+            </div>
+            <div className="modal-body">
+              <div className="form-group">
+                <label className="form-label">Audit Cycle Name</label>
+                <input type="text" className="form-control" placeholder="e.g. Q4 End of Year Audit" />
+              </div>
+              <div className="form-group mt-3">
+                <label className="form-label">Define Scope (Department / Location)</label>
+                <select className="form-control">
+                  <option>All Departments</option>
+                  <option>IT Infrastructure</option>
+                  <option>Human Resources</option>
+                  <option>Facilities Management</option>
+                </select>
+              </div>
+              <div className="form-group mt-3">
+                <label className="form-label">Assign Primary Auditor</label>
+                <select className="form-control">
+                  <option>Select Employee...</option>
+                  <option>Alex Johnson (Dept Head)</option>
+                  <option>Emma Davis (Asset Manager)</option>
+                </select>
+              </div>
+            </div>
+            <div className="modal-footer mt-4 flex gap-2">
+              <button className="btn btn-primary flex-1" onClick={() => setShowModal(false)}>Initialize Cycle</button>
+              <button className="btn btn-outline" onClick={() => setShowModal(false)}>Cancel</button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="audit-stats-grid">
         <div className="stat-card">
