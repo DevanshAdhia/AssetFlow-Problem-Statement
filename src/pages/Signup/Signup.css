@@ -47,8 +47,8 @@
 
 .phone-input-group {
   display: flex;
+  gap: 0.5rem; /* Add margin between select and input */
   position: relative;
-  /* Removed gap for seamless design */
 }
 
 .custom-country-select {
@@ -66,9 +66,8 @@
   padding: 0.75rem 0.5rem;
   background-color: var(--surface);
   user-select: none;
-  border-right: none;
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
 }
 
 .chevron-icon {
@@ -118,6 +117,4 @@
 .phone-number {
   flex: 1;
   width: 100% !important; /* Force override to prevent squishing */
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
 }

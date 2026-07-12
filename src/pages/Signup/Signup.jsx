@@ -128,14 +128,16 @@ const Signup = () => {
           </div>
         </div>
 
-        <div className="form-group">
-          <label className="form-label">Password</label>
-          <input type="password" className="form-control" placeholder="Create password" required />
-        </div>
+        <div className="form-row">
+          <div className="form-group half-width">
+            <label className="form-label">Password</label>
+            <input type="password" className="form-control" placeholder="Create password" required />
+          </div>
 
-        <div className="form-group">
-          <label className="form-label">Confirm Password</label>
-          <input type="password" className="form-control" placeholder="Confirm password" required />
+          <div className="form-group half-width">
+            <label className="form-label">Confirm Password</label>
+            <input type="password" className="form-control" placeholder="Confirm password" required />
+          </div>
         </div>
 
         <div className="form-options">
