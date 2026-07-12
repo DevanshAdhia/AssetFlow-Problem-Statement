@@ -18,6 +18,7 @@ import Maintenance from '../pages/Maintenance/Maintenance';
 import Audit from '../pages/Audit/Audit';
 import Allocation from '../pages/Allocation/Allocation';
 import OrganizationSetup from '../pages/OrganizationSetup/OrganizationSetup';
+import Assets from '../pages/Assets/Assets';
 import EditProfile from '../pages/Profile/EditProfile';
 import Terms from '../pages/Terms/Terms';
 import Unauthorized from '../pages/Unauthorized/Unauthorized';
@@ -39,6 +40,7 @@ const AppRoutes = () => {
         <Route path="/" element={<Navigate to="/dashboard" replace />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/setup" element={<OrganizationSetup />} />
+        <Route path="/assets" element={<Assets />} />
         <Route path="/allocation" element={<Allocation />} />
         <Route path="/maintenance" element={<Maintenance />} />
         <Route path="/audit" element={<Audit />} />
