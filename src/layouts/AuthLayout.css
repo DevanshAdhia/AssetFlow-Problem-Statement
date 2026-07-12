@@ -19,10 +19,22 @@
   background: var(--surface);
   border-radius: var(--radius);
   box-shadow: var(--shadow-lg);
-  padding: 2.5rem 2rem;
+  padding: 2rem;
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255,255,255,0.2);
   animation: slideUp 0.5s ease-out forwards;
+  max-height: 90vh;
+  overflow-y: auto;
+  width: 100%;
+}
+
+/* Hide scrollbar for auth card */
+.auth-card::-webkit-scrollbar {
+  display: none;
+}
+.auth-card {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 @keyframes slideUp {
