@@ -62,16 +62,30 @@ Design and develop an Enterprise Asset & Resource Management System where organi
 - Raises maintenance requests.
 - Initiates return/transfer requests.
 
-## 5. Basic Workflow
+## 5. Role-Based Workflows
 
-- **Admin Setup:** Admin sets up departments, asset categories, and promotes select employees to Department Head / Asset Manager.
-- **Registration:** Asset Manager registers a new asset, which enters the system as Available.
-- **Allocation:** Asset is allocated to an employee/department (blocked if already allocated—a transfer request is required instead) or marked as a shared bookable resource.
-- **Booking:** Employees book shared resources by time slot; overlapping requests are rejected automatically.
-- **Maintenance:** If an asset needs repair, the holder raises a maintenance request, which must be approved before work begins and before the asset flips to "Under Maintenance".
-- **Transfers/Returns:** Assets are transferred or returned as needs change; overdue returns are flagged automatically.
-- **Auditing:** Periodic audit cycles assign auditors, verify assets, and auto-generate discrepancy reports before closing.
-- **Tracking:** All activity is tracked through notifications, logs, and reports.
+### Admin Workflow
+1. **Onboarding & Setup:** Logs in and accesses Organization Setup.
+2. **Master Data:** Creates departments and asset categories.
+3. **Role Assignment:** Reviews the Employee Directory and promotes specific users to Department Head or Asset Manager.
+4. **Oversight:** Monitors organization-wide analytics and audit cycles on the Dashboard and Reports screens.
+
+### Asset Manager Workflow
+1. **Inventory Entry:** Registers new assets into the system, generating tags and setting initial conditions.
+2. **Allocation:** Approves direct allocations to employees or departments.
+3. **Approvals Pipeline:** Reviews and approves/rejects transfer requests and maintenance requests in the Kanban board.
+4. **Auditing:** Reviews auto-generated discrepancy reports from audit cycles and resolves "Missing" or "Damaged" flags.
+
+### Department Head Workflow
+1. **Visibility:** Views all assets currently allocated to their specific department.
+2. **Department Needs:** Books shared resources (e.g., conference rooms) on behalf of their department.
+3. **Internal Approvals:** Approves transfer/allocation requests originating from or targeting their department.
+
+### Employee Workflow
+1. **Daily Usage:** Logs in to view assets currently assigned to them.
+2. **Resource Booking:** Uses the calendar view to book shared resources for specific time slots (e.g., projectors, vehicles).
+3. **Issue Reporting:** If an asset breaks, raises a Maintenance Request and attaches photos.
+4. **Returns:** Initiates return or transfer requests when an asset is no longer needed.
 
 ## 6. Features & Application Screens
 
