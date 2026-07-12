@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Calendar as CalendarIcon, Clock, Users, Tv, Monitor, Plus, MapPin } from 'lucide-react';
+import { Calendar as CalendarIcon, Clock, Users, Tv, Monitor, Plus, MapPin, Search } from 'lucide-react';
 import './Bookings.css';
 
 const resources = [
