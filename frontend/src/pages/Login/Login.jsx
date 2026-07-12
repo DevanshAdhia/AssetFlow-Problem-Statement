@@ -148,15 +148,6 @@ const Login = () => {
         </p>
       </div>
 
-      {/* Demo quick-login pills */}
-      <div className="demo-pills">
-        <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: 500 }}>Quick demo:</span>
-        {DEMO_USERS.map(u => (
-          <button key={u.role} type="button" className="demo-pill" onClick={() => fillDemo(u)}>
-            <Shield size={12} /> {u.role}
-          </button>
-        ))}
-      </div>
 
       <form onSubmit={handleLogin} className="auth-form">
         {error && <div className="error-message text-danger mb-3 text-sm">{error}</div>}
