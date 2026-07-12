@@ -24,6 +24,15 @@ const DEMO_USERS = [
     status: 'Active',
   },
   {
+    name: 'Suresh Kumar',
+    email: 'depthead@assetflow.com',
+    password: 'head123',
+    phone: '+91 99887 76655',
+    department: 'Engineering',
+    role: 'Department Head',
+    status: 'Active',
+  },
+  {
     name: 'Rahul Verma',
     email: 'employee@assetflow.com',
     password: 'emp123',
@@ -35,9 +44,10 @@ const DEMO_USERS = [
 ];
 
 const ROLE_ROUTES = {
-  Admin:          '/dashboard',
-  'Asset Manager': '/asset-manager/dashboard',
-  Employee:       '/dashboard',
+  Admin:             '/dashboard',
+  'Asset Manager':   '/asset-manager/dashboard',
+  'Department Head': '/dept-head/dashboard',
+  Employee:          '/dashboard',
 };
 
 const buildAvatar = (name) =>

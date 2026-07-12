@@ -32,6 +32,20 @@ import AssetManagerReports from '../pages/AssetManager/AMReports';
 import AssetManagerNotifications from '../pages/AssetManager/AMNotifications';
 import AssetManagerActivityLogs from '../pages/AssetManager/AMActivityLogs';
 
+// Dept Head Pages
+import DeptHeadLayout from '../layouts/DeptHeadLayout';
+import DHDashboard from '../pages/DeptHead/DHDashboard';
+import DHAssets from '../pages/DeptHead/DHAssets';
+import DHAllocation from '../pages/DeptHead/DHAllocation';
+import DHTransfers from '../pages/DeptHead/DHTransfers';
+import DHBookings from '../pages/DeptHead/DHBookings';
+import DHCalendar from '../pages/DeptHead/DHCalendar';
+import DHEmployees from '../pages/DeptHead/DHEmployees';
+import DHReports from '../pages/DeptHead/DHReports';
+import DHNotifications from '../pages/DeptHead/DHNotifications';
+import DHActivityLogs from '../pages/DeptHead/DHActivityLogs';
+import DHProfile from '../pages/DeptHead/DHProfile';
+
 import EditProfile from '../pages/Profile/EditProfile';
 import Terms from '../pages/Terms/Terms';
 import Unauthorized from '../pages/Unauthorized/Unauthorized';
@@ -79,6 +93,22 @@ const AppRoutes = () => {
         <Route path="/asset-manager/activity-logs" element={<AssetManagerActivityLogs />} />
         <Route path="/asset-manager/profile" element={<Profile />} />
         <Route path="/asset-manager/edit-profile" element={<EditProfile />} />
+      </Route>
+
+      {/* Dept Head Routes */}
+      <Route element={<DeptHeadLayout />}>
+        <Route path="/dept-head" element={<Navigate to="/dept-head/dashboard" replace />} />
+        <Route path="/dept-head/dashboard" element={<DHDashboard />} />
+        <Route path="/dept-head/assets" element={<DHAssets />} />
+        <Route path="/dept-head/allocation" element={<DHAllocation />} />
+        <Route path="/dept-head/transfers" element={<DHTransfers />} />
+        <Route path="/dept-head/bookings" element={<DHBookings />} />
+        <Route path="/dept-head/calendar" element={<DHCalendar />} />
+        <Route path="/dept-head/employees" element={<DHEmployees />} />
+        <Route path="/dept-head/reports" element={<DHReports />} />
+        <Route path="/dept-head/notifications" element={<DHNotifications />} />
+        <Route path="/dept-head/activity-logs" element={<DHActivityLogs />} />
+        <Route path="/dept-head/profile" element={<DHProfile />} />
       </Route>
 
       {/* Error & Public Routes */}
