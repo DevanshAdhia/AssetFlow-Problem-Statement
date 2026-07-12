@@ -14,9 +14,9 @@ const mockHistory = [
 ];
 
 const mockActiveAllocations = [
-  { id: 1, tag: 'AF-001', asset: 'Dell XPS 15 Laptop', empId: 'EMP-1042', person: 'John Smith', department: 'IT', date: '10/05/2026' },
-  { id: 2, tag: 'AF-022', asset: 'MacBook Pro M3', empId: 'EMP-1088', person: 'Sarah Jenkins', department: 'Sales', date: '12/06/2026' },
-  { id: 3, tag: 'AF-031', asset: 'ThinkPad T14', empId: 'EMP-1105', person: 'Michael Chang', department: 'Development', date: '05/01/2026' }
+  { id: 1, tag: 'AF-001', asset: 'Dell XPS 15 Laptop', empId: 'EMP-1042', person: 'John Smith', department: 'IT', date: '10/05/2026', approvedBy: 'Admin (System)' },
+  { id: 2, tag: 'AF-022', asset: 'MacBook Pro M3', empId: 'EMP-1088', person: 'Sarah Jenkins', department: 'Sales', date: '12/06/2026', approvedBy: 'David Lee' },
+  { id: 3, tag: 'AF-031', asset: 'ThinkPad T14', empId: 'EMP-1105', person: 'Michael Chang', department: 'Development', date: '05/01/2026', approvedBy: 'Alex Johnson' }
 ];
 
 const Allocation = () => {
@@ -64,6 +64,7 @@ const Allocation = () => {
                   <th>Allocated To</th>
                   <th>Department</th>
                   <th>Date Assigned</th>
+                  <th>Approved By</th>
                 </tr>
               </thead>
               <tbody>
@@ -75,6 +76,7 @@ const Allocation = () => {
                     <td className="font-medium">{alloc.person}</td>
                     <td>{alloc.department}</td>
                     <td>{alloc.date}</td>
+                    <td className="text-muted text-sm">{alloc.approvedBy}</td>
                   </tr>
                 ))}
               </tbody>
