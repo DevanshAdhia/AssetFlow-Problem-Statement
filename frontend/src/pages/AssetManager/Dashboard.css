@@ -1,0 +1,9 @@
+/* Quick action button */
+.am-quick-action-btn {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 0.4rem; padding: 1rem 0.5rem;
+  border-radius: var(--am-radius); border: 1px solid;
+  cursor: pointer; transition: var(--am-transition);
+  background: transparent;
+}
+.am-quick-action-btn:hover { transform: translateY(-2px); box-shadow: var(--am-shadow-md); }
