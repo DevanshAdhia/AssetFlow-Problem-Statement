@@ -78,7 +78,7 @@ const EmpBookings = () => {
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '350px 1fr', gap: '1.5rem', alignItems: 'flex-start' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.5rem', alignItems: 'flex-start' }}>
         {/* Left Column */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
           <div className="emp-card" style={{ marginBottom: 0 }}>

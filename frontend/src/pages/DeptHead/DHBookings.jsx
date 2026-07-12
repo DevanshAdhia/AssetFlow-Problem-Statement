@@ -66,12 +66,12 @@ const DHBookings = () => {
         <div className="dh-modal-overlay" onClick={()=>setShowForm(false)}>
           <div className="dh-modal dh-modal-lg" onClick={e=>e.stopPropagation()}>
             <div className="dh-modal-header">
-              <h2 className="dh-modal-title"><BookOpen size={18} style={{display:'inline',marginRight:8,color:'#7c3aed'}}/>Book a Resource</h2>
+              <h2 className="dh-modal-title"><BookOpen size={18} style={{display:'inline',marginRight:8,color:'#2563eb'}}/>Book a Resource</h2>
               <button className="dh-close-btn" onClick={()=>setShowForm(false)}><X size={18}/></button>
             </div>
             <form onSubmit={handleBook}>
               <div className="dh-modal-body">
-                <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'1rem'}}>
+                <div style={{display:'grid',gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',gap:'1rem'}}>
                   <div>
                     <label style={{fontSize:'0.82rem',fontWeight:600,display:'block',marginBottom:6}}>Resource *</label>
                     <select className="dh-form-control" style={{width:'100%'}} value={form.resource} onChange={e=>f('resource',e.target.value)}>
@@ -128,7 +128,7 @@ const DHBookings = () => {
           return (
             <div key={r.id} className="dh-card" style={{padding:'1rem',cursor:'pointer',transition:'all 0.15s'}} onClick={()=>{setForm({...form,resource:r.name});setShowForm(true);}}>
               <div style={{display:'flex',alignItems:'center',gap:'0.6rem',marginBottom:'0.5rem'}}>
-                <div style={{width:34,height:34,borderRadius:8,background:'rgba(124,58,237,0.1)',color:'#7c3aed',display:'flex',alignItems:'center',justifyContent:'center'}}><Icon size={16}/></div>
+                <div style={{width:34,height:34,borderRadius:8,background:'rgba(124,58,237,0.1)',color:'#2563eb',display:'flex',alignItems:'center',justifyContent:'center'}}><Icon size={16}/></div>
                 <div><p style={{margin:0,fontWeight:700,fontSize:'0.85rem'}}>{r.name}</p><span style={{fontSize:'0.72rem',color:'var(--dh-muted)'}}>{r.type} · {r.floor}</span></div>
               </div>
               {r.capacity && <span style={{fontSize:'0.75rem',color:'var(--dh-muted)'}}><Users size={12} style={{display:'inline',marginRight:4}}/>{r.capacity} seats</span>}

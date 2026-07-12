@@ -42,7 +42,7 @@ const DHEmployees = () => {
               <button className="dh-close-btn" onClick={() => setViewEmp(null)}><X size={18}/></button>
             </div>
             <div className="dh-modal-body">
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1.5rem' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1rem', marginBottom: '1.5rem' }}>
                 <div><p style={{ margin: '0 0 3px', fontSize: '0.75rem', color: 'var(--dh-muted)', fontWeight: 600 }}>Employee ID</p><p style={{ margin: 0, fontWeight: 700 }}>{viewEmp.id}</p></div>
                 <div><p style={{ margin: '0 0 3px', fontSize: '0.75rem', color: 'var(--dh-muted)', fontWeight: 600 }}>Role</p><p style={{ margin: 0, fontWeight: 700 }}>{viewEmp.role}</p></div>
                 <div><p style={{ margin: '0 0 3px', fontSize: '0.75rem', color: 'var(--dh-muted)', fontWeight: 600 }}>Email</p><p style={{ margin: 0 }}>{viewEmp.email}</p></div>

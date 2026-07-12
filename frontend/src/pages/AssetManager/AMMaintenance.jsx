@@ -62,11 +62,11 @@ const AMMaintenance = () => {
             <form onSubmit={handleAdd}>
               <div className="am-modal-body" style={{display:'flex',flexDirection:'column',gap:'0.85rem'}}>
                 <div className="am-form-group"><label className="am-form-label">Issue / Title *</label><input className="am-form-control" value={form.title} onChange={e=>setForm(p=>({...p,title:e.target.value}))} required placeholder="e.g. Screen not turning on"/></div>
-                <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'0.75rem'}}>
+                <div style={{display:'grid',gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',gap:'0.75rem'}}>
                   <div className="am-form-group"><label className="am-form-label">Asset Name</label><input className="am-form-control" value={form.asset} onChange={e=>setForm(p=>({...p,asset:e.target.value}))} placeholder="Dell XPS Laptop"/></div>
                   <div className="am-form-group"><label className="am-form-label">Asset Tag</label><input className="am-form-control" value={form.tag} onChange={e=>setForm(p=>({...p,tag:e.target.value}))} placeholder="AF-001"/></div>
                 </div>
-                <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'0.75rem'}}>
+                <div style={{display:'grid',gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',gap:'0.75rem'}}>
                   <div className="am-form-group"><label className="am-form-label">Priority</label><select className="am-form-control" value={form.priority} onChange={e=>setForm(p=>({...p,priority:e.target.value}))}><option>High</option><option>Medium</option><option>Low</option></select></div>
                   <div className="am-form-group"><label className="am-form-label">Technician</label><input className="am-form-control" value={form.technician} onChange={e=>setForm(p=>({...p,technician:e.target.value}))} placeholder="Technician name"/></div>
                 </div>

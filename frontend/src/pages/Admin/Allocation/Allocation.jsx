@@ -114,7 +114,7 @@ const NewAllocationModal = ({ assets, currentUserName, onClose, onSubmit }) => {
           <div className="modal-divider" />
 
           {/* Employee details */}
-          <div className="grid-form col-2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+          <div className="grid-form col-2" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '0.75rem' }}>
             <div className="form-group">
               <label className="form-label">Employee ID <span className="text-danger">*</span></label>
               <input className="form-control" placeholder="EMP-1234" value={form.empId} onChange={e => set('empId', e.target.value)} required />

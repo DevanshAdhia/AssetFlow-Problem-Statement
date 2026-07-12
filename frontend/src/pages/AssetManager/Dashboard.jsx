@@ -145,7 +145,7 @@ const AssetManagerDashboard = () => {
       </div>
 
       {/* Main 2-col grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 380px', gap: '1.5rem' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.5rem' }}>
 
         {/* Left column */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>

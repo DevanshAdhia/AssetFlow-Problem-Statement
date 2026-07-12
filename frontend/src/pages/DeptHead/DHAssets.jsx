@@ -65,13 +65,13 @@ const DHAssets = () => {
           <div className="dh-modal" onClick={e => e.stopPropagation()}>
             <div className="dh-modal-header">
               <div>
-                <h2 className="dh-modal-title"><Package size={18} style={{ display:'inline', marginRight:8, color:'#7c3aed' }}/>{viewAsset.name}</h2>
+                <h2 className="dh-modal-title"><Package size={18} style={{ display:'inline', marginRight:8, color:'#2563eb' }}/>{viewAsset.name}</h2>
                 <span style={{ fontSize:'0.78rem', color:'var(--dh-muted)' }}>{viewAsset.tag}</span>
               </div>
               <button className="dh-close-btn" onClick={() => setView(null)}><X size={18}/></button>
             </div>
             <div className="dh-modal-body">
-              <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'1.25rem' }}>
+              <div style={{ display:'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap:'1.25rem' }}>
                 {[
                   ['Asset Tag', viewAsset.tag], ['Category', viewAsset.category],
                   ['Assigned To', viewAsset.employee || '—'], ['Location', viewAsset.location],
@@ -97,7 +97,7 @@ const DHAssets = () => {
                   { action:'Registered in system', date:'15 Jan 2026', status:'Registered' },
                 ].map((t,i) => (
                   <div key={i} className="dh-timeline-item">
-                    <div className="dh-timeline-dot" style={{ background:'rgba(124,58,237,0.1)', color:'#7c3aed' }}>
+                    <div className="dh-timeline-dot" style={{ background:'rgba(124,58,237,0.1)', color:'#2563eb' }}>
                       <Clock size={15}/>
                     </div>
                     <div>
@@ -168,7 +168,7 @@ const DHAssets = () => {
               {filtered.length > 0 ? filtered.map(a => (
                 <tr key={a.id}>
                   <td><input type="checkbox" checked={selected.includes(a.id)} onChange={() => toggleSelect(a.id)}/></td>
-                  <td style={{ fontWeight:700, color:'#7c3aed' }}>{a.tag}</td>
+                  <td style={{ fontWeight:700, color:'#2563eb' }}>{a.tag}</td>
                   <td style={{ fontWeight:600 }}>{a.name}</td>
                   <td><span className="dh-badge dh-badge-info">{a.category}</span></td>
                   <td>{a.employee}</td>

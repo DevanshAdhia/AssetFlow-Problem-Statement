@@ -72,6 +72,13 @@ const AssetManagerLayout = () => {
     };
   }, []);
 
+  // Role-Based Access Control Guard
+  useEffect(() => {
+    if (user.role !== 'Asset Manager') {
+      navigate('/403');
+    }
+  }, [user.role, navigate]);
+
   // Close dropdowns on outside click
   useEffect(() => {
     const handler = (e) => {

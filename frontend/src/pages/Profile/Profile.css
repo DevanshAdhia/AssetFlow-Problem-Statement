@@ -41,8 +41,9 @@
 
 .profile-status-badge {
   position: absolute;
-  bottom: 5px;
-  right: 5px;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
   background-color: var(--success);
   color: white;
   font-size: 0.75rem;

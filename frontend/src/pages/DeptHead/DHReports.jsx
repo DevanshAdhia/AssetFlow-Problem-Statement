@@ -3,7 +3,7 @@ import { FileText, Download, BarChart2, PieChart as PieIcon, Activity } from 'lu
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line } from 'recharts';
 import '../../layouts/DeptHeadLayout.css';
 
-const assetDist = [{ name: 'Electronics', value: 45, color: '#7c3aed' }, { name: 'Furniture', value: 25, color: '#0284c7' }, { name: 'Vehicles', value: 5, color: '#16a34a' }, { name: 'Telecom', value: 10, color: '#d97706' }];
+const assetDist = [{ name: 'Electronics', value: 45, color: '#2563eb' }, { name: 'Furniture', value: 25, color: '#0284c7' }, { name: 'Vehicles', value: 5, color: '#16a34a' }, { name: 'Telecom', value: 10, color: '#d97706' }];
 const monthlyAlloc = [{ month: 'Jan', req: 12 }, { month: 'Feb', req: 19 }, { month: 'Mar', req: 15 }, { month: 'Apr', req: 22 }, { month: 'May', req: 18 }, { month: 'Jun', req: 25 }];
 const bookingUtil = [{ resource: 'Meeting Room A', hours: 45 }, { resource: 'Meeting Room B', hours: 30 }, { resource: 'Projector A', hours: 25 }, { resource: 'Company Van', hours: 15 }];
 

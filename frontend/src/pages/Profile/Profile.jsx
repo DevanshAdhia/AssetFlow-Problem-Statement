@@ -1,48 +1,58 @@
-import React, { useState, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
-import {
-  User, Mail, Phone, Building2, Shield, Calendar,
-  Edit2, Save, X, Camera, Key, CheckCircle, ArrowLeft
-} from 'lucide-react';
-import './Profile.css';
+import React, { useState, useEffect } from 'react';
+import { User, Mail, Phone, MapPin, Edit2, Lock, Camera, Save, X, Building2, Briefcase, ShieldCheck, AlertCircle, Check } from 'lucide-react';
+import '../../layouts/EmployeeLayout.css'; // Use the same styling as EmpProfile
 
-const buildAvatar = (name) =>
-  `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=2563EB&color=fff&bold=true&size=128`;
-
-const getUser = () => {
+const getDefaultProfile = () => {
   try {
-    const u = JSON.parse(localStorage.getItem('auth_user'));
-    return u || {};
+    const auth = JSON.parse(localStorage.getItem('auth_user')) || {};
+    const saved = JSON.parse(localStorage.getItem('admin_profile')) || {};
+    return {
+      name: saved.name || auth.name || 'Admin User',
+      employeeId: saved.employeeId || auth.employeeId || 'ADM-' + String(Math.floor(Math.random()*9000)+1000),
+      email: saved.email || auth.email || '',
+      phone: saved.phone || auth.phone || '',
+      department: saved.department || auth.department || 'Management',
+      designation: saved.designation || auth.designation || auth.role || 'Administrator',
+      role: auth.role || 'Admin',
+      address: saved.address || auth.address || 'Headquarters, Building A',
+      emergencyContact: saved.emergencyContact || '',
+      joinDate: saved.joinDate || auth.joinDate || new Date().toLocaleDateString('en-IN', { year:'numeric', month:'long', day:'numeric' }),
+      avatar: saved.avatar || auth.avatar || null,
+    };
   } catch { return {}; }
 };
 
+const Toast = ({ msg, onClose }) => (
+  <div style={{ position: 'fixed', bottom: '1.5rem', right: '1.5rem', zIndex: 9999, background: '#16a34a', color: '#fff', padding: '0.75rem 1.25rem', borderRadius: '10px', display: 'flex', alignItems: 'center', gap: '0.65rem', boxShadow: '0 8px 24px rgba(0,0,0,0.15)', fontSize: '0.875rem', fontWeight: 600, animation: 'slideUp 0.25s' }}>
+    <Check size={17} /> {msg}
+    <button onClick={onClose} style={{ background: 'none', border: 'none', color: '#fff', cursor: 'pointer', marginLeft: '0.25rem' }}><X size={15} /></button>
+  </div>
+);
+
 const Profile = () => {
-  const navigate = useNavigate();
-  const [user, setUser]       = useState(getUser());
+  const [profile, setProfile] = useState(getDefaultProfile);
   const [editing, setEditing] = useState(false);
-  const [form, setForm]       = useState({ ...getUser() });
-  const [saved, setSaved]     = useState(false);
-  const [pwMode, setPwMode]   = useState(false);
-  const [pwForm, setPwForm]   = useState({ current: '', next: '', confirm: '' });
-  const [pwError, setPwError] = useState('');
-  const fileRef = useRef(null);
+  const [form, setForm] = useState(profile);
+  const [pwModal, setPwModal] = useState(false);
+  const [toast, setToast] = useState('');
+  const [pw, setPw] = useState({ current: '', next: '', confirm: '' });
 
-  const save = () => {
-    const updated = { ...user, ...form };
-    if (!updated.avatar || updated.avatar === buildAvatar(user.name)) {
-      updated.avatar = buildAvatar(updated.name);
-    }
-    localStorage.setItem('auth_user', JSON.stringify(updated));
-    window.dispatchEvent(new Event('storage')); // notify layout
-    setUser(updated);
-    setEditing(false);
-    setSaved(true);
-    setTimeout(() => setSaved(false), 3000);
-  };
-
-  const cancel = () => {
-    setForm({ ...user });
-    setEditing(false);
+  // Persist + broadcast
+  const persist = (data) => {
+    localStorage.setItem('admin_profile', JSON.stringify(data));
+    // Sync auth_user so topbar and other components update
+    try {
+      const auth = JSON.parse(localStorage.getItem('auth_user')) || {};
+      localStorage.setItem('auth_user', JSON.stringify({
+        ...auth,
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+        avatar: data.avatar || auth.avatar,
+        department: data.department || auth.department,
+      }));
+      window.dispatchEvent(new Event('storage'));
+    } catch {}
   };
 
   const handleAvatarUpload = (e) => {
@@ -50,194 +60,228 @@ const Profile = () => {
     if (!file) return;
     const reader = new FileReader();
     reader.onload = (ev) => {
-      setForm(p => ({ ...p, avatar: ev.target.result }));
+      if (editing) {
+        setForm(prev => ({ ...prev, avatar: ev.target.result }));
+      } else {
+        const updated = { ...profile, avatar: ev.target.result };
+        setProfile(updated);
+        localStorage.setItem('admin_profile', JSON.stringify(updated));
+        
+        // immediately persist to auth_user as well
+        const auth = JSON.parse(localStorage.getItem('auth_user')) || {};
+        localStorage.setItem('auth_user', JSON.stringify({ ...auth, avatar: ev.target.result }));
+        window.dispatchEvent(new Event('storage'));
+        
+        setToast('Profile picture updated successfully!');
+        setTimeout(() => setToast(''), 3000);
+      }
     };
     reader.readAsDataURL(file);
   };
 
-  const savePassword = () => {
-    if (!pwForm.next || pwForm.next.length < 6) return setPwError('New password must be at least 6 characters.');
-    if (pwForm.next !== pwForm.confirm) return setPwError('Passwords do not match.');
-    setPwError('');
-    setPwMode(false);
-    setPwForm({ current: '', next: '', confirm: '' });
-    setSaved(true);
-    setTimeout(() => setSaved(false), 3000);
+  const handleSave = () => {
+    setProfile(form);
+    persist(form);
+    setEditing(false);
+    setToast('Profile updated successfully!');
+    setTimeout(() => setToast(''), 3000);
   };
 
-  const avatarSrc = (editing ? form.avatar : user.avatar) || buildAvatar(user.name || 'User');
-
-  const roleColors = {
-    Admin:           { bg: 'rgba(37,99,235,0.1)',   color: '#2563EB' },
-    'Asset Manager': { bg: 'rgba(139,92,246,0.1)',  color: '#7c3aed' },
-    Employee:        { bg: 'rgba(34,197,94,0.1)',   color: '#16a34a' },
+  const handleChangePw = () => {
+    if (!pw.current) { alert('Please enter your current password.'); return; }
+    if (pw.next !== pw.confirm) { alert('New passwords do not match.'); return; }
+    if (pw.next.length < 6) { alert('Password must be at least 6 characters.'); return; }
+    setPwModal(false);
+    setPw({ current: '', next: '', confirm: '' });
+    setToast('Password changed successfully!');
+    setTimeout(() => setToast(''), 3000);
   };
-  const rc = roleColors[user.role] || roleColors.Employee;
+
+  const buildAvatar = (name) =>
+    `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=2563EB&color=fff&bold=true&size=200`;
+
+  const infoFields = [
+    { label: 'Full Name',         key: 'name',             icon: User,       editable: true },
+    { label: 'Email Address',     key: 'email',            icon: Mail,       editable: true, type: 'email' },
+    { label: 'Phone Number',      key: 'phone',            icon: Phone,      editable: true },
+    { label: 'Department',        key: 'department',       icon: Building2,  editable: false },
+    { label: 'Designation',       key: 'designation',      icon: Briefcase,  editable: false },
+    { label: 'Role',              key: 'role',             icon: ShieldCheck,editable: false },
+  ];
 
   return (
-    <div className="profile-page">
-      {/* Toast */}
-      {saved && (
-        <div style={{ position:'fixed', bottom:'1.5rem', right:'1.5rem', background:'#1e293b', color:'#fff', padding:'0.85rem 1.25rem', borderRadius:10, display:'flex', alignItems:'center', gap:'0.5rem', zIndex:1000, boxShadow:'0 8px 24px rgba(0,0,0,0.2)', borderLeft:'4px solid var(--success)' }}>
-          <CheckCircle size={16} style={{ color:'var(--success)' }}/> Profile updated successfully!
-        </div>
-      )}
+    <div className="emp-page">
+      {toast && <Toast msg={toast} onClose={() => setToast('')} />}
 
-      {/* Header */}
-      <div className="page-header" style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start' }}>
+      <div className="emp-page-header">
         <div>
-          <h1>My Profile</h1>
-          <p className="text-muted">Manage your account information and security settings.</p>
+          <h1 className="emp-page-title">My Profile</h1>
+          <p className="emp-page-subtitle">Manage your personal information and account settings.</p>
         </div>
-        <div style={{ display:'flex', gap:'0.5rem' }}>
-          {!editing ? (
+        <div className="emp-header-actions">
+          {editing ? (
             <>
-              <button className="btn btn-outline" onClick={() => navigate(-1)}>
-                <ArrowLeft size={16} /> Back
-              </button>
-              <button className="btn btn-primary" onClick={() => { setForm({...user}); setEditing(true); }}>
-                <Edit2 size={16} /> Edit Profile
-              </button>
+              <button className="btn btn-outline" onClick={() => setEditing(false)}><X size={15} /> Cancel</button>
+              <button className="btn btn-primary" onClick={handleSave}><Save size={15} /> Save Changes</button>
             </>
           ) : (
-            <>
-              <button className="btn btn-outline" onClick={cancel}><X size={16}/> Cancel</button>
-              <button className="btn btn-primary" onClick={save}><Save size={16}/> Save Changes</button>
-            </>
+            <button className="btn btn-primary" onClick={() => { setForm(profile); setEditing(true); }}>
+              <Edit2 size={15} /> Edit Profile
+            </button>
           )}
         </div>
       </div>
 
-      {/* Profile Card */}
-      <div className="profile-card" style={{ maxWidth: 860 }}>
-        <div className="profile-header-bg" />
-        <div className="profile-content">
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem', alignItems: 'flex-start' }}>
 
-          {/* Avatar + basic identity */}
-          <div style={{ display:'flex', alignItems:'flex-end', gap:'1.5rem', marginTop:'-50px', marginBottom:'1.75rem' }}>
-            <div className="profile-avatar-wrapper" style={{ marginTop:0, marginBottom:0 }}>
-              <img
-                src={avatarSrc}
-                alt={user.name}
-                className="profile-avatar-large"
-                onError={e => { e.target.src = buildAvatar(user.name || 'User'); }}
-              />
-              {editing && (
-                <>
-                  <input ref={fileRef} type="file" accept="image/*" style={{ display:'none' }} onChange={handleAvatarUpload} />
-                  <div className="upload-overlay" onClick={() => fileRef.current.click()}>
-                    <Camera size={22} style={{ color:'#fff' }} />
+        {/* ─── Left Column: Avatar Card ─── */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+          <div className="emp-card" style={{ marginBottom: 0 }}>
+            <div className="emp-card-body" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem', textAlign: 'center' }}>
+              {/* Avatar */}
+              <div style={{ position: 'relative' }}>
+                <img
+                  src={(editing ? form.avatar : profile.avatar) || buildAvatar(profile.name)}
+                  alt="Profile"
+                  style={{ width: 110, height: 110, borderRadius: '50%', objectFit: 'cover', border: '4px solid var(--primary)', boxShadow: '0 4px 16px rgba(37,99,235,0.2)' }}
+                />
+                <input id="emp-avatar-upload" type="file" accept="image/*" style={{ display: 'none' }} onChange={handleAvatarUpload} />
+                <label htmlFor="emp-avatar-upload" title="Change Photo" style={{ position: 'absolute', bottom: 2, right: 2, width: 32, height: 32, borderRadius: '50%', background: 'var(--primary)', border: '2px solid var(--surface)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff' }}>
+                  <Camera size={14} />
+                </label>
+              </div>
+
+              {/* Name & Role */}
+              <div>
+                <div style={{ fontWeight: 800, fontSize: '1.15rem', color: 'var(--secondary)' }}>{profile.name}</div>
+                <div style={{ color: 'var(--text-muted)', fontSize: '0.82rem', marginTop: '0.25rem' }}>{profile.designation}</div>
+                <div style={{ marginTop: '0.5rem', display: 'inline-flex', alignItems: 'center', gap: '0.35rem', padding: '0.2rem 0.7rem', borderRadius: '20px', fontSize: '0.72rem', fontWeight: 700, background: 'rgba(37,99,235,0.1)', color: 'var(--primary)' }}>
+                  <ShieldCheck size={12} /> {profile.role}
+                </div>
+              </div>
+
+              <div style={{ width: '100%', borderTop: '1px solid var(--border)', paddingTop: '1rem', textAlign: 'left', display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
+                {[
+                  { label: 'ID', value: profile.employeeId },
+                  { label: 'Department', value: profile.department },
+                  { label: 'Member Since', value: profile.joinDate },
+                ].map(({ label, value }) => (
+                  <div key={label}>
+                    <div style={{ fontSize: '0.68rem', color: 'var(--text-muted)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{label}</div>
+                    <div style={{ fontSize: '0.85rem', fontWeight: 600, marginTop: '0.15rem' }}>{value}</div>
                   </div>
-                </>
-              )}
-              <span className="profile-status-badge">{user.status || 'Active'}</span>
-            </div>
-
-            <div style={{ paddingBottom:'0.5rem' }}>
-              <h2 style={{ margin:0, fontSize:'1.4rem', fontWeight:700 }}>{user.name}</h2>
-              <p style={{ margin:'2px 0 6px', color:'var(--text-muted)', fontSize:'0.875rem' }}>{user.email}</p>
-              <span style={{ padding:'0.2rem 0.75rem', borderRadius:20, fontSize:'0.78rem', fontWeight:700, background: rc.bg, color: rc.color }}>
-                {user.role || 'Employee'}
-              </span>
+                ))}
+              </div>
             </div>
           </div>
 
-          <hr className="divider" />
+          {/* Security */}
+          <div className="emp-card" style={{ marginBottom: 0 }}>
+            <div className="emp-card-header"><h2 className="emp-card-title">Security</h2></div>
+            <div className="emp-card-body" style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+              <button className="btn btn-outline" style={{ width: '100%', justifyContent: 'flex-start', gap: '0.6rem' }} onClick={() => setPwModal(true)}>
+                <Lock size={16} style={{ color: 'var(--warning)' }} /> Change Password
+              </button>
+              <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textAlign: 'center' }}>
+                Last password change: 60 days ago
+              </div>
+            </div>
+          </div>
+        </div>
 
-          {/* Fields */}
-          {editing ? (
-            /* ── Edit mode ── */
-            <div>
-              <p className="text-muted text-sm" style={{ marginBottom:'1rem', display:'flex', alignItems:'center', gap:'0.4rem' }}>
-                <Camera size={14}/> Click on avatar to change photo
-              </p>
-              <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'1rem' }}>
-                {[
-                  { key:'name',       label:'Full Name *',      type:'text',  icon:User,      placeholder:'Your full name' },
-                  { key:'email',      label:'Email Address *',  type:'email', icon:Mail,      placeholder:'your@email.com' },
-                  { key:'phone',      label:'Phone Number',     type:'tel',   icon:Phone,     placeholder:'+91 9876543210' },
-                  { key:'department', label:'Department',       type:'text',  icon:Building2, placeholder:'Engineering' },
-                ].map(f => (
-                  <div key={f.key} className="form-group">
-                    <label className="form-label">{f.label}</label>
-                    <div className="input-with-icon">
-                      <f.icon className="input-icon" size={16} />
+        {/* ─── Right Column: Info + Contact ─── */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+
+          {/* Personal Info */}
+          <div className="emp-card" style={{ marginBottom: 0 }}>
+            <div className="emp-card-header">
+              <h2 className="emp-card-title">Personal Information</h2>
+              {editing && <span style={{ fontSize: '0.75rem', color: 'var(--warning)', display: 'flex', alignItems: 'center', gap: '0.3rem' }}><AlertCircle size={13} /> Editing mode active</span>}
+            </div>
+            <div className="emp-card-body">
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.25rem' }}>
+                {infoFields.map(({ label, key, icon: Icon, editable, type }) => (
+                  <div key={key} className="form-group" style={{ marginBottom: 0 }}>
+                    <label className="form-label" style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                      <Icon size={13} style={{ color: 'var(--text-muted)' }} /> {label}
+                      {!editable && <span style={{ fontSize: '0.65rem', background: 'var(--bg-color)', border: '1px solid var(--border)', borderRadius: '4px', padding: '0 0.3rem', color: 'var(--text-muted)' }}>Read-only</span>}
+                    </label>
+                    {editing && editable ? (
                       <input
-                        type={f.type}
-                        className="form-control pl-icon"
-                        placeholder={f.placeholder}
-                        value={form[f.key] || ''}
-                        onChange={e => setForm(p => ({ ...p, [f.key]: e.target.value }))}
+                        type={type || 'text'}
+                        className="form-control"
+                        value={form[key]}
+                        onChange={e => setForm({ ...form, [key]: e.target.value })}
+                        style={{ marginTop: '0.25rem' }}
                       />
-                    </div>
+                    ) : (
+                      <div style={{ padding: '0.55rem 0', fontWeight: 600, fontSize: '0.875rem', color: 'var(--secondary)', borderBottom: '1px dashed var(--border)' }}>
+                        {profile[key]}
+                      </div>
+                    )}
                   </div>
                 ))}
-                <div className="form-group">
-                  <label className="form-label">Role</label>
-                  <div style={{ padding:'0.55rem 0.85rem', background:'var(--bg-color)', borderRadius:8, border:'1px solid var(--border)', color:'var(--text-muted)', fontSize:'0.875rem' }}>
-                    {user.role} <span style={{ fontSize:'0.72rem' }}>(contact admin to change)</span>
-                  </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Contact Details */}
+          <div className="emp-card" style={{ marginBottom: 0 }}>
+            <div className="emp-card-header"><h2 className="emp-card-title">Contact & Address</h2></div>
+            <div className="emp-card-body">
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.1rem' }}>
+                <div className="form-group" style={{ marginBottom: 0 }}>
+                  <label className="form-label" style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}><MapPin size={13} style={{ color: 'var(--text-muted)' }} /> Office Address</label>
+                  {editing ? (
+                    <input type="text" className="form-control" value={form.address} onChange={e => setForm({ ...form, address: e.target.value })} style={{ marginTop: '0.25rem' }} />
+                  ) : (
+                    <div style={{ padding: '0.55rem 0', fontWeight: 600, fontSize: '0.875rem', color: 'var(--secondary)', borderBottom: '1px dashed var(--border)' }}>{profile.address}</div>
+                  )}
+                </div>
+                <div className="form-group" style={{ marginBottom: 0 }}>
+                  <label className="form-label" style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}><Phone size={13} style={{ color: 'var(--text-muted)' }} /> Emergency Contact</label>
+                  {editing ? (
+                    <input type="text" className="form-control" value={form.emergencyContact} onChange={e => setForm({ ...form, emergencyContact: e.target.value })} style={{ marginTop: '0.25rem' }} />
+                  ) : (
+                    <div style={{ padding: '0.55rem 0', fontWeight: 600, fontSize: '0.875rem', color: 'var(--secondary)', borderBottom: '1px dashed var(--border)' }}>{profile.emergencyContact}</div>
+                  )}
                 </div>
               </div>
             </div>
-          ) : (
-            /* ── View mode ── */
-            <div className="profile-details-grid">
-              {[
-                { label:'Full Name',    value: user.name,       icon: User },
-                { label:'Email',        value: user.email,      icon: Mail },
-                { label:'Phone',        value: user.phone || '—', icon: Phone },
-                { label:'Department',   value: user.department || '—', icon: Building2 },
-                { label:'Role',         value: user.role,       icon: Shield },
-                { label:'Member Since', value: user.joinDate ? new Date(user.joinDate).toLocaleDateString('en-IN',{year:'numeric',month:'long',day:'numeric'}) : '—', icon: Calendar },
-              ].map((d, i) => (
-                <div key={i} className="detail-item">
-                  <span className="detail-label" style={{ display:'flex', alignItems:'center', gap:'0.35rem' }}>
-                    <d.icon size={13} /> {d.label}
-                  </span>
-                  <span className="detail-value">{d.value}</span>
-                </div>
-              ))}
-            </div>
-          )}
-
-          {/* Change Password section */}
-          {!editing && (
-            <div style={{ borderTop:'1px solid var(--border)', paddingTop:'1.5rem', marginTop:'1.5rem' }}>
-              {!pwMode ? (
-                <button className="btn btn-outline" onClick={() => setPwMode(true)}>
-                  <Key size={16}/> Change Password
-                </button>
-              ) : (
-                <div style={{ maxWidth: 400 }}>
-                  <h3 style={{ fontSize:'0.95rem', fontWeight:700, marginBottom:'1rem' }}>Change Password</h3>
-                  {pwError && <p style={{ color:'var(--danger)', fontSize:'0.82rem', marginBottom:'0.75rem' }}>{pwError}</p>}
-                  {[
-                    { label:'Current Password', key:'current' },
-                    { label:'New Password',      key:'next' },
-                    { label:'Confirm Password',  key:'confirm' },
-                  ].map(f => (
-                    <div key={f.key} className="form-group">
-                      <label className="form-label">{f.label}</label>
-                      <input
-                        type="password"
-                        className="form-control"
-                        value={pwForm[f.key]}
-                        onChange={e => setPwForm(p => ({ ...p, [f.key]: e.target.value }))}
-                        placeholder="••••••••"
-                      />
-                    </div>
-                  ))}
-                  <div style={{ display:'flex', gap:'0.75rem' }}>
-                    <button className="btn btn-primary" onClick={savePassword}><Save size={15}/> Update Password</button>
-                    <button className="btn btn-outline" onClick={() => { setPwMode(false); setPwError(''); }}><X size={15}/> Cancel</button>
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
+          </div>
         </div>
       </div>
+
+      {/* ─── Change Password Modal ─── */}
+      {pwModal && (
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.45)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem' }} onClick={() => setPwModal(false)}>
+          <div className="emp-card" style={{ width: '100%', maxWidth: '420px', margin: 0 }} onClick={e => e.stopPropagation()}>
+            <div className="emp-card-header">
+              <h2 className="emp-card-title">Change Password</h2>
+              <button style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-muted)' }} onClick={() => setPwModal(false)}><X size={20} /></button>
+            </div>
+            <div className="emp-card-body">
+              {[
+                { label: 'Current Password', key: 'current' },
+                { label: 'New Password', key: 'next' },
+                { label: 'Confirm New Password', key: 'confirm' },
+              ].map(({ label, key }) => (
+                <div key={key} className="form-group" style={{ marginBottom: '1rem' }}>
+                  <label className="form-label">{label}</label>
+                  <input type="password" className="form-control" value={pw[key]} onChange={e => setPw({ ...pw, [key]: e.target.value })} placeholder="••••••••" />
+                </div>
+              ))}
+              <div style={{ background: 'var(--bg-color)', padding: '0.65rem 1rem', borderRadius: '8px', fontSize: '0.78rem', color: 'var(--text-muted)', marginBottom: '1.25rem' }}>
+                Password must be at least 6 characters. Use a mix of letters, numbers, and symbols for better security.
+              </div>
+              <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'flex-end' }}>
+                <button className="btn btn-outline" onClick={() => setPwModal(false)}>Cancel</button>
+                <button className="btn btn-primary" onClick={handleChangePw}><Lock size={14} /> Update Password</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

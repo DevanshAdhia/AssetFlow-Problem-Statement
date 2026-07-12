@@ -16,7 +16,7 @@ const getUser = () => {
 };
 
 const buildAvatar = (name) =>
-  `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=7C3AED&color=fff&bold=true&size=80`;
+  `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=2563EB&color=fff&bold=true&size=80`;
 
 const NAV_ITEMS = [
   { to: '/dept-head/dashboard',    icon: LayoutDashboard, label: 'Dashboard' },
@@ -32,7 +32,7 @@ const NAV_ITEMS = [
 ];
 
 const NOTIFS = [
-  { id:1, icon: CheckSquare, color:'#7c3aed', msg:'Allocation request from Rohan Mehta awaiting approval', time:'5m ago' },
+  { id:1, icon: CheckSquare, color:'#2563eb', msg:'Allocation request from Rohan Mehta awaiting approval', time:'5m ago' },
   { id:2, icon: ArrowRightLeft, color:'#d97706', msg:'Transfer request for Projector AF-009 submitted', time:'1h ago' },
   { id:3, icon: Clock, color:'#0284c7', msg:'Meeting Room A booked for tomorrow 10:00 AM', time:'2h ago' },
 ];
@@ -70,6 +70,13 @@ const DeptHeadLayout = () => {
       window.removeEventListener('focus', refresh);
     };
   }, []);
+
+  // Role-Based Access Control Guard
+  useEffect(() => {
+    if (user.role !== 'Department Head') {
+      navigate('/403');
+    }
+  }, [user.role, navigate]);
 
   useEffect(() => {
     const handler = (e) => {
@@ -121,7 +128,7 @@ const DeptHeadLayout = () => {
               <span>{label}</span>
               {badge && (
                 <span style={{
-                  marginLeft: 'auto', background: '#7c3aed', color: '#fff',
+                  marginLeft: 'auto', background: '#2563eb', color: '#fff',
                   borderRadius: 20, fontSize: '0.68rem', fontWeight: 700, padding: '1px 7px'
                 }}>{badge}</span>
               )}
@@ -161,7 +168,7 @@ const DeptHeadLayout = () => {
             </nav>
           </div>
 
-          <div className="topbar-right">
+          <div className="topbar-actions">
             {/* Search */}
             <div className="dh-search-bar" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', background: '#f1f5f9', border: '1px solid var(--border)', borderRadius: 8, padding: '0.4rem 0.75rem', minWidth: 200 }}>
               <Search size={15} style={{ color: 'var(--text-muted)' }} />
