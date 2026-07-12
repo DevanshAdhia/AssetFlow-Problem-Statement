@@ -8,6 +8,26 @@
   overflow: hidden;
 }
 
+.auth-layout::before {
+  content: '';
+  position: absolute;
+  top: -10%; left: -10%;
+  width: 50%; height: 50%;
+  background: radial-gradient(circle, rgba(37, 99, 235, 0.2) 0%, rgba(37, 99, 235, 0) 70%);
+  filter: blur(40px);
+  z-index: 0;
+}
+
+.auth-layout::after {
+  content: '';
+  position: absolute;
+  bottom: -10%; right: -10%;
+  width: 50%; height: 50%;
+  background: radial-gradient(circle, rgba(124, 58, 237, 0.2) 0%, rgba(124, 58, 237, 0) 70%);
+  filter: blur(40px);
+  z-index: 0;
+}
+
 .auth-container {
   width: 100%;
   max-width: 400px; /* slightly narrower */
@@ -17,12 +37,13 @@
 }
 
 .auth-card {
-  background: var(--surface);
+  background: rgba(255, 255, 255, 0.85);
   border-radius: var(--radius);
   box-shadow: var(--shadow-lg);
   padding: 1.5rem;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255,255,255,0.2);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255,255,255,0.4);
   animation: slideUp 0.5s ease-out forwards;
   width: 100%;
 }

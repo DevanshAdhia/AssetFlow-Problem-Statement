@@ -53,8 +53,18 @@ body {
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-display);
-  font-weight: 600;
+  font-weight: 700;
   color: var(--secondary);
+}
+
+h1 {
+  font-size: 1.45rem;
+  margin: 0;
+}
+
+h2 {
+  font-size: 0.95rem;
+  margin: 0;
 }
 
 a {
