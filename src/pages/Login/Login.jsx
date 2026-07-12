@@ -61,6 +61,15 @@ const Login = () => {
 
         <button type="submit" className="btn btn-primary w-100">Login</button>
         
+        <div className="auth-divider">
+          <span>OR</span>
+        </div>
+
+        <button type="button" className="btn btn-outline w-100 btn-google" onClick={() => navigate('/dashboard')}>
+          <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" className="google-icon" />
+          Continue with Google
+        </button>
+        
         <div className="auth-footer">
           <p>Don't have an account? <Link to="/signup">Create Account</Link></p>
         </div>
