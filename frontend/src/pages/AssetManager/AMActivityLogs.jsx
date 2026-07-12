@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Activity, Search, Download, Filter } from 'lucide-react';
+import { Activity, Search, Download, Filter, FileText, FileSpreadsheet } from 'lucide-react';
+import * as XLSX from 'xlsx';
 
 const LOGS = [
   { id:1,  date:'12/07/2026 13:42', user:'Bharat Rathor', module:'Allocation',   action:'Allocated AF-001 to John Smith (IT)',           status:'Success' },
@@ -32,18 +33,42 @@ const AMActivityLogs = () => {
   const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
   const paginated  = filtered.slice((page-1)*PAGE_SIZE, page*PAGE_SIZE);
 
-  const handleExport = () => {
+  const handleExportCSV = () => {
     const rows = ['Date,User,Module,Action,Status', ...filtered.map(l=>`${l.date},${l.user},${l.module},"${l.action}",${l.status}`)];
     const blob = new Blob([rows.join('\n')], { type:'text/csv' });
     const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
     a.download = `ActivityLogs_${Date.now()}.csv`; a.click();
   };
 
+  const handleExportExcel = () => {
+    const ws = XLSX.utils.json_to_sheet(filtered.map(l => ({
+      Date: l.date, User: l.user, Module: l.module, Action: l.action, Status: l.status
+    })));
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Activity Logs");
+    XLSX.writeFile(wb, `ActivityLogs_${Date.now()}.xlsx`);
+  };
+
   return (
     <div className="am-page">
       <div className="am-page-header">
         <div><h1 className="am-page-title am-flex am-gap-2"><Activity size={22}/> Activity Logs</h1><p className="am-page-subtitle">Chronological record of every system action.</p></div>
-        <button className="am-btn am-btn-outline" onClick={handleExport}><Download size={16}/> Export CSV</button>
+        <div style={{ position: 'relative', zIndex: 10 }}>
+          <button className="am-btn am-btn-outline" onClick={(e) => {
+            const menu = e.currentTarget.nextElementSibling;
+            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+          }}>
+            <Download size={16}/> Export <span style={{fontSize: '0.7rem', marginLeft: '2px'}}>▼</span>
+          </button>
+          <div className="am-dropdown" style={{ display: 'none', position: 'absolute', top: '100%', right: 0, marginTop: '4px', minWidth: '150px' }}>
+            <button className="am-dropdown-item" onClick={(e) => { e.currentTarget.parentElement.style.display = 'none'; handleExportCSV(); }}>
+              <FileText size={15}/> Export CSV
+            </button>
+            <button className="am-dropdown-item" onClick={(e) => { e.currentTarget.parentElement.style.display = 'none'; handleExportExcel(); }}>
+              <FileSpreadsheet size={15}/> Export Excel
+            </button>
+          </div>
+        </div>
       </div>
 
       <div className="am-card">

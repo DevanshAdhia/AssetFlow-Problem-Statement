@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Download, TrendingUp } from 'lucide-react';
+import { Download, TrendingUp, FileSpreadsheet, FileText } from 'lucide-react';
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from 'recharts';
+import * as XLSX from 'xlsx';
 
 const DEPT_DATA   = [{ name:'IT', v:320 },{ name:'Sales', v:195 },{ name:'HR', v:88 },{ name:'Dev', v:210 },{ name:'Ops', v:145 },{ name:'Legal', v:60 }];
 const MAINT_DATA  = [{ m:'Jan',i:4 },{ m:'Feb',i:7 },{ m:'Mar',i:5 },{ m:'Apr',i:12 },{ m:'May',i:8 },{ m:'Jun',i:15 },{ m:'Jul',i:6 }];
@@ -12,22 +13,44 @@ const TT = { contentStyle:{ borderRadius:'8px', border:'none', boxShadow:'0 4px 
 const AMReports = () => {
   const [period, setPeriod] = useState('Q3 2026');
 
-  const handleExport = () => {
+  const handleExportCSV = () => {
     const rows = ['Department,Assets\n', ...DEPT_DATA.map(d=>`${d.name},${d.v}`)];
     const blob = new Blob([rows.join('\n')], { type:'text/csv' });
     const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
     a.download = `AssetFlow_Report_${Date.now()}.csv`; a.click();
   };
 
+  const handleExportExcel = () => {
+    const ws = XLSX.utils.json_to_sheet(DEPT_DATA.map(d => ({ Department: d.name, Assets: d.v })));
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Department Allocation");
+    XLSX.writeFile(wb, `AssetFlow_Report_${Date.now()}.xlsx`);
+  };
+
   return (
     <div className="am-page">
       <div className="am-page-header">
         <div><h1 className="am-page-title">Reports & Analytics</h1><p className="am-page-subtitle">Asset utilization, maintenance trends and performance metrics.</p></div>
-        <div className="am-header-actions">
+        <div className="am-header-actions" style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
           <select className="am-form-control" style={{width:130}} value={period} onChange={e=>setPeriod(e.target.value)}>
             {['Q3 2026','Q2 2026','Q1 2026'].map(p=><option key={p}>{p}</option>)}
           </select>
-          <button className="am-btn am-btn-outline" onClick={handleExport}><Download size={16}/> Export CSV</button>
+          <div style={{ position: 'relative' }} className="export-dropdown-container">
+            <button className="am-btn am-btn-outline" onClick={(e) => {
+              const menu = e.currentTarget.nextElementSibling;
+              menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+            }}>
+              <Download size={16}/> Export <span style={{fontSize: '0.7rem', marginLeft: '2px'}}>▼</span>
+            </button>
+            <div className="am-dropdown" style={{ display: 'none', position: 'absolute', top: '100%', right: 0, marginTop: '4px', minWidth: '150px' }}>
+              <button className="am-dropdown-item" onClick={(e) => { e.currentTarget.parentElement.style.display = 'none'; handleExportCSV(); }}>
+                <FileText size={15}/> Export CSV
+              </button>
+              <button className="am-dropdown-item" onClick={(e) => { e.currentTarget.parentElement.style.display = 'none'; handleExportExcel(); }}>
+                <FileSpreadsheet size={15}/> Export Excel
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
