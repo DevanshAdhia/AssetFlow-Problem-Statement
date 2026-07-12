@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
-  Search, Filter, Plus, Edit2, Trash2, QrCode, Download, 
-  MoreHorizontal, Eye, Box, FileText, Image as ImageIcon, FileSpreadsheet
+  Search, Filter, Plus, Edit2, Trash2, QrCode, Download, Upload,
+  MoreHorizontal, Eye, Box, FileText, Image as ImageIcon, FileSpreadsheet,
+  CheckCircle, AlertCircle, X as XIcon
 } from 'lucide-react';
 import * as XLSX from 'xlsx';
 import '../Admin/Assets/Assets.css';
@@ -25,6 +26,14 @@ const AssetManagerAssets = () => {
 
   const [showModal, setShowModal] = useState(false);
   const [editingId, setEditingId] = useState(null);
+  const importRef = useRef(null);
+  
+  // Filtering & View states
+  const [searchTerm, setSearchTerm] = useState('');
+  const [categoryFilter, setCategoryFilter] = useState('All');
+  const [statusFilter, setStatusFilter] = useState('All');
+  const [viewAsset, setViewAsset] = useState(null);
+  const [toast, setToast] = useState(null); // { type: 'success'|'error', msg: '' }
   
   // Form state
   const [formData, setFormData] = useState({
@@ -76,25 +85,105 @@ const AssetManagerAssets = () => {
     setShowModal(false);
   };
 
+  const showToast = (type, msg) => {
+    setToast({ type, msg });
+    setTimeout(() => setToast(null), 4000);
+  };
+
+  const handleImport = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (evt) => {
+      try {
+        const wb = XLSX.read(evt.target.result, { type: 'binary' });
+        const ws = wb.Sheets[wb.SheetNames[0]];
+        const rows = XLSX.utils.sheet_to_json(ws);
+        if (!rows.length) { showToast('error', 'File is empty or has no data rows.'); return; }
+        const imported = rows.map((r, i) => ({
+          id: Date.now() + i,
+          tag: r['Asset Tag'] || r['tag'] || `AF-${String(Date.now() + i).slice(-3)}`,
+          name: r['Asset Name'] || r['name'] || 'Unnamed Asset',
+          brand: r['Brand'] || r['brand'] || 'N/A',
+          category: r['Category'] || r['category'] || 'General',
+          status: r['Status'] || r['status'] || 'Available',
+          location: r['Location'] || r['location'] || 'Unassigned',
+          cost: r['Cost'] || r['cost'] || '$0',
+        }));
+        setAssets(prev => [...imported, ...prev]);
+        showToast('success', `${imported.length} asset(s) imported successfully!`);
+      } catch (err) {
+        showToast('error', 'Failed to parse file. Please use a valid CSV or Excel file.');
+      }
+      // Reset input so same file can be re-imported
+      e.target.value = '';
+    };
+    reader.readAsBinaryString(file);
+  };
+
+  const filteredAssets = assets.filter(asset => {
+    const matchesSearch = asset.tag.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                          asset.name.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory = categoryFilter === 'All' || asset.category === categoryFilter;
+    const matchesStatus = statusFilter === 'All' || asset.status === statusFilter;
+    return matchesSearch && matchesCategory && matchesStatus;
+  });
+
   return (
     <div className="assets-page" style={{ padding: '1.5rem', width: '100%' }}>
+      
+      {/* Toast notification */}
+      {toast && (
+        <div style={{
+          position:'fixed', top:'1.25rem', right:'1.25rem', zIndex:9999,
+          background: toast.type==='success' ? '#1e293b' : '#fff1f2',
+          color: toast.type==='success' ? '#fff' : '#dc2626',
+          padding:'0.85rem 1.25rem', borderRadius:'10px',
+          display:'flex', alignItems:'center', gap:'0.6rem',
+          boxShadow:'0 8px 24px rgba(0,0,0,0.18)',
+          borderLeft: toast.type==='success' ? '4px solid #22c55e' : '4px solid #ef4444',
+          minWidth: '280px', maxWidth: '420px'
+        }}>
+          {toast.type==='success' ? <CheckCircle size={18} style={{color:'#22c55e',flexShrink:0}}/> : <AlertCircle size={18} style={{color:'#ef4444',flexShrink:0}}/>}
+          <span style={{flex:1, fontSize:'0.875rem'}}>{toast.msg}</span>
+          <button onClick={()=>setToast(null)} style={{background:'none',border:'none',cursor:'pointer',color:'inherit',padding:0}}><XIcon size={16}/></button>
+        </div>
+      )}
+
+      {/* Hidden file input for import */}
+      <input
+        ref={importRef}
+        type="file"
+        accept=".csv,.xlsx,.xls"
+        style={{ display: 'none' }}
+        onChange={handleImport}
+      />
+
       <div className="page-header flex-between mb-4">
         <div>
           <h1>Asset Directory</h1>
           <p className="text-muted">Comprehensive inventory of all organizational assets.</p>
         </div>
-        <div className="flex gap-2">
+        <div style={{ display:'flex', gap:'0.75rem', alignItems:'center' }}>
+          {/* Import Button */}
+          <button className="btn btn-outline" onClick={() => importRef.current.click()}
+            title="Import assets from CSV or Excel file"
+            style={{ display:'flex', alignItems:'center', gap:'0.4rem' }}>
+            <Upload size={16} /> Import
+          </button>
+
+          {/* Export Dropdown */}
           <div style={{ position: 'relative', zIndex: 10 }}>
             <button className="btn btn-outline" onClick={(e) => {
               const menu = e.currentTarget.nextElementSibling;
               menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
             }}>
-              <Download size={18} /> Export <span style={{fontSize: '0.7rem', marginLeft: '2px'}}>▼</span>
+              <Download size={16} /> Export <span style={{fontSize: '0.7rem', marginLeft: '4px'}}>▼</span>
             </button>
-            <div className="am-dropdown" style={{ display: 'none', position: 'absolute', top: '100%', right: 0, marginTop: '4px', minWidth: '150px' }}>
+            <div className="am-dropdown" style={{ display: 'none', position: 'absolute', top: '100%', right: 0, marginTop: '4px', minWidth: '160px' }}>
               <button className="am-dropdown-item" onClick={(e) => { 
                 e.currentTarget.parentElement.style.display = 'none'; 
-                const rows = ['Asset Tag,Asset Name,Category,Status,Location', ...assets.map(a=>`${a.tag},"${a.name}",${a.category},${a.status},"${a.location}"`)];
+                const rows = ['Asset Tag,Asset Name,Category,Status,Location,Cost', ...filteredAssets.map(a=>`${a.tag},"${a.name}",${a.category},${a.status},"${a.location}","${a.cost}"`)]
                 const blob = new Blob([rows.join('\n')], { type:'text/csv' });
                 const link = document.createElement('a'); link.href = URL.createObjectURL(blob);
                 link.download = `Assets_${Date.now()}.csv`; link.click();
@@ -103,8 +192,8 @@ const AssetManagerAssets = () => {
               </button>
               <button className="am-dropdown-item" onClick={(e) => { 
                 e.currentTarget.parentElement.style.display = 'none'; 
-                const ws = XLSX.utils.json_to_sheet(assets.map(a => ({
-                  'Asset Tag': a.tag, 'Asset Name': a.name, 'Category': a.category, 'Status': a.status, 'Location': a.location
+                const ws = XLSX.utils.json_to_sheet(filteredAssets.map(a => ({
+                  'Asset Tag': a.tag, 'Asset Name': a.name, 'Brand': a.brand, 'Category': a.category, 'Status': a.status, 'Location': a.location, 'Cost': a.cost
                 })));
                 const wb = XLSX.utils.book_new();
                 XLSX.utils.book_append_sheet(wb, ws, "Assets");
@@ -114,8 +203,11 @@ const AssetManagerAssets = () => {
               </button>
             </div>
           </div>
-          <button className="btn btn-primary" onClick={() => setShowModal(true)}>
-            <Plus size={18} /> Register Asset
+
+          {/* Register Asset */}
+          <button className="btn btn-primary" onClick={() => setShowModal(true)}
+            style={{ display:'flex', alignItems:'center', gap:'0.4rem', marginLeft:'0.25rem' }}>
+            <Plus size={16} /> Register Asset
           </button>
         </div>
       </div>
@@ -124,17 +216,17 @@ const AssetManagerAssets = () => {
         <div className="card-header filters-header">
           <div className="search-box">
             <Search size={16} />
-            <input type="text" placeholder="Search by tag, name, or serial..." />
+            <input type="text" placeholder="Search by tag or name..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} />
             <button className="icon-btn qr-btn" title="Scan QR Code"><QrCode size={16}/></button>
           </div>
           
           <div className="filter-group">
-            <select className="form-control filter-select">
+            <select className="form-control filter-select" value={categoryFilter} onChange={e => setCategoryFilter(e.target.value)}>
               <option value="All">All Categories</option>
               <option value="Electronics">Electronics</option>
               <option value="Furniture">Furniture</option>
             </select>
-            <select className="form-control filter-select">
+            <select className="form-control filter-select" value={statusFilter} onChange={e => setStatusFilter(e.target.value)}>
               <option value="All">All Statuses</option>
               <option value="Available">Available</option>
               <option value="Allocated">Allocated</option>
@@ -158,7 +250,7 @@ const AssetManagerAssets = () => {
               </tr>
             </thead>
             <tbody>
-              {assets.map(asset => (
+              {filteredAssets.length > 0 ? filteredAssets.map(asset => (
                 <tr key={asset.id}>
                   <td className="font-medium text-primary">{asset.tag}</td>
                   <td className="font-medium">{asset.name}</td>
@@ -167,13 +259,15 @@ const AssetManagerAssets = () => {
                   <td>{asset.location}</td>
                   <td className="text-right">
                     <div className="action-buttons">
-                      <button className="icon-btn" title="View Details"><Eye size={16}/></button>
+                      <button className="icon-btn" title="View Details" onClick={() => setViewAsset(asset)}><Eye size={16}/></button>
                       <button className="icon-btn edit-btn" title="Edit" onClick={() => handleEdit(asset)}><Edit2 size={16}/></button>
                       <button className="icon-btn delete-btn" title="Delete" onClick={() => handleDelete(asset.id)}><Trash2 size={16}/></button>
                     </div>
                   </td>
                 </tr>
-              ))}
+              )) : (
+                <tr><td colSpan={6} className="text-center text-muted py-4">No assets found matching the filters.</td></tr>
+              )}
             </tbody>
           </table>
         </div>
@@ -267,6 +361,34 @@ const AssetManagerAssets = () => {
             <div className="modal-footer pt-3 border-top flex gap-2">
               <button type="submit" form="assetRegistrationForm" className="btn btn-primary flex-1">Register Asset</button>
               <button type="button" className="btn btn-outline" onClick={() => setShowModal(false)}>Cancel</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* View Asset Details Modal */}
+      {viewAsset && (
+        <div className="modal-overlay" onClick={() => setViewAsset(null)}>
+          <div className="modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: '500px' }}>
+            <div className="modal-header border-bottom pb-3">
+              <h2 className="text-xl flex gap-2"><Box size={22} className="text-primary"/> Asset Details</h2>
+              <button className="close-btn" onClick={() => setViewAsset(null)}>&times;</button>
+            </div>
+            
+            <div className="modal-body py-4">
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem' }}>
+                <div><p className="text-muted mb-1 text-sm">Asset Tag</p><p className="font-bold text-primary">{viewAsset.tag}</p></div>
+                <div><p className="text-muted mb-1 text-sm">Asset Name</p><p className="font-bold">{viewAsset.name}</p></div>
+                <div><p className="text-muted mb-1 text-sm">Category</p><p className="font-bold">{viewAsset.category}</p></div>
+                <div><p className="text-muted mb-1 text-sm">Brand</p><p className="font-bold">{viewAsset.brand || 'N/A'}</p></div>
+                <div><p className="text-muted mb-1 text-sm">Location</p><p className="font-bold">{viewAsset.location}</p></div>
+                <div><p className="text-muted mb-1 text-sm">Cost</p><p className="font-bold">{viewAsset.cost}</p></div>
+                <div style={{ gridColumn: 'span 2' }}><p className="text-muted mb-1 text-sm">Current Status</p>{getStatusBadge(viewAsset.status)}</div>
+              </div>
+            </div>
+            
+            <div className="modal-footer pt-3 border-top flex gap-2 justify-end">
+              <button className="btn btn-outline" onClick={() => setViewAsset(null)}>Close</button>
             </div>
           </div>
         </div>
