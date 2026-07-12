@@ -63,7 +63,7 @@ const DashboardLayout = () => {
             <ShieldCheck size={20} />
             <span>Audit</span>
           </NavLink>
-          <NavLink to="/activity-logs" className="nav-item" onClick={() => setSidebarOpen(false)}>
+          <NavLink to="/reports" className="nav-item" onClick={() => setSidebarOpen(false)}>
             <FileText size={20} />
             <span>Reports</span>
           </NavLink>

@@ -13,6 +13,7 @@ import Profile from '../pages/Profile/Profile';
 import ChangePassword from '../pages/Profile/ChangePassword';
 import Notifications from '../pages/Notifications/Notifications';
 import ActivityLogs from '../pages/ActivityLogs/ActivityLogs';
+import Reports from '../pages/Reports/Reports';
 import OrganizationSetup from '../pages/OrganizationSetup/OrganizationSetup';
 import EditProfile from '../pages/Profile/EditProfile';
 import Terms from '../pages/Terms/Terms';
@@ -40,6 +41,7 @@ const AppRoutes = () => {
         <Route path="/change-password" element={<ChangePassword />} />
         <Route path="/notifications" element={<Notifications />} />
         <Route path="/activity-logs" element={<ActivityLogs />} />
+        <Route path="/reports" element={<Reports />} />
       </Route>
 
       {/* Error & Public Routes */}
