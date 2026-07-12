@@ -1,267 +1,155 @@
 .reports-page {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  padding: 1rem;
   max-width: 1000px;
+  font-family: 'Comic Sans MS', 'Chalkboard SE', 'Comic Neue', sans-serif; /* Adding a slightly handwriting feel for the wireframe look if desired, but falling back to default is fine too. Using standard var(--font-sans) is safer for premium feel */
+  font-family: var(--font-sans);
 }
 
-.analytics-grid {
+.reports-top-charts {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1.5rem;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
 }
 
-.col-span-2 {
-  grid-column: span 2;
-}
-
-.analytics-card {
+.blue-box {
+  background-color: #a3d9ff; /* matching the light blue from the sketch */
+  border: 2px solid #333;
+  border-radius: 20px;
+  padding: 1.5rem;
+  position: relative;
+  min-height: 250px;
   display: flex;
   flex-direction: column;
 }
 
-.analytics-card .card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1.5rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid var(--border);
-}
-
-.analytics-card .card-header h3 {
+.chart-title {
   font-size: 1.1rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin: 0;
-}
-
-/* Vertical Bar Chart */
-.chart-container {
-  display: flex;
-  justify-content: space-around;
-  height: 250px;
-  align-items: flex-end;
-  padding: 1rem 0;
-  border-bottom: 1px solid var(--border);
-  border-left: 1px solid var(--border);
-}
-
-.bar-group {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  height: 100%;
-  width: 40px;
-}
-
-.bars {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  width: 100%;
-  height: 100%;
-  border-radius: 4px;
-  overflow: hidden;
-  background-color: var(--bg-color);
-}
-
-.bar {
-  width: 100%;
-  transition: height 0.5s ease;
-}
-
-.bar.used {
-  background-color: var(--primary);
-}
-
-.bar.idle {
-  background-color: var(--border);
-}
-
-.bar-label {
-  margin-top: 0.75rem;
-  font-size: 0.75rem;
-  color: var(--text-muted);
   font-weight: 500;
+  margin-bottom: 1.5rem;
+  color: #333;
 }
 
-.chart-legend {
-  display: flex;
-  justify-content: center;
-  gap: 1.5rem;
-  margin-top: 1.5rem;
-}
-
-.legend-item {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.85rem;
-  color: var(--text-muted);
-}
-
-.dot {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-}
-.used-dot { background-color: var(--primary); }
-.idle-dot { background-color: var(--border); }
-
-/* Progress Alerts */
-.maintenance-alerts {
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-}
-
-.alert-row {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.alert-info {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.9rem;
-  font-weight: 500;
-}
-
-.progress-bg {
-  width: 100%;
-  height: 8px;
-  background-color: var(--bg-color);
-  border-radius: 4px;
-  overflow: hidden;
-}
-
-.progress-fill {
-  height: 100%;
-  border-radius: 4px;
-}
-
-/* Horizontal Frequency Line Chart */
-.frequency-chart {
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-}
-
-.freq-row {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: var(--text-muted);
-}
-
-.freq-row span:first-child {
-  width: 80px;
-}
-
-.freq-row span:last-child {
-  width: 50px;
-  text-align: right;
-  font-size: 0.8rem;
-}
-
-.freq-line {
+/* Bar Chart Mock CSS */
+.bar-chart-mock {
+  position: relative;
   flex: 1;
-  height: 20px;
-  background-color: var(--bg-color);
-  border-radius: 10px;
-  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-around;
+  padding-bottom: 10px;
+  margin: 0 10px;
 }
 
-.freq-fill {
-  height: 100%;
-  background: linear-gradient(90deg, #f87171 0%, #ef4444 100%);
-  border-radius: 10px;
+.bar-wrapper {
+  width: 15%;
+  height: 150px; /* fixed height for chart area */
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  z-index: 2;
 }
 
-/* Heatmap Grid */
-.heatmap-container {
+.bar-yellow {
+  width: 100%;
+  background-color: #ffe599; /* yellow from the sketch */
+  border: 2px solid #333;
+  border-radius: 4px 4px 0 0;
+}
+
+.chart-base-line {
+  position: absolute;
+  bottom: 10px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: #333;
+  z-index: 1;
+}
+
+/* Line Chart Mock CSS */
+.line-chart-mock {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: flex-end;
+  padding-bottom: 10px;
+}
+
+.line-chart-mock svg {
+  margin-bottom: 5px;
+}
+
+/* Stats Sections */
+.reports-middle-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.stat-list {
   display: flex;
   flex-direction: column;
-  align-items: center;
 }
 
-.heatmap-grid {
-  display: grid;
-  grid-template-columns: 100px repeat(4, 1fr);
-  gap: 4px;
-  width: 100%;
-}
-
-.hm-header {
-  font-size: 0.85rem;
+.stat-title {
+  font-size: 1.1rem;
   font-weight: 600;
-  text-align: center;
-  color: var(--text-muted);
-  padding: 0.5rem;
+  margin-bottom: 0.75rem;
+  color: #333;
 }
 
-.hm-row-label {
-  font-size: 0.85rem;
+.stat-ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.stat-ul li {
+  font-size: 1rem;
+  color: #555;
+}
+
+.divider-line {
+  width: 100%;
+  height: 1px;
+  background-color: #ccc;
+  margin: 2rem 0;
+}
+
+.reports-bottom-stats {
+  display: flex;
+  flex-direction: column;
+}
+
+.mt-4 { margin-top: 1.5rem; }
+
+/* Export Button */
+.btn-export {
+  background-color: #fce4ec; /* light pinkish red from sketch */
+  border: 1px solid #d8a0ab;
+  color: #333;
+  padding: 0.5rem 1.5rem;
+  border-radius: 8px;
   font-weight: 500;
-  display: flex;
-  align-items: center;
-  color: var(--text-main);
+  cursor: pointer;
+  transition: opacity 0.2s;
 }
 
-.hm-cell {
-  padding: 0.75rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 4px;
-  font-weight: 600;
-  font-size: 0.9rem;
-  color: white;
-  transition: transform 0.2s;
-}
-
-.hm-cell:hover {
-  transform: scale(1.05);
-  box-shadow: var(--shadow-sm);
-}
-
-.hm-cell.low {
-  background-color: #93c5fd; /* Light blue */
-  color: #1e3a8a;
-}
-.hm-cell.med {
-  background-color: #3b82f6; /* Blue */
-}
-.hm-cell.high {
-  background-color: #1e40af; /* Dark blue */
-}
-
-.heatmap-legend {
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-  width: 100%;
-  justify-content: flex-end;
-}
-
-.heatmap-legend .hm-cell {
-  padding: 0.25rem 0.75rem;
-  font-size: 0.75rem;
+.btn-export:hover {
+  opacity: 0.8;
 }
 
 @media (max-width: 768px) {
-  .analytics-grid {
+  .reports-top-charts {
     grid-template-columns: 1fr;
   }
-  .col-span-2 {
-    grid-column: span 1;
-  }
-  .heatmap-grid {
-    overflow-x: auto;
+  .reports-middle-stats {
+    grid-template-columns: 1fr;
   }
 }
