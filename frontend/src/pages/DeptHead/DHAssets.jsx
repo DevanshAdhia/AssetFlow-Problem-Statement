@@ -71,7 +71,7 @@ const DHAssets = () => {
               <button className="dh-close-btn" onClick={() => setView(null)}><X size={18}/></button>
             </div>
             <div className="dh-modal-body">
-              <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'1.25rem' }}>
+              <div style={{ display:'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap:'1.25rem' }}>
                 {[
                   ['Asset Tag', viewAsset.tag], ['Category', viewAsset.category],
                   ['Assigned To', viewAsset.employee || '—'], ['Location', viewAsset.location],

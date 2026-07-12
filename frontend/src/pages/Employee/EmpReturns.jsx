@@ -131,7 +131,7 @@ const EmpReturns = () => {
                 <label className="form-label">Reason for Return <span style={{ color: 'var(--danger)' }}>*</span></label>
                 <textarea className="form-control" rows="3" placeholder="Why are you returning this asset?" value={form.reason} onChange={e => setForm({ ...form, reason: e.target.value })}></textarea>
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1rem', marginBottom: '1rem' }}>
                 <div className="form-group">
                   <label className="form-label">Current Condition</label>
                   <select className="form-control" value={form.condition} onChange={e => setForm({ ...form, condition: e.target.value })}>

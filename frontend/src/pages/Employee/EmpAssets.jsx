@@ -111,7 +111,7 @@ const EmpAssets = () => {
               <button style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-muted)' }} onClick={() => setSelectedAsset(null)}><X size={20} /></button>
             </div>
             <div className="emp-card-body">
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.25rem' }}>
                 {[
                   { icon: Tag, label: 'Asset Tag', value: selectedAsset.id },
                   { icon: Cpu, label: 'Serial Number', value: selectedAsset.serial },

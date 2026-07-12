@@ -71,7 +71,7 @@ const DHBookings = () => {
             </div>
             <form onSubmit={handleBook}>
               <div className="dh-modal-body">
-                <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'1rem'}}>
+                <div style={{display:'grid',gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',gap:'1rem'}}>
                   <div>
                     <label style={{fontSize:'0.82rem',fontWeight:600,display:'block',marginBottom:6}}>Resource *</label>
                     <select className="dh-form-control" style={{width:'100%'}} value={form.resource} onChange={e=>f('resource',e.target.value)}>

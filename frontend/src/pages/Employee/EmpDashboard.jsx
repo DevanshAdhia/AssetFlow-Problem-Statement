@@ -63,7 +63,7 @@ const EmpDashboard = () => {
           <div className="emp-card-header">
             <h2 className="emp-card-title">Quick Actions</h2>
           </div>
-          <div className="emp-card-body" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+          <div className="emp-card-body" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1rem' }}>
             <button className="btn btn-outline" onClick={() => navigate('/employee/bookings')} style={{ padding: '1rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
               <Calendar size={24} className="text-primary" />
               <span>Book Resource</span>

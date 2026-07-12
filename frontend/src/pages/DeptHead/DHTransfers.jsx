@@ -54,7 +54,7 @@ const DHTransfers = () => {
               <button className="dh-close-btn" onClick={()=>setDetail(null)}><X size={18}/></button>
             </div>
             <div className="dh-modal-body">
-              <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'1rem',marginBottom:'1.5rem'}}>
+              <div style={{display:'grid',gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',gap:'1rem',marginBottom:'1.5rem'}}>
                 {[['Transfer ID',detail.id],['Asset',detail.asset],['Current Holder',detail.curEmp],['Target Employee',detail.tarEmp],['From Dept',detail.curDept],['To Dept',detail.tarDept],['Requested By',detail.requestedBy],['Request Date',detail.date],['Priority',detail.priority]].map(([l,v])=>(
                   <div key={l}><p style={{margin:'0 0 3px',fontSize:'0.75rem',color:'var(--dh-muted)',fontWeight:600}}>{l}</p><p style={{margin:0,fontWeight:700}}>{v}</p></div>
                 ))}

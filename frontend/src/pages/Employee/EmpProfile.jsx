@@ -100,7 +100,7 @@ const EmpProfile = () => {
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '300px 1fr', gap: '1.5rem', alignItems: 'flex-start' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem', alignItems: 'flex-start' }}>
 
         {/* ─── Left Column: Avatar Card ─── */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
@@ -166,7 +166,7 @@ const EmpProfile = () => {
               {editing && <span style={{ fontSize: '0.75rem', color: 'var(--warning)', display: 'flex', alignItems: 'center', gap: '0.3rem' }}><AlertCircle size={13} /> Editing mode active</span>}
             </div>
             <div className="emp-card-body">
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.25rem' }}>
                 {infoFields.map(({ label, key, icon: Icon, editable, type }) => (
                   <div key={key} className="form-group" style={{ marginBottom: 0 }}>
                     <label className="form-label" style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>

@@ -43,7 +43,7 @@ const AMAudit = () => {
               <button className="am-close-btn" onClick={()=>setDetail(null)}><X size={18}/></button>
             </div>
             <div className="am-modal-body" style={{display:'flex',flexDirection:'column',gap:'0.85rem'}}>
-              <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'0.75rem'}}>
+              <div style={{display:'grid',gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',gap:'0.75rem'}}>
                 {[['Asset Name',detail.name],['Asset Tag',detail.tag],['Expected Location',detail.expected],['Reported Location',detail.reported]].map(([l,v])=>(
                   <div key={l}><p style={{fontSize:'0.75rem',color:'var(--am-text-muted)',margin:'0 0 3px'}}>{l}</p><p style={{fontWeight:600,margin:0}}>{v}</p></div>
                 ))}

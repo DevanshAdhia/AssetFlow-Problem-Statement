@@ -99,7 +99,7 @@ const AMAllocation = () => {
                   <label className="am-form-label">Approved By</label>
                   <input className="am-form-control" value={getUser()} disabled />
                 </div>
-                <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'0.75rem'}}>
+                <div style={{display:'grid',gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',gap:'0.75rem'}}>
                   <div className="am-form-group">
                     <label className="am-form-label">Employee ID *</label>
                     <input className="am-form-control" placeholder="EMP-1234" value={form.empId} onChange={e=>setForm(p=>({...p,empId:e.target.value}))} required />
@@ -184,7 +184,7 @@ const AMAllocation = () => {
 
       {/* Transfer tab */}
       {tab==='transfer' && (
-        <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'1.5rem'}}>
+        <div style={{display:'grid',gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',gap:'1.5rem'}}>
           <div className="am-card">
             <div className="am-card-header"><h3 className="am-card-title">Select Asset</h3></div>
             <div className="am-card-body" style={{display:'flex',flexDirection:'column',gap:'0.75rem'}}>

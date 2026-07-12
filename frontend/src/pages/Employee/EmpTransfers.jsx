@@ -129,7 +129,7 @@ const EmpTransfers = () => {
                   <option>Logitech MX Master 3S (AST-2030)</option>
                 </select>
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1rem', marginBottom: '1rem' }}>
                 <div className="form-group">
                   <label className="form-label">Transfer To (Employee)</label>
                   <select className="form-control" value={form.to} onChange={e => setForm({ ...form, to: e.target.value })}>

@@ -151,7 +151,7 @@ const Profile = () => {
               <p className="text-muted text-sm" style={{ marginBottom:'1rem', display:'flex', alignItems:'center', gap:'0.4rem' }}>
                 <Camera size={14}/> Click on avatar to change photo
               </p>
-              <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'1rem' }}>
+              <div style={{ display:'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap:'1rem' }}>
                 {[
                   { key:'name',       label:'Full Name *',      type:'text',  icon:User,      placeholder:'Your full name' },
                   { key:'email',      label:'Email Address *',  type:'email', icon:Mail,      placeholder:'your@email.com' },

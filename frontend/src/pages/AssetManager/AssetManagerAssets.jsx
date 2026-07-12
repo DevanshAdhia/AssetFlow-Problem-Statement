@@ -376,7 +376,7 @@ const AssetManagerAssets = () => {
             </div>
             
             <div className="modal-body py-4">
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.25rem' }}>
                 <div><p className="text-muted mb-1 text-sm">Asset Tag</p><p className="font-bold text-primary">{viewAsset.tag}</p></div>
                 <div><p className="text-muted mb-1 text-sm">Asset Name</p><p className="font-bold">{viewAsset.name}</p></div>
                 <div><p className="text-muted mb-1 text-sm">Category</p><p className="font-bold">{viewAsset.category}</p></div>

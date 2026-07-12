@@ -70,7 +70,7 @@ const AMReports = () => {
         ))}
       </div>
 
-      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'1.5rem'}}>
+      <div style={{display:'grid',gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',gap:'1.5rem'}}>
         {/* Department allocation */}
         <div className="am-card">
           <div className="am-card-header"><h3 className="am-card-title">Department Allocation</h3></div>
@@ -137,7 +137,7 @@ const AMReports = () => {
       {/* Action Required */}
       <div className="am-card">
         <div className="am-card-header"><h3 className="am-card-title am-text-danger">⚠ Action Required</h3></div>
-        <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'1.5rem',padding:'1.25rem 1.5rem'}}>
+        <div style={{display:'grid',gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',gap:'1.5rem',padding:'1.25rem 1.5rem'}}>
           <div>
             <h4 style={{fontSize:'0.875rem',fontWeight:700,color:'var(--am-danger)',marginBottom:'0.5rem'}}>Idle Assets (&gt;60 days)</h4>
             <ul style={{listStyle:'none',padding:0,margin:0,display:'flex',flexDirection:'column',gap:'0.5rem'}}>

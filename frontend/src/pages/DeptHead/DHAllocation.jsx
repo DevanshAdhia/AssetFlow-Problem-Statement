@@ -66,7 +66,7 @@ const DHAllocation = () => {
               <button className="dh-close-btn" onClick={() => setDetail(null)}><X size={18}/></button>
             </div>
             <div className="dh-modal-body">
-              <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'1rem', marginBottom:'1.25rem' }}>
+              <div style={{ display:'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap:'1rem', marginBottom:'1.25rem' }}>
                 {[['Request ID',detail.id],['Employee',detail.employee],['Department',detail.dept],['Asset Requested',detail.asset],['Priority',detail.priority],['Expected Return',detail.expected],['Submitted',detail.submitted]].map(([l,v])=>(
                   <div key={l}><p style={{ margin:'0 0 3px', fontSize:'0.75rem', color:'var(--dh-muted)', fontWeight:600 }}>{l}</p><p style={{ margin:0, fontWeight:700 }}>{v}</p></div>
                 ))}

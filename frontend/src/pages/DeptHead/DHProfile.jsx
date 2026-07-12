@@ -51,7 +51,7 @@ const DHProfile = () => {
         )}
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '320px 1fr', gap: '1.5rem', alignItems: 'start' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem', alignItems: 'start' }}>
         
         {/* Profile Card */}
         <div className="dh-card" style={{ padding: '2rem 1.5rem', textAlign: 'center' }}>
@@ -84,7 +84,7 @@ const DHProfile = () => {
           </div>
           <div style={{ padding: '1.5rem' }}>
             {editMode ? (
-              <form onSubmit={handleSave} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem' }}>
+              <form onSubmit={handleSave} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.25rem' }}>
                 <div><label style={{ fontSize: '0.82rem', fontWeight: 600, display: 'block', marginBottom: 6 }}>Full Name</label>
                   <input className="dh-form-control" style={{ width: '100%' }} value={formData.name} onChange={e=>setFormData({...formData, name:e.target.value})} required/>
                 </div>
@@ -103,7 +103,7 @@ const DHProfile = () => {
                 </div>
               </form>
             ) : (
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '2rem' }}>
                 <div><p style={{ margin: '0 0 4px', fontSize: '0.75rem', color: 'var(--dh-muted)' }}>Full Name</p><p style={{ margin: 0, fontWeight: 600 }}>{user.name}</p></div>
                 <div><p style={{ margin: '0 0 4px', fontSize: '0.75rem', color: 'var(--dh-muted)' }}>Email Address</p><p style={{ margin: 0, fontWeight: 600 }}>{user.email}</p></div>
                 <div><p style={{ margin: '0 0 4px', fontSize: '0.75rem', color: 'var(--dh-muted)' }}>Phone Number</p><p style={{ margin: 0, fontWeight: 600 }}>{user.phone || '+91 98765 43210'}</p></div>
