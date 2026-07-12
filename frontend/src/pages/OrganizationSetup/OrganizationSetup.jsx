@@ -23,6 +23,13 @@ const OrganizationSetup = () => {
     { id: 3, name: 'Emma Davis', dept: 'Facilities', role: 'Asset Manager', email: 'emma@example.com' }
   ]);
 
+  const [locations] = useState([
+    { id: 1, name: 'Main HQ - Floor 1', type: 'Office', capacity: 150, status: 'Active' },
+    { id: 2, name: 'Main HQ - Server Room', type: 'Data Center', capacity: 20, status: 'Active' },
+    { id: 3, name: 'Downtown Branch', type: 'Office', capacity: 50, status: 'Active' },
+    { id: 4, name: 'Storage Warehouse A', type: 'Storage', capacity: 500, status: 'Inactive' }
+  ]);
+
   return (
     <div className="setup-container">
       <div className="setup-header">
@@ -33,7 +40,7 @@ const OrganizationSetup = () => {
         <div className="header-actions">
           <button className="btn btn-primary">
             <Plus size={18} />
-            <span>Add {activeTab === 'departments' ? 'Department' : activeTab === 'categories' ? 'Category' : 'Employee'}</span>
+            <span>Add {activeTab === 'departments' ? 'Department' : activeTab === 'categories' ? 'Category' : activeTab === 'locations' ? 'Location' : 'Employee'}</span>
           </button>
         </div>
       </div>
@@ -45,6 +52,9 @@ const OrganizationSetup = () => {
         <button className={`tab-btn ${activeTab === 'categories' ? 'active' : ''}`} onClick={() => setActiveTab('categories')}>
           Asset Categories
         </button>
+        <button className={`tab-btn ${activeTab === 'locations' ? 'active' : ''}`} onClick={() => setActiveTab('locations')}>
+          Locations
+        </button>
         <button className={`tab-btn ${activeTab === 'employees' ? 'active' : ''}`} onClick={() => setActiveTab('employees')}>
           Employee Directory (Roles)
         </button>
@@ -54,7 +64,8 @@ const OrganizationSetup = () => {
         <div className="card-header filters-header">
           <h2 className="card-title">
             {activeTab === 'departments' ? 'Departments Directory' : 
-             activeTab === 'categories' ? 'Master Asset Categories' : 'Employee Role Assignment'}
+             activeTab === 'categories' ? 'Master Asset Categories' :
+             activeTab === 'locations' ? 'Registered Locations' : 'Employee Role Assignment'}
           </h2>
           <div className="filters">
             <div className="search-box">
@@ -119,6 +130,40 @@ const OrganizationSetup = () => {
                     <td className="fw-medium text-primary">{cat.name}</td>
                     <td>{cat.description}</td>
                     <td>{cat.count} items</td>
+                    <td className="text-right">
+                      <div className="action-buttons">
+                        <button className="icon-btn edit-btn" title="Edit"><Edit2 size={16} /></button>
+                        <button className="icon-btn delete-btn" title="Delete"><Trash2 size={16} /></button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+
+          {activeTab === 'locations' && (
+            <table className="data-table">
+              <thead>
+                <tr>
+                  <th>Location Name</th>
+                  <th>Type</th>
+                  <th>Capacity (Est. Assets)</th>
+                  <th>Status</th>
+                  <th className="text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {locations.map((loc) => (
+                  <tr key={loc.id}>
+                    <td className="fw-medium">{loc.name}</td>
+                    <td className="text-muted">{loc.type}</td>
+                    <td>{loc.capacity}</td>
+                    <td>
+                      <span className={`status-badge ${loc.status === 'Active' ? 'status-active' : 'status-inactive'}`}>
+                        {loc.status}
+                      </span>
+                    </td>
                     <td className="text-right">
                       <div className="action-buttons">
                         <button className="icon-btn edit-btn" title="Edit"><Edit2 size={16} /></button>
