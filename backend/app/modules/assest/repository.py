@@ -25,8 +25,25 @@ class AssestRepository:
         items = list(result.scalars().all())
         return items, total
 
-    async def create(self, name: str, description: str = "") -> Assest:
-        instance = Assest(name=name, description=description)
+    async def create(
+        self,
+        tag: str,
+        name: str,
+        description: str = "",
+        status: str = "Available",
+        current_holder: Optional[str] = None,
+        location: Optional[str] = None,
+        condition: str = "Good",
+    ) -> Assest:
+        instance = Assest(
+            tag=tag,
+            name=name,
+            description=description,
+            status=status,
+            current_holder=current_holder,
+            location=location,
+            condition=condition,
+        )
         self.db.add(instance)
         await self.db.flush()
         await self.db.refresh(instance)

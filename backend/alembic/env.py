@@ -10,6 +10,11 @@ from app.core.config import settings
 # Import all models so Alembic can detect them
 from app.modules.signup.model import User, OTP  # noqa: F401
 from app.modules.assest.model import Assest  # noqa: F401
+from app.modules.department.model import Department, UserRole, AssetCategory, Location, UserDepartment  # noqa: F401
+from app.modules.booking.model import Resource, Booking  # noqa: F401
+from app.modules.maintenance.model import MaintenanceRequest  # noqa: F401
+from app.modules.audit.model import AuditCycle, AuditRecord  # noqa: F401
+from app.modules.allocation.model import Allocation, AllocationHistory  # noqa: F401
 
 config = context.config
 config.set_main_option("sqlalchemy.url", settings.DATABASE_URL)

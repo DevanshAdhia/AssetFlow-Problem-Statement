@@ -30,7 +30,15 @@ class AssestService:
         return instance
 
     async def create(self, data: AssestCreate) -> Assest:
-        instance = await self.repo.create(name=data.name, description=data.description)
+        instance = await self.repo.create(
+            tag=data.tag,
+            name=data.name,
+            description=data.description,
+            status=data.status,
+            current_holder=data.currentHolder,
+            location=data.location,
+            condition=data.condition,
+        )
         logger.info("Assest created: id=%s name=%s", instance.id, instance.name)
         return instance
 
@@ -38,8 +46,13 @@ class AssestService:
         instance = await self.get(pk)
         updated = await self.repo.update(
             instance,
+            tag=data.tag,
             name=data.name,
             description=data.description,
+            status=data.status,
+            current_holder=data.currentHolder,
+            location=data.location,
+            condition=data.condition,
             is_active=data.is_active,
         )
         logger.info("Assest updated: id=%s", updated.id)

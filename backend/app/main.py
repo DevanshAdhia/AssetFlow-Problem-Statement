@@ -2,7 +2,6 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
-from fastapi.responses import JSONResponse
 
 from app.core.config import settings
 from app.common.exceptions import setup_exception_handlers
@@ -14,6 +13,12 @@ from app.db.base import Base
 from app.modules.login.routes import router as login_router
 from app.modules.signup.routes import router as signup_router
 from app.modules.assest.routes import router as assest_router
+from app.modules.department.routes import router as department_router
+from app.modules.booking.routes import router as booking_router
+from app.modules.maintenance.routes import router as maintenance_router
+from app.modules.audit.routes import router as audit_router
+from app.modules.profile.routes import router as profile_router
+from app.modules.allocation.routes import router as allocation_router
 
 
 @asynccontextmanager
@@ -59,3 +64,9 @@ app.include_router(health_router, prefix="/api", tags=["Health"])
 app.include_router(login_router, prefix="/api/login", tags=["Login"])
 app.include_router(signup_router, prefix="/api/signup", tags=["Signup"])
 app.include_router(assest_router, prefix="/api/assest", tags=["Assest"])
+app.include_router(department_router, prefix="/api/departments", tags=["Departments"])
+app.include_router(booking_router, prefix="/api/bookings", tags=["Bookings"])
+app.include_router(maintenance_router, prefix="/api/maintenance", tags=["Maintenance"])
+app.include_router(audit_router, prefix="/api/audit", tags=["Audit"])
+app.include_router(profile_router, prefix="/api/profile", tags=["Profile"])
+app.include_router(allocation_router, prefix="/api/allocations", tags=["Allocations"])

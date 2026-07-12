@@ -25,7 +25,15 @@ class TestAssestService:
         mock_instance.id = 1
         mock_instance.name = "Test"
         service.repo.create = AsyncMock(return_value=mock_instance)
-        data = AssestCreate(name="Test", description="desc")
+        data = AssestCreate(tag="AF-001", name="Test", description="desc")
         result = await service.create(data)
         assert result.name == "Test"
-        service.repo.create.assert_called_once_with(name="Test", description="desc")
+        service.repo.create.assert_called_once_with(
+            tag="AF-001",
+            name="Test",
+            description="desc",
+            status="Available",
+            current_holder=None,
+            location=None,
+            condition="Good",
+        )
