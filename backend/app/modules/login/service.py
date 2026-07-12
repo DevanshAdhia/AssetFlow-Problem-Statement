@@ -4,15 +4,22 @@ This module coordinates password validation, Google OAuth id_token verification
 via external HTTP calls, and database updates for oauth logins.
 """
 
+import asyncio
 import logging
+import secrets
+import smtplib
+from datetime import datetime, timedelta, timezone
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 from typing import Optional
 import httpx
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.modules.signup.model import User
 from app.modules.signup.repository import UserRepository
 from app.modules.login.repository import LoginRepository
-from app.core.security import verify_password
+from app.core.security import verify_password, get_password_hash
 from app.common.exceptions import AppException
+from app.core.config import settings
 
 logger = logging.getLogger(__name__)
 
@@ -131,3 +138,52 @@ class LoginService:
             raise AppException("This account is inactive.", code="inactive_account")
 
         return user
+
+    async def request_password_reset(self, email: str) -> None:
+        """Generate a password reset token and dispatch it via email.
+
+        Always returns successfully to avoid leaking whether an email is registered.
+
+        Args:
+            email (str): The account email address requesting a reset.
+        """
+        user = await self.login_repo.get_by_email(email)
+        if not user or not user.hashed_password:
+            # Silently succeed to prevent email enumeration
+            logger.info("Password reset requested for unknown or OAuth-only email: %s", email)
+            return
+
+        token = secrets.token_urlsafe(32)
+        expires_at = datetime.now(timezone.utc) + timedelta(hours=1)
+        await self.login_repo.create_reset_token(email=email, token=token, expires_at=expires_at)
+
+        logger.info("Password reset token generated for %s: %s", email, token)
+        print(f"DEBUG PASSWORD RESET TOKEN for {email}: {token}")
+
+        await asyncio.to_thread(_send_reset_email_sync, email, token)
+
+    async def reset_password(self, token: str, new_password: str) -> None:
+        """Validate a reset token and update the user's password.
+
+        Args:
+            token (str): The password reset token from the email link.
+            new_password (str): The new plaintext password to set.
+
+        Raises:
+            AppException: If the token is invalid, expired, or already used.
+        """
+        record = await self.login_repo.get_valid_reset_token(token)
+        if not record:
+            raise AppException(
+                "Invalid or expired password reset token.", code="invalid_reset_token"
+            )
+
+        user = await self.login_repo.get_by_email(record.email)
+        if not user:
+            raise AppException("Account not found.", code="not_found")
+
+        user.hashed_password = get_password_hash(new_password)
+        await self.login_repo.mark_reset_token_used(record)
+        await self.login_repo.db.commit()
+
+        logger.info("Password successfully reset for user id=%s", user.id)

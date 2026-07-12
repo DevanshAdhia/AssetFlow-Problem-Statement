@@ -11,6 +11,20 @@ class AssestBase(BaseModel):
     currentHolder: Optional[str] = Field(None, max_length=255, alias="current_holder")
     location: Optional[str] = Field(None, max_length=255)
     condition: str = Field(default="Good", max_length=50)
+    
+    # New Asset Manager Extended Fields
+    category: Optional[str] = Field(None, max_length=255)
+    department: Optional[str] = Field(None, max_length=255)
+    brand: Optional[str] = Field(None, max_length=255)
+    model_name: Optional[str] = Field(None, max_length=255, alias="model")
+    serial_number: Optional[str] = Field(None, max_length=255, alias="serial")
+    manufacturer: Optional[str] = Field(None, max_length=255)
+    purchaseDate: Optional[str] = Field(None, max_length=50, alias="purchase_date")
+    warranty: Optional[str] = Field(None, max_length=50, alias="warranty_expiry")
+    cost: Optional[str] = Field(None, max_length=50)
+    supplier: Optional[str] = Field(None, max_length=255)
+    isShared: bool = Field(False, alias="is_shared")
+    isBookable: bool = Field(False, alias="is_bookable")
 
     model_config = {"populate_by_name": True}
 
@@ -33,6 +47,19 @@ class AssestUpdate(BaseModel):
     location: Optional[str] = Field(None, max_length=255)
     condition: Optional[str] = Field(None, max_length=50)
     is_active: Optional[bool] = None
+
+    category: Optional[str] = Field(None, max_length=255)
+    department: Optional[str] = Field(None, max_length=255)
+    brand: Optional[str] = Field(None, max_length=255)
+    model_name: Optional[str] = Field(None, max_length=255, alias="model")
+    serial_number: Optional[str] = Field(None, max_length=255, alias="serial")
+    manufacturer: Optional[str] = Field(None, max_length=255)
+    purchaseDate: Optional[str] = Field(None, max_length=50, alias="purchase_date")
+    warranty: Optional[str] = Field(None, max_length=50, alias="warranty_expiry")
+    cost: Optional[str] = Field(None, max_length=50)
+    supplier: Optional[str] = Field(None, max_length=255)
+    isShared: Optional[bool] = Field(None, alias="is_shared")
+    isBookable: Optional[bool] = Field(None, alias="is_bookable")
 
     model_config = {"populate_by_name": True}
 

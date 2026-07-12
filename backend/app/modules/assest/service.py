@@ -38,6 +38,18 @@ class AssestService:
             current_holder=data.currentHolder,
             location=data.location,
             condition=data.condition,
+            category=data.category,
+            department=data.department,
+            brand=data.brand,
+            model=data.model_name,
+            serial_number=data.serial_number,
+            manufacturer=data.manufacturer,
+            purchase_date=data.purchaseDate,
+            warranty_expiry=data.warranty,
+            cost=data.cost,
+            supplier=data.supplier,
+            is_shared=data.isShared,
+            is_bookable=data.isBookable,
         )
         logger.info("Assest created: id=%s name=%s", instance.id, instance.name)
         return instance
@@ -54,6 +66,18 @@ class AssestService:
             location=data.location,
             condition=data.condition,
             is_active=data.is_active,
+            category=data.category,
+            department=data.department,
+            brand=data.brand,
+            model=data.model_name,
+            serial_number=data.serial_number,
+            manufacturer=data.manufacturer,
+            purchase_date=data.purchaseDate,
+            warranty_expiry=data.warranty,
+            cost=data.cost,
+            supplier=data.supplier,
+            is_shared=data.isShared,
+            is_bookable=data.isBookable,
         )
         logger.info("Assest updated: id=%s", updated.id)
         return updated

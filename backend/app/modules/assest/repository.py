@@ -34,6 +34,7 @@ class AssestRepository:
         current_holder: Optional[str] = None,
         location: Optional[str] = None,
         condition: str = "Good",
+        **kwargs,
     ) -> Assest:
         instance = Assest(
             tag=tag,
@@ -43,6 +44,7 @@ class AssestRepository:
             current_holder=current_holder,
             location=location,
             condition=condition,
+            **kwargs,
         )
         self.db.add(instance)
         await self.db.flush()

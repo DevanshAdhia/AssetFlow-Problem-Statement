@@ -70,3 +70,31 @@ class OTP(Base, TimestampMixin):
             str: Formal representation of the OTP instance.
         """
         return f"<OTP(email={self.email!r}, verified={self.is_verified})>"
+
+
+class PasswordResetToken(Base, TimestampMixin):
+    """SQLAlchemy model representing a password reset token.
+
+    Attributes:
+        id (int): Primary key.
+        email (str): Email address the reset was requested for.
+        token (str): Unique secure token sent to the user.
+        expires_at (datetime): UTC expiry time of the token.
+        is_used (bool): Whether the token has already been consumed.
+    """
+
+    __tablename__ = "password_reset_tokens"
+
+    id = Column(Integer, primary_key=True, index=True)
+    email = Column(String(255), nullable=False, index=True)
+    token = Column(String(255), nullable=False, unique=True, index=True)
+    expires_at = Column(DateTime(timezone=True), nullable=False)
+    is_used = Column(Boolean, nullable=False, default=False)
+
+    def __repr__(self) -> str:
+        """Return representation string for the PasswordResetToken model.
+
+        Returns:
+            str: Formal representation of the token instance.
+        """
+        return f"<PasswordResetToken(email={self.email!r}, used={self.is_used})>"
