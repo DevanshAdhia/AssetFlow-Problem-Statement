@@ -3,7 +3,7 @@ import { Bell, CheckSquare, ArrowRightLeft, BookOpen, AlertCircle, Settings, Che
 import '../../layouts/DeptHeadLayout.css';
 
 const NOTIFICATIONS = [
-  { id: 1, type: 'Allocation', icon: CheckSquare,    color: '#7c3aed', title: 'New Allocation Request', desc: 'Rohan Mehta has requested a Dell XPS 15 Laptop.', priority: 'High', date: 'Today, 09:45 AM', read: false },
+  { id: 1, type: 'Allocation', icon: CheckSquare,    color: '#2563eb', title: 'New Allocation Request', desc: 'Rohan Mehta has requested a Dell XPS 15 Laptop.', priority: 'High', date: 'Today, 09:45 AM', read: false },
   { id: 2, type: 'Transfer',   icon: ArrowRightLeft, color: '#d97706', title: 'Transfer Request Submitted', desc: 'Sneha Kulkarni requested transfer of 4K Monitor (AF-045).', priority: 'Medium', date: 'Today, 08:30 AM', read: false },
   { id: 3, type: 'Booking',    icon: BookOpen,       color: '#0284c7', title: 'Resource Booked', desc: 'Meeting Room A is booked by you for Sprint Review.', priority: 'Low', date: 'Yesterday, 04:15 PM', read: true },
   { id: 4, type: 'Maintenance',icon: AlertCircle,    color: '#dc2626', title: 'Maintenance Overdue', desc: 'Laptop AF-022 requires immediate maintenance check.', priority: 'High', date: 'Yesterday, 10:00 AM', read: true },
@@ -51,7 +51,7 @@ const DHNotifications = () => {
             </div>
             <div style={{ flex: 1 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 4 }}>
-                <h4 style={{ margin: 0, fontSize: '0.95rem', fontWeight: n.read ? 600 : 700, color: n.read ? 'var(--dh-text)' : '#7c3aed' }}>{n.title}</h4>
+                <h4 style={{ margin: 0, fontSize: '0.95rem', fontWeight: n.read ? 600 : 700, color: n.read ? 'var(--dh-text)' : '#2563eb' }}>{n.title}</h4>
                 <span style={{ fontSize: '0.75rem', color: 'var(--dh-muted)' }}>{n.date}</span>
               </div>
               <p style={{ margin: '0 0 0.5rem', fontSize: '0.85rem', color: 'var(--dh-text)' }}>{n.desc}</p>

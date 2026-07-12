@@ -14,11 +14,11 @@ import '../../layouts/DeptHeadLayout.css';
 const TT = { contentStyle: { borderRadius: 8, border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,.12)', background: '#fff', fontSize: 12 } };
 
 const allocTrend   = [{ m:'Jan',req:4 },{ m:'Feb',req:7 },{ m:'Mar',req:5 },{ m:'Apr',req:9 },{ m:'May',req:6 },{ m:'Jun',req:11 },{ m:'Jul',req:8 }];
-const statusData   = [{ name:'Allocated',v:38,c:'#7c3aed'},{ name:'Available',v:14,c:'#16a34a'},{ name:'Maintenance',v:5,c:'#d97706'},{ name:'Reserved',v:3,c:'#0284c7'}];
+const statusData   = [{ name:'Allocated',v:38,c:'#2563eb'},{ name:'Available',v:14,c:'#16a34a'},{ name:'Maintenance',v:5,c:'#d97706'},{ name:'Reserved',v:3,c:'#0284c7'}];
 const bookingTrend = [{ m:'Jan',b:6 },{ m:'Feb',b:9 },{ m:'Mar',b:7 },{ m:'Apr',b:13 },{ m:'May',b:10 },{ m:'Jun',b:15 },{ m:'Jul',b:11 }];
 
 const ACTIVITIES = [
-  { icon: CheckSquare, color:'#7c3aed', msg:'Allocation request approved for Rohan Mehta — ThinkPad T14', time:'10m ago', type:'Approval' },
+  { icon: CheckSquare, color:'#2563eb', msg:'Allocation request approved for Rohan Mehta — ThinkPad T14', time:'10m ago', type:'Approval' },
   { icon: ArrowRightLeft, color:'#d97706', msg:'Transfer request for Projector AF-009 sent to Asset Manager', time:'45m ago', type:'Transfer' },
   { icon: BookOpen, color:'#0284c7', msg:'Meeting Room B booked by Sneha Kulkarni for Sprint Review', time:'1h ago', type:'Booking' },
   { icon: AlertCircle, color:'#dc2626', msg:'Laptop AF-022 flagged for maintenance — overdue check', time:'3h ago', type:'Maintenance' },
@@ -45,7 +45,7 @@ const DHDashboard = () => {
   const user = (() => { try { return JSON.parse(localStorage.getItem('auth_user')) || {}; } catch { return {}; } })();
 
   const KPI_CARDS = [
-    { label:'Total Dept. Assets',    value:60,  delta:'↑ 3 this month', color:'#7c3aed', icon:Package },
+    { label:'Total Dept. Assets',    value:60,  delta:'↑ 3 this month', color:'#2563eb', icon:Package },
     { label:'Allocated',             value:38,  delta:'63% utilization',  color:'#2563eb', icon:Users },
     { label:'Available',             value:14,  delta:'23% idle',          color:'#16a34a', icon:CheckCircle },
     { label:'Under Maintenance',     value:5,   delta:'2 critical',       color:'#d97706', icon:Wrench },
@@ -109,15 +109,15 @@ const DHDashboard = () => {
               <AreaChart data={allocTrend} margin={{ top:5, right:5, left:-28, bottom:0 }}>
                 <defs>
                   <linearGradient id="dhGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#7c3aed" stopOpacity={0.2}/>
-                    <stop offset="95%" stopColor="#7c3aed" stopOpacity={0}/>
+                    <stop offset="5%" stopColor="#2563eb" stopOpacity={0.2}/>
+                    <stop offset="95%" stopColor="#2563eb" stopOpacity={0}/>
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0"/>
                 <XAxis dataKey="m" tick={{ fontSize:11, fill:'#9ca3af' }} axisLine={false} tickLine={false}/>
                 <YAxis tick={{ fontSize:11, fill:'#9ca3af' }} axisLine={false} tickLine={false}/>
                 <Tooltip {...TT}/>
-                <Area type="monotone" dataKey="req" stroke="#7c3aed" strokeWidth={3} fill="url(#dhGrad)" dot={{ r:4, fill:'#7c3aed', strokeWidth:2, stroke:'#fff' }}/>
+                <Area type="monotone" dataKey="req" stroke="#2563eb" strokeWidth={3} fill="url(#dhGrad)" dot={{ r:4, fill:'#2563eb', strokeWidth:2, stroke:'#fff' }}/>
               </AreaChart>
             </ResponsiveContainer>
           </div>

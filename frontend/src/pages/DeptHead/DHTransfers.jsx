@@ -68,10 +68,10 @@ const DHTransfers = () => {
                   return (
                     <React.Fragment key={step}>
                       <div style={{display:'flex',flexDirection:'column',alignItems:'center',flex:1}}>
-                        <div style={{width:28,height:28,borderRadius:'50%',background:active?'#7c3aed':'#e5e7eb',color:active?'#fff':'#9ca3af',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'0.7rem',fontWeight:700}}>{i+1}</div>
-                        <span style={{fontSize:'0.68rem',marginTop:4,textAlign:'center',color:active?'#7c3aed':'var(--dh-muted)',fontWeight:active?700:400}}>{step}</span>
+                        <div style={{width:28,height:28,borderRadius:'50%',background:active?'#2563eb':'#e5e7eb',color:active?'#fff':'#9ca3af',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'0.7rem',fontWeight:700}}>{i+1}</div>
+                        <span style={{fontSize:'0.68rem',marginTop:4,textAlign:'center',color:active?'#2563eb':'var(--dh-muted)',fontWeight:active?700:400}}>{step}</span>
                       </div>
-                      {i<WORKFLOW.length-1 && <div style={{flex:1,height:2,background:active&&i<3?'#7c3aed':'#e5e7eb',marginTop:13}}/>}
+                      {i<WORKFLOW.length-1 && <div style={{flex:1,height:2,background:active&&i<3?'#2563eb':'#e5e7eb',marginTop:13}}/>}
                     </React.Fragment>
                   );
                 })}

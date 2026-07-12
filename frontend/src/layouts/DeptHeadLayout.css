@@ -3,8 +3,8 @@
 
 /* DH-specific color tokens */
 :root {
-  --dh-primary:    #7C3AED;
-  --dh-primary-lt: rgba(124,58,237,0.1);
+  --dh-primary:    #2563EB;
+  --dh-primary-lt: rgba(37,99,235,0.1);
   --dh-success:    #16a34a;
   --dh-warning:    #d97706;
   --dh-danger:     #dc2626;

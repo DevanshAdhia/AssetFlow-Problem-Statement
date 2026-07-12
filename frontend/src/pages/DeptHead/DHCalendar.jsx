@@ -3,13 +3,13 @@ import { CalendarDays, ChevronLeft, ChevronRight, BookOpen, CheckSquare, Wrench,
 import '../../layouts/DeptHeadLayout.css';
 
 const EVENTS = [
-  { id:1, title:'Sprint Review', type:'Meeting',     date:'2026-07-12', time:'15:00–16:00', color:'#7c3aed' },
+  { id:1, title:'Sprint Review', type:'Meeting',     date:'2026-07-12', time:'15:00–16:00', color:'#2563eb' },
   { id:2, title:'Client Demo — Projector B', type:'Booking', date:'2026-07-13', time:'10:00–12:00', color:'#0284c7' },
   { id:3, title:'Onboarding — Training Room', type:'Booking', date:'2026-07-14', time:'14:00–17:00', color:'#0284c7' },
   { id:4, title:'Laptop AF-022 Maintenance', type:'Maintenance', date:'2026-07-15', time:'All Day', color:'#d97706' },
   { id:5, title:'Allocation Review — Divya', type:'Approval', date:'2026-07-16', time:'09:00', color:'#16a34a' },
-  { id:6, title:'Team Standup', type:'Meeting', date:'2026-07-12', time:'09:30–09:45', color:'#7c3aed' },
-  { id:7, title:'Quarterly Town Hall', type:'Meeting', date:'2026-07-18', time:'14:00–15:30', color:'#7c3aed' },
+  { id:6, title:'Team Standup', type:'Meeting', date:'2026-07-12', time:'09:30–09:45', color:'#2563eb' },
+  { id:7, title:'Quarterly Town Hall', type:'Meeting', date:'2026-07-18', time:'14:00–15:30', color:'#2563eb' },
   { id:8, title:'Van Booking — Client Visit', type:'Booking', date:'2026-07-15', time:'08:00–18:00', color:'#0284c7' },
 ];
 
@@ -56,7 +56,7 @@ const DHCalendar = () => {
           <button key={f} className={`dh-btn dh-btn-sm ${filter===f?'dh-btn-primary':'dh-btn-outline'}`} onClick={()=>setFilter(f)}>{f}</button>
         ))}
         <div style={{marginLeft:'auto',display:'flex',alignItems:'center',gap:4}}>
-          {[{c:'#7c3aed',l:'Meeting'},{c:'#0284c7',l:'Booking'},{c:'#d97706',l:'Maintenance'},{c:'#16a34a',l:'Approval'}].map(i=>(
+          {[{c:'#2563eb',l:'Meeting'},{c:'#0284c7',l:'Booking'},{c:'#d97706',l:'Maintenance'},{c:'#16a34a',l:'Approval'}].map(i=>(
             <span key={i.l} style={{display:'flex',alignItems:'center',gap:4,fontSize:'0.72rem',color:'var(--dh-muted)',marginLeft:12}}>
               <span style={{width:8,height:8,borderRadius:'50%',background:i.c,display:'inline-block'}}/>{i.l}
             </span>
@@ -91,9 +91,9 @@ const DHCalendar = () => {
                     <>
                       <span style={{
                         fontSize:'0.8rem', fontWeight: isToday(d)?800:500,
-                        color: isToday(d)?'#7c3aed':'var(--dh-text)',
+                        color: isToday(d)?'#2563eb':'var(--dh-text)',
                         display:'inline-block', marginBottom:2,
-                        ...(isToday(d) ? { background:'#7c3aed', color:'#fff', width:24, height:24, borderRadius:'50%', textAlign:'center', lineHeight:'24px' } : {})
+                        ...(isToday(d) ? { background:'#2563eb', color:'#fff', width:24, height:24, borderRadius:'50%', textAlign:'center', lineHeight:'24px' } : {})
                       }}>{d}</span>
                       {events.slice(0,2).map(ev=>(
                         <div key={ev.id} style={{

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { User, Mail, Phone, Building2, MapPin, Edit2, CheckCircle, Lock, Bell } from 'lucide-react';
 import '../../layouts/DeptHeadLayout.css';
 
-const buildAvatar = (name) => `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=7C3AED&color=fff&bold=true&size=150`;
+const buildAvatar = (name) => `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=2563EB&color=fff&bold=true&size=150`;
 
 const DHProfile = () => {
   const [user, setUser] = useState({ name: 'Loading...', email: '', phone: '', department: '', role: '', avatar: '' });
