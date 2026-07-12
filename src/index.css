@@ -35,6 +35,15 @@
   box-sizing: border-box;
 }
 
+/* Hide all native scrollbars for a premium seamless app feel */
+::-webkit-scrollbar {
+  display: none;
+}
+* {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 body {
   font-family: var(--font-sans);
   background-color: var(--bg-color);
