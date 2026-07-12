@@ -1,70 +1,96 @@
-# AssetFlow ERP Platform
+# AssetFlow ERP Platform Backend API
 
-![AssetFlow Banner](https://via.placeholder.com/1200x400.png?text=AssetFlow+-+Enterprise+Resource+Planning)
+**AssetFlow** is a modern, enterprise-grade FastAPI backend service built to manage organizational assets, employee allocations, resource bookings, Kanban-style maintenance tracking, and verification audits.
 
-**AssetFlow** is a modern, highly responsive Enterprise Resource Planning (ERP) platform prototype designed to streamline asset allocation, resource booking, organization setups, and maintenance tracking.
+---
 
-## 🌟 Key Features
+## 🌟 Key Backend Modules & Features
 
-### 1. Robust Authentication Flow
-- **Interactive UI:** Split-screen layouts with fully responsive styling.
-- **Social Integration:** Integrated "Continue with Google" architecture.
-- **Dynamic Formatting:** Custom-built country code selector integrating real-time flag CDN images.
-- **Enterprise Grade UX:** Forms designed to prevent viewport scrolling via aggressive auto-scaling layouts.
+### 1. Robust Authentication & Accounts (`/api/login`, `/api/signup`)
+- Email password sign-in (using bcrypt hashing).
+- Google OAuth token verification and account registration/linking.
+- One-Time Password (OTP) validation.
 
-### 2. Comprehensive Dashboard
-- **Live KPI Metrics:** Monitor available assets, active allocations, and maintenance alerts at a glance.
-- **Seamless Navigation:** Smart, auto-collapsing mobile sidebars replacing outdated full-screen menus.
-- **Responsive Tables:** Clean data displays for activity logs and resource reports.
+### 2. Organization Structure (`/api/departments`)
+- Department hierarchy management.
+- Employee registration, roles (`Employee`, `Asset Manager`, `Admin`), and permissions.
+- Asset category and physical location classification.
 
-### 3. Administrator & Organization Management
-- **Organization Setup:** Manage departments, internal hierarchy, and team structure via interactive data tables.
-- **Terms & Policy:** Mandatory scroll-tracking acceptance flows for new administrator accounts.
-- **Profile Customization:** Dynamic image uploading featuring instant blob-preview URLs.
+### 3. Asset Inventory (`/api/assest`)
+- Full CRUD operations supporting tags, location tracking, status, and physical condition.
 
-### 4. Advanced Operations & Auditing
-- **Kanban Maintenance:** Track repairs across pending, approved, and resolved states.
-- **Audit Center:** Live discrepancy reporting for expected vs. reported asset locations.
-- **Rich Analytics:** Lightweight CSS-based heatmaps and utilization charts for actionable insights.
-- **Double-Allocation Check:** Smart transfer forms that visually block requests for already-assigned assets.
+### 4. Resource Booking (`/api/bookings`)
+- Timeline scheduling with built-in validation preventing resource double-bookings.
+
+### 5. Maintenance Board (`/api/maintenance`)
+- Kanban task workflow tracking with step-by-step state transition rules (`pending` → `approved` → `assigned` → `in_progress` → `resolved`).
+
+### 6. Verification Audits (`/api/audit`)
+- Create audit cycles, match items dynamically, track expected vs. reported location, and record discrepancies.
+
+### 7. Allocation & Transfers (`/api/allocations`)
+- Track who holds which asset.
+- Double-allocation validation (prevents assigning already-allocated assets).
+- Return assets to storage or transfer them between employees/departments with automated history logging.
+
+### 8. System Monitoring (`/api/activity-logs`, `/api/notifications`)
+- Activity log audit trails for successful/pending system events.
+- Notification dispatch targeted to specific users with unread/read state transitions.
+
+---
 
 ## 🛠️ Technology Stack
-- **Core:** React 18, Vite
-- **Routing:** React Router DOM v6
-- **Styling:** Vanilla CSS (CSS Variables, Flexbox, CSS Grid)
-- **Icons:** Lucide React
-- **Integration:** FlagCDN for dynamic assets
+- **Framework**: FastAPI (ASGI)
+- **Database ORM**: SQLAlchemy 2.0 (Asyncpg PostgreSQL)
+- **Migrations**: Alembic
+- **Validation**: Pydantic v2
+- **Testing**: Pytest (with Asyncio)
+- **Security**: Passlib (Bcrypt) & Python-Jose JWT
+
+---
 
 ## 🚀 Quick Start Guide
 
 ### Prerequisites
-Make sure you have Node.js installed locally.
+Make sure you have Python 3.10+ and a PostgreSQL server instance running.
 
 ### Installation
 1. Clone the repository:
    ```bash
    git clone https://github.com/DevanshAdhia/AssetFlow-Problem-Statement.git
+   cd AssetFlow-Problem-Statement/backend
    ```
-2. Navigate to the project directory:
+2. Set up virtual environment:
    ```bash
-   cd AssetFlow-Problem-Statement
+   python -m venv venv
+   source venv/bin/activate  # On Windows use: .\venv\Scripts\activate
    ```
 3. Install dependencies:
    ```bash
-   npm install
+   pip install -r requirements.txt
+   ```
+4. Copy the environment variables template and configure your credentials:
+   ```bash
+   cp .env.example .env
    ```
 
-### Running Locally
-Start the Vite development server:
+### Database Migrations
+Run the migrations to set up the database tables:
 ```bash
-npm run dev
+alembic upgrade head
 ```
-Open your browser and navigate to `http://localhost:5175/` (or the port specified in your terminal).
 
-## 📄 Documentation Structure
-- `API_CONTRACT.md`: Complete JSON API endpoint spec designed for Backend Developer integration.
-- `admin.md`: Deep dive into specific admin features and layout behaviors (Intended for internal team).
-- `README.md`: Public-facing project overview (this file).
+### Running Locally
+Start the Uvicorn ASGI server:
+```bash
+uvicorn app.main:app --reload --port 5000
+```
+Interactive API documentation will be available at `http://localhost:5000/docs`.
 
 ---
-*Built for the Hackathon — Focuses on providing a flawless, 100% responsive, visually stunning frontend experience.*
+
+## 🧪 Testing
+To execute the automated test suite (including route and service validations):
+```bash
+python -m pytest
+```
