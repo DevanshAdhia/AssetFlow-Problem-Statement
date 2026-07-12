@@ -47,6 +47,24 @@ const EmpProfile = () => {
     } catch {}
   };
 
+  const handleAvatarUpload = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      if (editing) {
+        setForm(prev => ({ ...prev, avatar: ev.target.result }));
+      } else {
+        const updated = { ...profile, avatar: ev.target.result };
+        setProfile(updated);
+        localStorage.setItem('emp_profile', JSON.stringify(updated));
+        window.dispatchEvent(new Event('storage'));
+        setToast('Profile picture updated successfully!');
+      }
+    };
+    reader.readAsDataURL(file);
+  };
+
   const handleSave = () => {
     setProfile(form);
     persist(form);
@@ -109,13 +127,14 @@ const EmpProfile = () => {
               {/* Avatar */}
               <div style={{ position: 'relative' }}>
                 <img
-                  src={profile.avatar || buildAvatar(profile.name)}
+                  src={(editing ? form.avatar : profile.avatar) || buildAvatar(profile.name)}
                   alt="Profile"
                   style={{ width: 110, height: 110, borderRadius: '50%', objectFit: 'cover', border: '4px solid var(--primary)', boxShadow: '0 4px 16px rgba(37,99,235,0.2)' }}
                 />
-                <button title="Change Photo" style={{ position: 'absolute', bottom: 2, right: 2, width: 32, height: 32, borderRadius: '50%', background: 'var(--primary)', border: '2px solid var(--surface)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff' }}>
+                <input id="emp-avatar-upload" type="file" accept="image/*" style={{ display: 'none' }} onChange={handleAvatarUpload} />
+                <label htmlFor="emp-avatar-upload" title="Change Photo" style={{ position: 'absolute', bottom: 2, right: 2, width: 32, height: 32, borderRadius: '50%', background: 'var(--primary)', border: '2px solid var(--surface)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff' }}>
                   <Camera size={14} />
-                </button>
+                </label>
               </div>
 
               {/* Name & Role */}

@@ -1,9 +1,66 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { CheckCircle2, ChevronDown } from 'lucide-react';
 import { API_ENDPOINTS } from '../../config/api';
-import '../Login/Login.css'; // Reusing some auth styles
+import '../Login/Login.css';
 import './Signup.css';
+
+const ROLE_ROUTES = {
+  Admin:             '/dashboard',
+  'Asset Manager':   '/asset-manager/dashboard',
+  'Department Head': '/dept-head/dashboard',
+  Employee:          '/employee/dashboard',
+};
+
+const GOOGLE_ACCOUNTS = [
+  { name: 'Bharat Rathor', email: 'bharat.rathor@gmail.com', avatar: 'https://ui-avatars.com/api/?name=Bharat+Rathor&background=EA4335&color=fff&bold=true&size=80' },
+  { name: 'Priya Sharma',  email: 'priya.sharma@gmail.com',  avatar: 'https://ui-avatars.com/api/?name=Priya+Sharma&background=34A853&color=fff&bold=true&size=80' },
+  { name: 'Suresh Kumar',  email: 'suresh.kumar@gmail.com',  avatar: 'https://ui-avatars.com/api/?name=Suresh+Kumar&background=FBBC04&color=fff&bold=true&size=80' },
+  { name: 'Rahul Verma',   email: 'rahul.verma@gmail.com',   avatar: 'https://ui-avatars.com/api/?name=Rahul+Verma&background=4285F4&color=fff&bold=true&size=80' },
+];
+
+const GoogleAccountPicker = ({ role, onSelect, onClose }) => {
+  const modalRef = useRef(null);
+  useEffect(() => {
+    const h = (e) => { if (modalRef.current && !modalRef.current.contains(e.target)) onClose(); };
+    document.addEventListener('mousedown', h);
+    return () => document.removeEventListener('mousedown', h);
+  }, [onClose]);
+  return (
+    <div style={{ position:'fixed', inset:0, zIndex:9999, background:'rgba(0,0,0,0.45)', display:'flex', alignItems:'center', justifyContent:'center', backdropFilter:'blur(4px)' }}>
+      <div ref={modalRef} style={{ background:'#fff', borderRadius:28, width:400, maxWidth:'94vw', boxShadow:'0 24px 60px rgba(0,0,0,0.25)', overflow:'hidden', fontFamily:"'Google Sans','Segoe UI',sans-serif", animation:'gPickerIn 0.22s cubic-bezier(.4,0,.2,1)' }}>
+        <div style={{ padding:'32px 32px 0', textAlign:'center' }}>
+          <div style={{ display:'flex', justifyContent:'center', marginBottom:16 }}>
+            {[['G','#4285F4'],['o','#EA4335'],['o','#FBBC05'],['g','#4285F4'],['l','#34A853'],['e','#EA4335']].map(([l,c],i)=><span key={i} style={{fontSize:26,fontWeight:700,color:c}}>{l}</span>)}
+          </div>
+          <h2 style={{ margin:0, fontSize:20, fontWeight:500, color:'#202124' }}>Sign in with Google</h2>
+          <p style={{ margin:'8px 0 0', fontSize:14, color:'#5f6368' }}>Choose an account to continue to <strong>AssetFlow</strong></p>
+        </div>
+        <div style={{ padding:'16px 8px', maxHeight:280, overflowY:'auto' }}>
+          {GOOGLE_ACCOUNTS.map(acc => (
+            <button key={acc.email} onClick={() => onSelect(acc)} style={{ display:'flex', alignItems:'center', gap:14, width:'100%', padding:'12px 24px', border:'none', background:'transparent', cursor:'pointer', borderRadius:12, textAlign:'left', transition:'background 0.15s' }} onMouseEnter={e=>e.currentTarget.style.background='#f1f3f4'} onMouseLeave={e=>e.currentTarget.style.background='transparent'}>
+              <img src={acc.avatar} alt={acc.name} style={{ width:46, height:46, borderRadius:'50%', flexShrink:0 }} />
+              <div style={{ flex:1 }}>
+                <div style={{ fontWeight:500, fontSize:15, color:'#202124' }}>{acc.name}</div>
+                <div style={{ fontSize:13, color:'#5f6368', marginTop:2 }}>{acc.email}</div>
+              </div>
+            </button>
+          ))}
+          <button onClick={onClose} style={{ display:'flex', alignItems:'center', gap:14, width:'100%', padding:'12px 24px', border:'none', background:'transparent', cursor:'pointer', borderRadius:12, textAlign:'left' }} onMouseEnter={e=>e.currentTarget.style.background='#f1f3f4'} onMouseLeave={e=>e.currentTarget.style.background='transparent'}>
+            <div style={{ width:46, height:46, borderRadius:'50%', background:'#f1f3f4', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+              <svg width="24" height="24" viewBox="0 0 24 24"><path fill="#5f6368" d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
+            </div>
+            <div style={{ fontWeight:500, fontSize:15, color:'#202124' }}>Use another account</div>
+          </button>
+        </div>
+        <div style={{ borderTop:'1px solid #e8eaed', padding:'16px 24px', display:'flex', justifyContent:'space-between', fontSize:12, color:'#5f6368' }}>
+          <div style={{ display:'flex', gap:16 }}><a href="#" style={{ color:'#5f6368', textDecoration:'none' }}>Privacy</a><a href="#" style={{ color:'#5f6368', textDecoration:'none' }}>Terms</a></div>
+          <button onClick={onClose} style={{ background:'none', border:'none', cursor:'pointer', color:'#5f6368', fontSize:12 }}>Cancel</button>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -15,8 +72,10 @@ const Signup = () => {
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [role, setRole] = useState('Employee');
   const [error, setError] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
+  const [showGoogle, setShowGoogle] = useState(false);
   
   // Custom Country Dropdown State
   const [showCountries, setShowCountries] = useState(false);
@@ -30,20 +89,16 @@ const Signup = () => {
     { code: '+81', flag: '🇯🇵', name: 'Japan' }
   ];
 
-  const handleGoogleAuth = () => {
-    const googleUser = {
-      name: "Google Demo User",
-      email: "demo@gmail.com",
-      phone: "+1 800 555 0199",
-      department: "Cloud Operations",
-      role: "Employee",
-      status: "Active",
-      avatar: `https://ui-avatars.com/api/?name=Google+Demo+User&background=2563EB&color=fff&bold=true&size=128`,
+  const handleGooglePick = (acc) => {
+    const userData = {
+      name: acc.name, email: acc.email, phone: '', department: 'General',
+      role: role, status: 'Active', avatar: acc.avatar,
       joinDate: new Date().toISOString().split('T')[0],
     };
-    localStorage.setItem('auth_user', JSON.stringify(googleUser));
+    localStorage.setItem('auth_user', JSON.stringify(userData));
     localStorage.setItem('token', 'google-oauth-demo-token');
-    window.location.href = '/dashboard';
+    window.dispatchEvent(new Event('storage'));
+    window.location.href = ROLE_ROUTES[role] || '/employee/dashboard';
   };
 
   const handleSignup = async (e) => {
@@ -88,7 +143,7 @@ const Signup = () => {
       email: email,
       phone: fullPhone,
       department: 'General',
-      role: 'Employee',
+      role: role,
       status: 'Active',
       avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(fullName)}&background=2563EB&color=fff&bold=true&size=128`,
       joinDate: new Date().toISOString().split('T')[0],
@@ -168,8 +223,17 @@ const Signup = () => {
     }
   };
 
+  const ROLE_META = {
+    Admin:             { color: '#2563EB', bg: 'rgba(37,99,235,0.08)',  label: 'Full system access' },
+    'Asset Manager':   { color: '#7c3aed', bg: 'rgba(124,58,237,0.08)', label: 'Manage all assets' },
+    'Department Head': { color: '#0284c7', bg: 'rgba(2,132,199,0.08)',  label: 'Dept. oversight' },
+    Employee:          { color: '#16a34a', bg: 'rgba(22,163,74,0.08)',  label: 'Self-service portal' },
+  };
+
   return (
-    <div className="login-wrapper">
+    <>
+      {showGoogle && <GoogleAccountPicker role={role} onSelect={handleGooglePick} onClose={() => setShowGoogle(false)} />}
+      <div className="login-wrapper">
       <div className="auth-header">
         <h1 className="brand-logo">AssetFlow</h1>
         <p className="welcome-text">Create your employee account</p>
@@ -273,14 +337,32 @@ const Signup = () => {
             <span>I accept the <Link to="/terms" className="forgot-link">Terms and Conditions</Link></span>
           </label>
         </div>
+          
+        <div className="form-group mb-4">
+          <label className="form-label">Register As</label>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem', marginTop: 4 }}>
+            {Object.entries(ROLE_META).map(([r, rm]) => (
+              <button key={r} type="button" onClick={() => setRole(r)}
+                style={{
+                  padding: '0.5rem 0.75rem', borderRadius: 10,
+                  border: `2px solid ${role === r ? rm.color : 'var(--border)'}`,
+                  background: role === r ? rm.bg : 'var(--surface)',
+                  cursor: 'pointer', textAlign: 'left', transition: 'all 0.15s',
+                }}>
+                <div style={{ fontSize: '0.8rem', fontWeight: 700, color: role === r ? rm.color : 'var(--text-main)' }}>{r}</div>
+                <div style={{ fontSize: '0.68rem', color: 'var(--text-muted)', marginTop: 2 }}>{rm.label}</div>
+              </button>
+            ))}
+          </div>
+        </div>
 
-        <button type="submit" className="btn btn-primary w-100">Create Account</button>
+        <button type="submit" className="btn btn-primary w-100" style={{ marginTop: '1rem' }}>Create Account</button>
         
         <div className="auth-divider">
           <span>OR</span>
         </div>
 
-        <button type="button" className="btn btn-outline w-100 btn-google" onClick={handleGoogleAuth}>
+        <button type="button" className="btn btn-outline w-100 btn-google" onClick={() => setShowGoogle(true)}>
           <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" className="google-icon" />
           Continue with Google
         </button>
@@ -290,6 +372,7 @@ const Signup = () => {
         </div>
       </form>
     </div>
+    </>
   );
 };
 
