@@ -11,6 +11,8 @@ from app.core.dependencies import get_db
 from app.modules.login.schema import LoginRequest, GoogleLoginRequest, TokenResponse
 from app.modules.login.service import LoginService
 from app.core.security import create_access_token, create_refresh_token
+from app.core.dependencies import get_current_user
+from app.modules.signup.model import User
 
 router = APIRouter()
 
@@ -85,3 +87,24 @@ async def login_google(
         is_profile_complete=is_profile_complete,
         user=user,
     )
+
+
+@router.post(
+    "/logout",
+    status_code=status.HTTP_200_OK,
+    summary="User Logout",
+    description="Endpoint for user logout. In this stateless JWT setup, it confirms the intent to log out so the client can discard tokens.",
+)
+async def logout(
+    current_user: Annotated[User, Depends(get_current_user)],
+) -> dict:
+    """Log out the current user.
+    
+    Args:
+        current_user (User): The authenticated user from the dependency.
+        
+    Returns:
+        dict: A success message.
+    """
+    # If a token blocklist was implemented, we would invalidate the token here.
+    return {"message": "Successfully logged out."}
