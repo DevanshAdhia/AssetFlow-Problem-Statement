@@ -2,8 +2,10 @@
 
 This document outlines the REST API endpoints and JSON payload structures expected by the AssetFlow frontend. The frontend is currently using mocked data, but once these APIs are implemented, the frontend will integrate them.
 
-## Base URL
-`api/v1`
+## Base URLs
+- **Local Development (Backend):** `http://localhost:5000/api/v1`
+- **Staging / QA:** `https://staging-api.assetflow.example.com/api/v1`
+- **Production:** `https://api.assetflow.example.com/api/v1`
 
 ---
 
