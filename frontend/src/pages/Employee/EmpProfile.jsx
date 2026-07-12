@@ -6,17 +6,17 @@ const getDefaultProfile = () => {
     const auth = JSON.parse(localStorage.getItem('auth_user')) || {};
     const saved = JSON.parse(localStorage.getItem('emp_profile')) || {};
     return {
-      name: saved.name || auth.name || 'Rahul Verma',
-      employeeId: saved.employeeId || 'EMP-0042',
-      email: saved.email || auth.email || 'employee@assetflow.com',
-      phone: saved.phone || auth.phone || '+91 87654 32109',
-      department: saved.department || auth.department || 'Sales',
-      designation: saved.designation || 'Sales Executive',
-      role: 'Employee',
-      address: saved.address || '14-B, Lotus Colony, Bandra West, Mumbai – 400050',
-      emergencyContact: saved.emergencyContact || '+91 99001 12233 (Amit Verma – Brother)',
-      joinDate: saved.joinDate || 'March 15, 2022',
-      avatar: saved.avatar || null,
+      name: saved.name || auth.name || 'Employee',
+      employeeId: saved.employeeId || auth.employeeId || 'EMP-' + String(Math.floor(Math.random()*9000)+1000),
+      email: saved.email || auth.email || '',
+      phone: saved.phone || auth.phone || '',
+      department: saved.department || auth.department || 'General',
+      designation: saved.designation || auth.designation || auth.role || 'Employee',
+      role: auth.role || 'Employee',
+      address: saved.address || auth.address || '',
+      emergencyContact: saved.emergencyContact || '',
+      joinDate: saved.joinDate || auth.joinDate || new Date().toLocaleDateString('en-IN', { year:'numeric', month:'long', day:'numeric' }),
+      avatar: saved.avatar || auth.avatar || null,
     };
   } catch { return {}; }
 };
@@ -39,10 +39,17 @@ const EmpProfile = () => {
   // Persist + broadcast
   const persist = (data) => {
     localStorage.setItem('emp_profile', JSON.stringify(data));
-    // Also sync auth_user name/email so topbar updates
+    // Sync auth_user so topbar and other components update
     try {
       const auth = JSON.parse(localStorage.getItem('auth_user')) || {};
-      localStorage.setItem('auth_user', JSON.stringify({ ...auth, name: data.name, email: data.email }));
+      localStorage.setItem('auth_user', JSON.stringify({
+        ...auth,
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+        avatar: data.avatar || auth.avatar,
+        department: data.department || auth.department,
+      }));
       window.dispatchEvent(new Event('storage'));
     } catch {}
   };

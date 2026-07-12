@@ -8,9 +8,9 @@
 
 ### 1. Robust Authentication Flow
 - **Interactive UI:** Split-screen layouts with fully responsive styling.
-- **Social Integration:** Integrated "Continue with Google" architecture.
+- **Realistic Authentication:** Real-world simulated Google Account Picker for SSO onboarding.
+- **Role-Based Routing:** Dropdown role selection embedded directly into the login and signup flow, seamlessly routing users to their specific dashboard (`/admin`, `/employee`, etc.) while hiding demo credentials for a production feel.
 - **Dynamic Formatting:** Custom-built country code selector integrating real-time flag CDN images.
-- **Enterprise Grade UX:** Forms designed to prevent viewport scrolling via aggressive auto-scaling layouts.
 
 ### 2. Comprehensive Dashboard
 - **Live KPI Metrics:** Monitor available assets, active allocations, and maintenance alerts at a glance.
@@ -20,13 +20,13 @@
 ### 3. Administrator & Organization Management
 - **Organization Setup:** Manage departments, internal hierarchy, and team structure via interactive data tables.
 - **Terms & Policy:** Mandatory scroll-tracking acceptance flows for new administrator accounts.
-- **Profile Customization:** Dynamic image uploading featuring instant blob-preview URLs.
+- **Dynamic Profiles:** Fully integrated profile modules with dynamic avatar uploading (camera button) and password management.
 
-### 4. Employee Self-Service Portal
+### 4. Employee & Department Head Portals
 - **My Assets & Bookings:** Employees can track assigned assets and book shared resources via a calendar timeline interface.
 - **Maintenance & Transfers:** Built-in modal workflows for raising tickets and requesting asset transfers.
 - **Dynamic Activity History:** Accordion-based (drop down/up) audit trail of all employee actions.
-- **Live Profile Synchronization:** Instant profile updates synchronized across the app using custom local storage event dispatchers.
+- **Universal Profile Synchronization:** Instant profile updates (including avatars, emails, and passwords) synchronized across the app utilizing cross-component local storage event dispatchers.
 
 ### 5. Advanced Operations & Auditing (Admin & Managers)
 - **Kanban Maintenance:** Track repairs across pending, approved, and resolved states.

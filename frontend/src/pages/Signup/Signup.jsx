@@ -340,20 +340,17 @@ const Signup = () => {
           
         <div className="form-group mb-4">
           <label className="form-label">Register As</label>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem', marginTop: 4 }}>
-            {Object.entries(ROLE_META).map(([r, rm]) => (
-              <button key={r} type="button" onClick={() => setRole(r)}
-                style={{
-                  padding: '0.5rem 0.75rem', borderRadius: 10,
-                  border: `2px solid ${role === r ? rm.color : 'var(--border)'}`,
-                  background: role === r ? rm.bg : 'var(--surface)',
-                  cursor: 'pointer', textAlign: 'left', transition: 'all 0.15s',
-                }}>
-                <div style={{ fontSize: '0.8rem', fontWeight: 700, color: role === r ? rm.color : 'var(--text-main)' }}>{r}</div>
-                <div style={{ fontSize: '0.68rem', color: 'var(--text-muted)', marginTop: 2 }}>{rm.label}</div>
-              </button>
-            ))}
-          </div>
+          <select
+            className="form-control"
+            value={role}
+            onChange={e => setRole(e.target.value)}
+            style={{ cursor: 'pointer' }}
+          >
+            <option value="Admin">Admin</option>
+            <option value="Asset Manager">Asset Manager</option>
+            <option value="Department Head">Department Head</option>
+            <option value="Employee">Employee</option>
+          </select>
         </div>
 
         <button type="submit" className="btn btn-primary w-100" style={{ marginTop: '1rem' }}>Create Account</button>
