@@ -1,9 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { notificationsList } from '../../data/mockData';
 import { Bell } from 'lucide-react';
 import './Notifications.css';
 
 const Notifications = () => {
+  const [activeTab, setActiveTab] = useState('all');
+
+  const filteredNotifications = notificationsList.filter(notif => 
+    activeTab === 'all' || notif.type === activeTab
+  );
+
   return (
     <div className="notifications-page">
       <div className="page-header flex-between">
@@ -14,8 +20,30 @@ const Notifications = () => {
         <button className="btn btn-outline btn-sm">Mark all as read</button>
       </div>
 
+      <div className="notification-tabs">
+        <button 
+          className={`tab-btn ${activeTab === 'all' ? 'active' : ''}`}
+          onClick={() => setActiveTab('all')}
+        >All</button>
+        <button 
+          className={`tab-btn ${activeTab === 'alerts' ? 'active' : ''}`}
+          onClick={() => setActiveTab('alerts')}
+        >Alerts</button>
+        <button 
+          className={`tab-btn ${activeTab === 'approvals' ? 'active' : ''}`}
+          onClick={() => setActiveTab('approvals')}
+        >Approvals</button>
+        <button 
+          className={`tab-btn ${activeTab === 'bookings' ? 'active' : ''}`}
+          onClick={() => setActiveTab('bookings')}
+        >Bookings</button>
+      </div>
+
       <div className="notifications-list">
-        {notificationsList.map(notif => (
+        {filteredNotifications.length === 0 ? (
+          <div className="empty-state">No notifications found for this category.</div>
+        ) : (
+          filteredNotifications.map(notif => (
           <div key={notif.id} className={`notification-item ${!notif.read ? 'unread' : ''}`}>
             <div className="notif-icon-wrapper">
               <Bell size={20} className={!notif.read ? 'text-primary' : 'text-muted'} />
@@ -27,7 +55,7 @@ const Notifications = () => {
             </div>
             {!notif.read && <div className="unread-dot"></div>}
           </div>
-        ))}
+        )))}
       </div>
     </div>
   );

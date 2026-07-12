@@ -23,9 +23,11 @@ export const recentActivities = [
 ];
 
 export const notificationsList = [
-  { id: 1, title: "Asset Assigned", message: "MacBook Pro M3 has been assigned to you.", time: "2 min ago", read: false },
-  { id: 2, title: "Maintenance Approved", message: "Your request for Keyboard replacement is approved.", time: "10 min ago", read: false },
-  { id: 3, title: "Booking Confirmed", message: "Conference Room A booking confirmed for 3 PM.", time: "1 hour ago", read: true }
+  { id: 1, title: "Asset Assigned", message: "MacBook Pro M3 has been assigned to you.", time: "2 min ago", read: false, type: "alerts" },
+  { id: 2, title: "Maintenance Approved", message: "Your request for Keyboard replacement is approved.", time: "10 min ago", read: false, type: "approvals" },
+  { id: 3, title: "Booking Confirmed", message: "Conference Room A booking confirmed for 3 PM.", time: "1 hour ago", read: true, type: "bookings" },
+  { id: 4, title: "Overdue Return Alert", message: "Projector AF-009 return is overdue by 1 day.", time: "2 hours ago", read: false, type: "alerts" },
+  { id: 5, title: "Audit Discrepancy", message: "1 laptop missing from expected location.", time: "5 hours ago", read: true, type: "alerts" }
 ];
 
 export const activityLogsData = [
