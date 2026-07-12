@@ -9,6 +9,18 @@ const Signup = () => {
   const [emailVerified, setEmailVerified] = useState(false);
   const [showOtp, setShowOtp] = useState(false);
   const [otp, setOtp] = useState('');
+  
+  // Custom Country Dropdown State
+  const [showCountries, setShowCountries] = useState(false);
+  const [selectedCountry, setSelectedCountry] = useState({ code: '+1', flag: 'us' });
+
+  const countries = [
+    { code: '+1', flag: 'us', name: 'United States' },
+    { code: '+44', flag: 'gb', name: 'United Kingdom' },
+    { code: '+91', flag: 'in', name: 'India' },
+    { code: '+61', flag: 'au', name: 'Australia' },
+    { code: '+81', flag: 'jp', name: 'Japan' }
+  ];
 
   const handleSignup = (e) => {
     e.preventDefault();
@@ -82,14 +94,36 @@ const Signup = () => {
         <div className="form-group">
           <label className="form-label">Phone</label>
           <div className="phone-input-group">
-            <select className="form-control country-select">
-              <option value="+1">🇺🇸 +1</option>
-              <option value="+44">🇬🇧 +44</option>
-              <option value="+91">🇮🇳 +91</option>
-              <option value="+61">🇦🇺 +61</option>
-              <option value="+81">🇯🇵 +81</option>
-            </select>
-            <input type="tel" className="form-control phone-number" placeholder="234 567 890" required />
+            
+            <div className="custom-country-select">
+              <div 
+                className="country-select-trigger form-control" 
+                onClick={() => setShowCountries(!showCountries)}
+              >
+                <img src={`https://flagcdn.com/w20/${selectedCountry.flag}.png`} alt="flag" />
+                <span>{selectedCountry.code}</span>
+              </div>
+              
+              {showCountries && (
+                <div className="country-options">
+                  {countries.map(c => (
+                    <div 
+                      key={c.code} 
+                      className="country-option"
+                      onClick={() => {
+                        setSelectedCountry(c);
+                        setShowCountries(false);
+                      }}
+                    >
+                      <img src={`https://flagcdn.com/w20/${c.flag}.png`} alt="flag" />
+                      <span>{c.code}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <input type="tel" className="form-control phone-number" placeholder="234 567 8900" required />
           </div>
         </div>
 
