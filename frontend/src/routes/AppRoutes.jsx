@@ -14,6 +14,9 @@ import ChangePassword from '../pages/Profile/ChangePassword';
 import Notifications from '../pages/Notifications/Notifications';
 import ActivityLogs from '../pages/ActivityLogs/ActivityLogs';
 import Reports from '../pages/Reports/Reports';
+import Maintenance from '../pages/Maintenance/Maintenance';
+import Audit from '../pages/Audit/Audit';
+import Allocation from '../pages/Allocation/Allocation';
 import OrganizationSetup from '../pages/OrganizationSetup/OrganizationSetup';
 import EditProfile from '../pages/Profile/EditProfile';
 import Terms from '../pages/Terms/Terms';
@@ -36,6 +39,9 @@ const AppRoutes = () => {
         <Route path="/" element={<Navigate to="/dashboard" replace />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/setup" element={<OrganizationSetup />} />
+        <Route path="/allocation" element={<Allocation />} />
+        <Route path="/maintenance" element={<Maintenance />} />
+        <Route path="/audit" element={<Audit />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/edit-profile" element={<EditProfile />} />
         <Route path="/change-password" element={<ChangePassword />} />
