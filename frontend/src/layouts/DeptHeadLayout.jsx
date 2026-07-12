@@ -161,7 +161,7 @@ const DeptHeadLayout = () => {
             </nav>
           </div>
 
-          <div className="topbar-right">
+          <div className="topbar-actions">
             {/* Search */}
             <div className="dh-search-bar" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', background: '#f1f5f9', border: '1px solid var(--border)', borderRadius: 8, padding: '0.4rem 0.75rem', minWidth: 200 }}>
               <Search size={15} style={{ color: 'var(--text-muted)' }} />
