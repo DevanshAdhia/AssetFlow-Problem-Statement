@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { 
   Search, Filter, Plus, Edit2, Trash2, QrCode, Download, 
-  MoreHorizontal, Eye, Box, FileText, Image as ImageIcon
+  MoreHorizontal, Eye, Box, FileText, Image as ImageIcon, FileSpreadsheet
 } from 'lucide-react';
+import * as XLSX from 'xlsx';
 import '../Admin/Assets/Assets.css';
 import './AssetManagerAssets.css';
 
@@ -83,7 +84,36 @@ const AssetManagerAssets = () => {
           <p className="text-muted">Comprehensive inventory of all organizational assets.</p>
         </div>
         <div className="flex gap-2">
-          <button className="btn btn-outline"><Download size={18} /> Export</button>
+          <div style={{ position: 'relative', zIndex: 10 }}>
+            <button className="btn btn-outline" onClick={(e) => {
+              const menu = e.currentTarget.nextElementSibling;
+              menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+            }}>
+              <Download size={18} /> Export <span style={{fontSize: '0.7rem', marginLeft: '2px'}}>▼</span>
+            </button>
+            <div className="am-dropdown" style={{ display: 'none', position: 'absolute', top: '100%', right: 0, marginTop: '4px', minWidth: '150px' }}>
+              <button className="am-dropdown-item" onClick={(e) => { 
+                e.currentTarget.parentElement.style.display = 'none'; 
+                const rows = ['Asset Tag,Asset Name,Category,Status,Location', ...assets.map(a=>`${a.tag},"${a.name}",${a.category},${a.status},"${a.location}"`)];
+                const blob = new Blob([rows.join('\n')], { type:'text/csv' });
+                const link = document.createElement('a'); link.href = URL.createObjectURL(blob);
+                link.download = `Assets_${Date.now()}.csv`; link.click();
+              }}>
+                <FileText size={15}/> Export CSV
+              </button>
+              <button className="am-dropdown-item" onClick={(e) => { 
+                e.currentTarget.parentElement.style.display = 'none'; 
+                const ws = XLSX.utils.json_to_sheet(assets.map(a => ({
+                  'Asset Tag': a.tag, 'Asset Name': a.name, 'Category': a.category, 'Status': a.status, 'Location': a.location
+                })));
+                const wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, "Assets");
+                XLSX.writeFile(wb, `Assets_${Date.now()}.xlsx`);
+              }}>
+                <FileSpreadsheet size={15}/> Export Excel
+              </button>
+            </div>
+          </div>
           <button className="btn btn-primary" onClick={() => setShowModal(true)}>
             <Plus size={18} /> Register Asset
           </button>

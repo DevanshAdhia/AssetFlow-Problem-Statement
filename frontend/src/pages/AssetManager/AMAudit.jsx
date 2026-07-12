@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { ShieldCheck, Search, CheckCircle, AlertTriangle, X } from 'lucide-react';
+import { ShieldCheck, Search, CheckCircle, AlertTriangle, X, Download, FileText, FileSpreadsheet } from 'lucide-react';
+import * as XLSX from 'xlsx';
 
 const ASSETS = [
   { id:'A001', tag:'AF-001', name:'Dell XPS 15',     expected:'IT Dept',      reported:'IT Dept',      status:'Verified' },
@@ -59,7 +60,39 @@ const AMAudit = () => {
 
       <div className="am-page-header">
         <div><h1 className="am-page-title">Asset Audit</h1><p className="am-page-subtitle">Verify asset locations and resolve discrepancies.</p></div>
-        <button className="am-btn am-btn-primary"><ShieldCheck size={16}/> Start New Audit Cycle</button>
+        <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+          <div style={{ position: 'relative', zIndex: 10 }}>
+            <button className="am-btn am-btn-outline" onClick={(e) => {
+              const menu = e.currentTarget.nextElementSibling;
+              menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+            }}>
+              <Download size={16}/> Export <span style={{fontSize: '0.7rem', marginLeft: '2px'}}>▼</span>
+            </button>
+            <div className="am-dropdown" style={{ display: 'none', position: 'absolute', top: '100%', right: 0, marginTop: '4px', minWidth: '150px' }}>
+              <button className="am-dropdown-item" onClick={(e) => { 
+                e.currentTarget.parentElement.style.display = 'none'; 
+                const rows = ['Asset ID,Tag,Name,Expected Location,Reported Location,Status', ...filtered.map(a=>`${a.id},${a.tag},"${a.name}","${a.expected}","${a.reported}",${a.status}`)];
+                const blob = new Blob([rows.join('\n')], { type:'text/csv' });
+                const link = document.createElement('a'); link.href = URL.createObjectURL(blob);
+                link.download = `Audit_${Date.now()}.csv`; link.click();
+              }}>
+                <FileText size={15}/> Export CSV
+              </button>
+              <button className="am-dropdown-item" onClick={(e) => { 
+                e.currentTarget.parentElement.style.display = 'none'; 
+                const ws = XLSX.utils.json_to_sheet(filtered.map(a => ({
+                  'Asset ID': a.id, 'Tag': a.tag, 'Name': a.name, 'Expected Location': a.expected, 'Reported Location': a.reported, 'Status': a.status
+                })));
+                const wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, "Audit");
+                XLSX.writeFile(wb, `Audit_${Date.now()}.xlsx`);
+              }}>
+                <FileSpreadsheet size={15}/> Export Excel
+              </button>
+            </div>
+          </div>
+          <button className="am-btn am-btn-primary"><ShieldCheck size={16}/> Start New Audit Cycle</button>
+        </div>
       </div>
 
       {/* Stats */}
