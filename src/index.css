@@ -129,3 +129,50 @@ a:hover {
   display: flex;
   flex-direction: column;
 }
+
+/* Global Responsive Overrides */
+@media (max-width: 768px) {
+  :root {
+    --radius: 8px; /* Slightly smaller border radius on mobile */
+  }
+  
+  body {
+    font-size: 14px; /* Adjust base font size for mobile readability */
+  }
+
+  h1 { font-size: 1.5rem !important; }
+  h2 { font-size: 1.25rem !important; }
+  
+  .btn {
+    padding: 0.6rem 1.2rem;
+    width: 100%; /* Full width buttons on mobile by default for better touch targets */
+    justify-content: center;
+  }
+  
+  .form-control {
+    padding: 0.6rem 0.8rem; /* Optimize touch targets */
+  }
+
+  /* Padding adjustments for pages */
+  .auth-card {
+    padding: 1.5rem 1rem !important;
+  }
+  
+  .content-area, .terms-content {
+    padding: 1rem !important;
+  }
+
+  .kpi-grid, .profile-details-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  /* Tablet adjustments */
+  .kpi-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  .content-area, .terms-content {
+    padding: 1.5rem !important;
+  }
+}
