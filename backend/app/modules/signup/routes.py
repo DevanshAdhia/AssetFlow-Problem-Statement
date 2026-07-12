@@ -1,86 +1,87 @@
-import math
-from fastapi import APIRouter, Depends, Query, status
+"""API routes for user registration and OTP verification flows.
+
+Exposes endpoints for generating/verifying OTPs and completing account registration
+while complying with strict validation rules.
+"""
+
+from typing import Annotated
+from fastapi import APIRouter, Depends, status
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.core.dependencies import get_db, get_current_user_id
-from app.modules.signup.schema import (
-    SignupCreate,
-    SignupUpdate,
-    SignupResponse,
-    SignupListResponse,
-)
+from app.core.dependencies import get_db
+from app.modules.signup.schema import OTPRequest, OTPVerify, SignupCreate, UserResponse
 from app.modules.signup.service import SignupService
 
 router = APIRouter()
 
 
-@router.get("", response_model=SignupListResponse, summary="List Signups")
-async def list_signups(
-    page: int = Query(1, ge=1, description="Page number"),
-    page_size: int = Query(20, ge=1, le=200, description="Items per page"),
-    db: AsyncSession = Depends(get_db),
-    _: int = Depends(get_current_user_id),
-):
+@router.post(
+    "/send-otp",
+    status_code=status.HTTP_200_OK,
+    summary="Send OTP",
+    description="Generate a 4-digit OTP code, save it, and print to console logs.",
+)
+async def send_otp(
+    data: OTPRequest,
+    db: Annotated[AsyncSession, Depends(get_db)],
+) -> dict[str, bool | str]:
+    """Generate and send a 4-digit OTP for email verification.
+
+    Args:
+        data (OTPRequest): The email address request body.
+        db (AsyncSession): The database session.
+
+    Returns:
+        dict[str, bool | str]: A dictionary showing success status and action message.
+    """
     svc = SignupService(db)
-    items, total = await svc.list(page=page, page_size=page_size)
-    total_pages = math.ceil(total / page_size) if page_size > 0 else 0
-    return {
-        "success": True,
-        "pagination": {
-            "count": total,
-            "total_pages": total_pages,
-            "current_page": page,
-            "page_size": page_size,
-        },
-        "results": items,
-    }
+    await svc.generate_otp(data.email)
+    return {"success": True, "message": "OTP sent successfully."}
 
 
-@router.post("", response_model=SignupResponse, status_code=status.HTTP_201_CREATED, summary="Create Signup")
-async def create_signup(
+@router.post(
+    "/verify-otp",
+    status_code=status.HTTP_200_OK,
+    summary="Verify OTP",
+    description="Validate the submitted OTP code. Accepts '1234' in development.",
+)
+async def verify_otp(
+    data: OTPVerify,
+    db: Annotated[AsyncSession, Depends(get_db)],
+) -> dict[str, bool | str]:
+    """Verify the submitted OTP code.
+
+    Args:
+        data (OTPVerify): The verification request body.
+        db (AsyncSession): The database session.
+
+    Returns:
+        dict[str, bool | str]: A dictionary showing verification success status.
+    """
+    svc = SignupService(db)
+    await svc.verify_otp(data.email, data.code)
+    return {"success": True, "message": "OTP verified successfully."}
+
+
+@router.post(
+    "/register",
+    response_model=UserResponse,
+    status_code=status.HTTP_201_CREATED,
+    summary="Complete Registration",
+    description="Create a new user account if the OTP was verified.",
+)
+async def register(
     data: SignupCreate,
-    db: AsyncSession = Depends(get_db),
-    _: int = Depends(get_current_user_id),
-):
+    db: Annotated[AsyncSession, Depends(get_db)],
+) -> UserResponse:
+    """Create a new user account with validated details and OTP status.
+
+    Args:
+        data (SignupCreate): Registration input validation fields.
+        db (AsyncSession): The database session.
+
+    Returns:
+        UserResponse: The newly registered user profile attributes.
+    """
     svc = SignupService(db)
-    return await svc.create(data)
-
-
-@router.get("/search", response_model=list[SignupResponse], summary="Search Signups")
-async def search_signups(
-    q: str = Query(..., min_length=1, description="Search query"),
-    db: AsyncSession = Depends(get_db),
-    _: int = Depends(get_current_user_id),
-):
-    svc = SignupService(db)
-    return await svc.search(q)
-
-
-@router.get("/{pk}", response_model=SignupResponse, summary="Get Signup")
-async def get_signup(
-    pk: int,
-    db: AsyncSession = Depends(get_db),
-    _: int = Depends(get_current_user_id),
-):
-    svc = SignupService(db)
-    return await svc.get(pk)
-
-
-@router.put("/{pk}", response_model=SignupResponse, summary="Update Signup")
-async def update_signup(
-    pk: int,
-    data: SignupUpdate,
-    db: AsyncSession = Depends(get_db),
-    _: int = Depends(get_current_user_id),
-):
-    svc = SignupService(db)
-    return await svc.update(pk, data)
-
-
-@router.delete("/{pk}", status_code=status.HTTP_204_NO_CONTENT, summary="Delete Signup")
-async def delete_signup(
-    pk: int,
-    db: AsyncSession = Depends(get_db),
-    _: int = Depends(get_current_user_id),
-):
-    svc = SignupService(db)
-    await svc.delete(pk)
+    user = await svc.register_user(data)
+    return user

@@ -1,86 +1,87 @@
-import math
-from fastapi import APIRouter, Depends, Query, status
+"""API routes for user authentication.
+
+Exposes endpoints for credential-based logins and Google OAuth verification,
+returning standard session tokens.
+"""
+
+from typing import Annotated
+from fastapi import APIRouter, Depends, status
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.core.dependencies import get_db, get_current_user_id
-from app.modules.login.schema import (
-    LoginCreate,
-    LoginUpdate,
-    LoginResponse,
-    LoginListResponse,
-)
+from app.core.dependencies import get_db
+from app.modules.login.schema import LoginRequest, GoogleLoginRequest, TokenResponse
 from app.modules.login.service import LoginService
+from app.core.security import create_access_token, create_refresh_token
 
 router = APIRouter()
 
 
-@router.get("", response_model=LoginListResponse, summary="List Logins")
-async def list_logins(
-    page: int = Query(1, ge=1, description="Page number"),
-    page_size: int = Query(20, ge=1, le=200, description="Items per page"),
-    db: AsyncSession = Depends(get_db),
-    _: int = Depends(get_current_user_id),
-):
+@router.post(
+    "/token",
+    response_model=TokenResponse,
+    status_code=status.HTTP_200_OK,
+    summary="Login via Email and Password",
+    description="Validate user credentials and return bearer access/refresh tokens.",
+)
+async def login_token(
+    data: LoginRequest,
+    db: Annotated[AsyncSession, Depends(get_db)],
+) -> TokenResponse:
+    """Authenticate email/password credentials.
+
+    Args:
+        data (LoginRequest): Input credentials.
+        db (AsyncSession): Database session.
+
+    Returns:
+        TokenResponse: Session tokens and profile status.
+    """
     svc = LoginService(db)
-    items, total = await svc.list(page=page, page_size=page_size)
-    total_pages = math.ceil(total / page_size) if page_size > 0 else 0
-    return {
-        "success": True,
-        "pagination": {
-            "count": total,
-            "total_pages": total_pages,
-            "current_page": page,
-            "page_size": page_size,
-        },
-        "results": items,
-    }
+    user = await svc.authenticate_email_password(email=data.email, password=data.password)
+
+    access_token = create_access_token(subject=user.id)
+    refresh_token = create_refresh_token(subject=user.id)
+
+    is_profile_complete = user.phone is not None
+
+    return TokenResponse(
+        access_token=access_token,
+        refresh_token=refresh_token,
+        is_profile_complete=is_profile_complete,
+        user=user,
+    )
 
 
-@router.post("", response_model=LoginResponse, status_code=status.HTTP_201_CREATED, summary="Create Login")
-async def create_login(
-    data: LoginCreate,
-    db: AsyncSession = Depends(get_db),
-    _: int = Depends(get_current_user_id),
-):
+@router.post(
+    "/google",
+    response_model=TokenResponse,
+    status_code=status.HTTP_200_OK,
+    summary="Login via Google OAuth",
+    description="Verify Google id_token, log in or sign up the user, and return bearer tokens.",
+)
+async def login_google(
+    data: GoogleLoginRequest,
+    db: Annotated[AsyncSession, Depends(get_db)],
+) -> TokenResponse:
+    """Authenticate Google OAuth credential token.
+
+    Args:
+        data (GoogleLoginRequest): Google id_token body.
+        db (AsyncSession): Database session.
+
+    Returns:
+        TokenResponse: Session tokens and profile status.
+    """
     svc = LoginService(db)
-    return await svc.create(data)
+    user = await svc.authenticate_google(id_token=data.id_token)
 
+    access_token = create_access_token(subject=user.id)
+    refresh_token = create_refresh_token(subject=user.id)
 
-@router.get("/search", response_model=list[LoginResponse], summary="Search Logins")
-async def search_logins(
-    q: str = Query(..., min_length=1, description="Search query"),
-    db: AsyncSession = Depends(get_db),
-    _: int = Depends(get_current_user_id),
-):
-    svc = LoginService(db)
-    return await svc.search(q)
+    is_profile_complete = user.phone is not None
 
-
-@router.get("/{pk}", response_model=LoginResponse, summary="Get Login")
-async def get_login(
-    pk: int,
-    db: AsyncSession = Depends(get_db),
-    _: int = Depends(get_current_user_id),
-):
-    svc = LoginService(db)
-    return await svc.get(pk)
-
-
-@router.put("/{pk}", response_model=LoginResponse, summary="Update Login")
-async def update_login(
-    pk: int,
-    data: LoginUpdate,
-    db: AsyncSession = Depends(get_db),
-    _: int = Depends(get_current_user_id),
-):
-    svc = LoginService(db)
-    return await svc.update(pk, data)
-
-
-@router.delete("/{pk}", status_code=status.HTTP_204_NO_CONTENT, summary="Delete Login")
-async def delete_login(
-    pk: int,
-    db: AsyncSession = Depends(get_db),
-    _: int = Depends(get_current_user_id),
-):
-    svc = LoginService(db)
-    await svc.delete(pk)
+    return TokenResponse(
+        access_token=access_token,
+        refresh_token=refresh_token,
+        is_profile_complete=is_profile_complete,
+        user=user,
+    )

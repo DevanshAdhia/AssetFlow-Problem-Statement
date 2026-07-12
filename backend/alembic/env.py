@@ -8,8 +8,7 @@ from app.db.base import Base
 from app.core.config import settings
 
 # Import all models so Alembic can detect them
-from app.modules.login.model import Login  # noqa: F401
-from app.modules.signup.model import Signup  # noqa: F401
+from app.modules.signup.model import User, OTP  # noqa: F401
 from app.modules.assest.model import Assest  # noqa: F401
 
 config = context.config
