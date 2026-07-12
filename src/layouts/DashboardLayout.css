@@ -221,4 +221,8 @@
     z-index: 40;
     backdrop-filter: blur(2px);
   }
+
+  .user-name {
+    display: none;
+  }
 }
