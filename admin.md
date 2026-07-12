@@ -32,6 +32,7 @@ The AssetFlow Admin Dashboard is an enterprise-grade UI prototype built using Re
 
 ### 4. User Profile & Settings
 - **Profile Layout:** Displays user details, roles, and recent activity.
+- **Edit Profile:** Dedicated interface supporting live, interactive image preview uploads using `URL.createObjectURL()` and form state management.
 - **Password Management:** Dedicated screens for password resets and updates.
 - **Activity Logs:** Tabular data layout with horizontal scrolling for mobile devices.
 
