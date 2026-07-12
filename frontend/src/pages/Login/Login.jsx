@@ -219,12 +219,35 @@ const Login = () => {
           </p>
         </div>
 
-        {/* Quick demo pills */}
-        <div className="demo-pills">
-          <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontWeight: 600 }}>Quick demo:</span>
-          {DEMO_USERS.map(u => (
-            <button key={u.email} className="demo-pill" onClick={() => fillDemo(u)}>{u.role}</button>
-          ))}
+        {/* Demo credential cards */}
+        <div style={{ marginBottom: '1rem' }}>
+          <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.5rem' }}>
+            🔑 Demo Credentials — click to auto-fill
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.4rem' }}>
+            {DEMO_USERS.map(u => {
+              const colors = {
+                Admin: '#2563EB', 'Asset Manager': '#7c3aed',
+                'Department Head': '#0284c7', Employee: '#16a34a',
+              };
+              const c = colors[u.role] || '#2563EB';
+              return (
+                <button key={u.email} onClick={() => { fillDemo(u); setRole(u.role); }}
+                  style={{
+                    background: 'var(--surface)', border: `1.5px solid var(--border)`,
+                    borderRadius: 10, padding: '0.5rem 0.6rem', cursor: 'pointer',
+                    textAlign: 'left', transition: 'all 0.15s', borderLeft: `3px solid ${c}`,
+                  }}
+                  onMouseEnter={e => e.currentTarget.style.background = 'var(--bg-color)'}
+                  onMouseLeave={e => e.currentTarget.style.background = 'var(--surface)'}
+                >
+                  <div style={{ fontSize: '0.72rem', fontWeight: 700, color: c, marginBottom: 2 }}>{u.role}</div>
+                  <div style={{ fontSize: '0.68rem', color: 'var(--text-muted)', fontFamily: 'monospace' }}>{u.email}</div>
+                  <div style={{ fontSize: '0.68rem', color: 'var(--text-muted)', fontFamily: 'monospace' }}>pw: {u.password}</div>
+                </button>
+              );
+            })}
+          </div>
         </div>
 
         <form onSubmit={handleLogin} className="auth-form">

@@ -29,11 +29,12 @@ const Profile = () => {
 
   const save = () => {
     const updated = { ...user, ...form };
-    if (!updated.avatar || updated.avatar === buildAvatar(user.name)) {
+    // Only fall back to initials avatar if no real image has been set
+    if (!updated.avatar) {
       updated.avatar = buildAvatar(updated.name);
     }
     localStorage.setItem('auth_user', JSON.stringify(updated));
-    window.dispatchEvent(new Event('storage')); // notify layout
+    window.dispatchEvent(new Event('storage'));
     setUser(updated);
     setEditing(false);
     setSaved(true);
