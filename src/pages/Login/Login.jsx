@@ -17,7 +17,6 @@ const Login = () => {
     <div className="login-wrapper">
       <div className="auth-header">
         <h1 className="brand-logo">AssetFlow</h1>
-        <p className="welcome-text">Welcome Back, Please login to your account.</p>
       </div>
       
       <form onSubmit={handleLogin} className="auth-form">
