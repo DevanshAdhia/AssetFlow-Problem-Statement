@@ -51,7 +51,18 @@ const Profile = () => {
     if (!file) return;
     const reader = new FileReader();
     reader.onload = (ev) => {
-      setForm(p => ({ ...p, avatar: ev.target.result }));
+      const newAvatar = ev.target.result;
+      if (editing) {
+        setForm(p => ({ ...p, avatar: newAvatar }));
+      } else {
+        const updated = { ...user, avatar: newAvatar };
+        localStorage.setItem('auth_user', JSON.stringify(updated));
+        window.dispatchEvent(new Event('storage'));
+        setUser(updated);
+        setForm(updated);
+        setSaved(true);
+        setTimeout(() => setSaved(false), 3000);
+      }
     };
     reader.readAsDataURL(file);
   };
@@ -116,25 +127,22 @@ const Profile = () => {
 
           {/* Avatar + basic identity */}
           <div style={{ display:'flex', alignItems:'flex-end', gap:'1.5rem', marginTop:'-50px', marginBottom:'1.75rem' }}>
-            <div className="profile-avatar-wrapper" style={{ marginTop:0, marginBottom:0 }}>
+            <div className="profile-avatar-wrapper" style={{ marginTop:0, marginBottom:0, flexShrink: 0 }}>
               <img
                 src={avatarSrc}
                 alt={user.name}
                 className="profile-avatar-large"
                 onError={e => { e.target.src = buildAvatar(user.name || 'User'); }}
+                style={{ backgroundColor: 'var(--surface)' }}
               />
-              {editing && (
-                <>
-                  <input ref={fileRef} type="file" accept="image/*" style={{ display:'none' }} onChange={handleAvatarUpload} />
-                  <div className="upload-overlay" onClick={() => fileRef.current.click()}>
-                    <Camera size={22} style={{ color:'#fff' }} />
-                  </div>
-                </>
-              )}
+              <input ref={fileRef} type="file" accept="image/*" style={{ display:'none' }} onChange={handleAvatarUpload} />
+              <div className="upload-overlay" onClick={() => fileRef.current.click()}>
+                <Camera size={22} style={{ color:'#fff' }} />
+              </div>
               <span className="profile-status-badge">{user.status || 'Active'}</span>
             </div>
 
-            <div style={{ paddingBottom:'0.5rem' }}>
+            <div style={{ paddingBottom:'0.5rem', zIndex: 1 }}>
               <h2 style={{ margin:0, fontSize:'1.4rem', fontWeight:700 }}>{user.name}</h2>
               <p style={{ margin:'2px 0 6px', color:'var(--text-muted)', fontSize:'0.875rem' }}>{user.email}</p>
               <span style={{ padding:'0.2rem 0.75rem', borderRadius:20, fontSize:'0.78rem', fontWeight:700, background: rc.bg, color: rc.color }}>
