@@ -53,8 +53,10 @@ const Signup = () => {
         body: JSON.stringify({
           email,
           password,
+          confirm_password: confirmPassword,
           full_name: fullName,
-          phone: fullPhone
+          phone: fullPhone,
+          otp: otp
         })
       });
       const data = await res.json();

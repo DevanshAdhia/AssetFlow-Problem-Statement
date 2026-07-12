@@ -7,6 +7,7 @@ pydantic>=2.5.0
 pydantic-settings>=2.1.0
 python-jose[cryptography]>=3.3.0
 passlib[bcrypt]>=1.7.4
+bcrypt==4.0.1
 python-multipart>=0.0.7
 celery[redis]>=5.3
 redis>=5.0
@@ -18,3 +19,4 @@ black>=23.0
 isort>=5.12
 mypy>=1.5
 email-validator>=2.0.0
+greenlet>=3.0.0

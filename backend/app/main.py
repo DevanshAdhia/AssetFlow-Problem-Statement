@@ -2,7 +2,9 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, FileResponse
+from fastapi.staticfiles import StaticFiles
+import os
 
 from app.core.config import settings
 from app.common.exceptions import setup_exception_handlers
@@ -59,3 +61,14 @@ app.include_router(health_router, prefix="/api", tags=["Health"])
 app.include_router(login_router, prefix="/api/login", tags=["Login"])
 app.include_router(signup_router, prefix="/api/signup", tags=["Signup"])
 app.include_router(assest_router, prefix="/api/assest", tags=["Assest"])
+
+frontend_build_path = os.path.join(os.path.dirname(__file__), "../../frontend/dist")
+if os.path.exists(frontend_build_path):
+    app.mount("/assets", StaticFiles(directory=os.path.join(frontend_build_path, "assets")), name="assets")
+
+    @app.get("/{full_path:path}")
+    async def serve_frontend(full_path: str):
+        file_path = os.path.join(frontend_build_path, full_path)
+        if os.path.isfile(file_path):
+            return FileResponse(file_path)
+        return FileResponse(os.path.join(frontend_build_path, "index.html"))
