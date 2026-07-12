@@ -4,8 +4,10 @@ import {
   LayoutDashboard, 
   Settings, 
   Box, 
+  ArrowRightLeft,
   Calendar, 
   Wrench, 
+  ShieldCheck,
   FileText, 
   Bell, 
   User, 
@@ -45,17 +47,25 @@ const DashboardLayout = () => {
             <Box size={20} />
             <span>Assets</span>
           </NavLink>
+          <NavLink to="/allocation" className="nav-item">
+            <ArrowRightLeft size={20} />
+            <span>Allocation & Transfer</span>
+          </NavLink>
           <NavLink to="/bookings" className="nav-item">
             <Calendar size={20} />
-            <span>Bookings</span>
+            <span>Resource Booking</span>
           </NavLink>
           <NavLink to="/maintenance" className="nav-item">
             <Wrench size={20} />
             <span>Maintenance</span>
           </NavLink>
+          <NavLink to="/audit" className="nav-item">
+            <ShieldCheck size={20} />
+            <span>Audit</span>
+          </NavLink>
           <NavLink to="/activity-logs" className="nav-item">
             <FileText size={20} />
-            <span>Reports & Logs</span>
+            <span>Reports</span>
           </NavLink>
         </div>
 

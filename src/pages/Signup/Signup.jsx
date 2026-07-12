@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { CheckCircle2 } from 'lucide-react';
+import { CheckCircle2, ChevronDown } from 'lucide-react';
 import '../Login/Login.css'; // Reusing some auth styles
 import './Signup.css';
 
@@ -102,6 +102,7 @@ const Signup = () => {
               >
                 <img src={`https://flagcdn.com/w20/${selectedCountry.flag}.png`} alt="flag" />
                 <span>{selectedCountry.code}</span>
+                <ChevronDown size={14} className={`chevron-icon ${showCountries ? 'open' : ''}`} />
               </div>
               
               {showCountries && (
