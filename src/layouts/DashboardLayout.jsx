@@ -35,46 +35,46 @@ const DashboardLayout = () => {
         </div>
         
         <div className="sidebar-nav">
-          <NavLink to="/dashboard" className="nav-item">
+          <NavLink to="/dashboard" className="nav-item" onClick={() => setSidebarOpen(false)}>
             <LayoutDashboard size={20} />
             <span>Dashboard</span>
           </NavLink>
-          <NavLink to="/setup" className="nav-item">
+          <NavLink to="/setup" className="nav-item" onClick={() => setSidebarOpen(false)}>
             <Settings size={20} />
             <span>Organization Setup</span>
           </NavLink>
-          <NavLink to="/assets" className="nav-item">
+          <NavLink to="/assets" className="nav-item" onClick={() => setSidebarOpen(false)}>
             <Box size={20} />
             <span>Assets</span>
           </NavLink>
-          <NavLink to="/allocation" className="nav-item">
+          <NavLink to="/allocation" className="nav-item" onClick={() => setSidebarOpen(false)}>
             <ArrowRightLeft size={20} />
             <span>Allocation & Transfer</span>
           </NavLink>
-          <NavLink to="/bookings" className="nav-item">
+          <NavLink to="/bookings" className="nav-item" onClick={() => setSidebarOpen(false)}>
             <Calendar size={20} />
             <span>Resource Booking</span>
           </NavLink>
-          <NavLink to="/maintenance" className="nav-item">
+          <NavLink to="/maintenance" className="nav-item" onClick={() => setSidebarOpen(false)}>
             <Wrench size={20} />
             <span>Maintenance</span>
           </NavLink>
-          <NavLink to="/audit" className="nav-item">
+          <NavLink to="/audit" className="nav-item" onClick={() => setSidebarOpen(false)}>
             <ShieldCheck size={20} />
             <span>Audit</span>
           </NavLink>
-          <NavLink to="/activity-logs" className="nav-item">
+          <NavLink to="/activity-logs" className="nav-item" onClick={() => setSidebarOpen(false)}>
             <FileText size={20} />
             <span>Reports</span>
           </NavLink>
         </div>
 
         <div className="sidebar-footer">
-          <NavLink to="/notifications" className="nav-item">
+          <NavLink to="/notifications" className="nav-item" onClick={() => setSidebarOpen(false)}>
             <Bell size={20} />
             <span>Notifications</span>
           </NavLink>
-          <NavLink to="/profile" className="nav-item">
+          <NavLink to="/profile" className="nav-item" onClick={() => setSidebarOpen(false)}>
             <User size={20} />
             <span>Profile</span>
           </NavLink>
