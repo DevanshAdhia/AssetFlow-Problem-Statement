@@ -25,6 +25,12 @@ import Bookings from '../pages/Admin/Bookings/Bookings';
 // Asset Manager Pages
 import AssetManagerDashboard from '../pages/AssetManager/Dashboard';
 import AssetManagerAssets from '../pages/AssetManager/AssetManagerAssets';
+import AssetManagerAllocation from '../pages/AssetManager/AMAllocation';
+import AssetManagerMaintenance from '../pages/AssetManager/AMMaintenance';
+import AssetManagerAudit from '../pages/AssetManager/AMAudit';
+import AssetManagerReports from '../pages/AssetManager/AMReports';
+import AssetManagerNotifications from '../pages/AssetManager/AMNotifications';
+import AssetManagerActivityLogs from '../pages/AssetManager/AMActivityLogs';
 
 import EditProfile from '../pages/Profile/EditProfile';
 import Terms from '../pages/Terms/Terms';
@@ -65,6 +71,12 @@ const AppRoutes = () => {
         <Route path="/asset-manager" element={<Navigate to="/asset-manager/dashboard" replace />} />
         <Route path="/asset-manager/dashboard" element={<AssetManagerDashboard />} />
         <Route path="/asset-manager/assets" element={<AssetManagerAssets />} />
+        <Route path="/asset-manager/allocation" element={<AssetManagerAllocation />} />
+        <Route path="/asset-manager/maintenance" element={<AssetManagerMaintenance />} />
+        <Route path="/asset-manager/audit" element={<AssetManagerAudit />} />
+        <Route path="/asset-manager/reports" element={<AssetManagerReports />} />
+        <Route path="/asset-manager/notifications" element={<AssetManagerNotifications />} />
+        <Route path="/asset-manager/activity-logs" element={<AssetManagerActivityLogs />} />
       </Route>
 
       {/* Error & Public Routes */}
