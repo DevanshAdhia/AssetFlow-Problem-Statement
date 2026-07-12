@@ -19,6 +19,8 @@ from app.modules.maintenance.routes import router as maintenance_router
 from app.modules.audit.routes import router as audit_router
 from app.modules.profile.routes import router as profile_router
 from app.modules.allocation.routes import router as allocation_router
+from app.modules.activity_log.routes import router as activity_log_router
+from app.modules.notification.routes import router as notification_router
 
 
 @asynccontextmanager
@@ -70,3 +72,5 @@ app.include_router(maintenance_router, prefix="/api/maintenance", tags=["Mainten
 app.include_router(audit_router, prefix="/api/audit", tags=["Audit"])
 app.include_router(profile_router, prefix="/api/profile", tags=["Profile"])
 app.include_router(allocation_router, prefix="/api/allocations", tags=["Allocations"])
+app.include_router(activity_log_router, prefix="/api/activity-logs", tags=["ActivityLogs"])
+app.include_router(notification_router, prefix="/api/notifications", tags=["Notifications"])

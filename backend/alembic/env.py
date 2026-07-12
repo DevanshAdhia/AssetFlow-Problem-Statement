@@ -15,6 +15,8 @@ from app.modules.booking.model import Resource, Booking  # noqa: F401
 from app.modules.maintenance.model import MaintenanceRequest  # noqa: F401
 from app.modules.audit.model import AuditCycle, AuditRecord  # noqa: F401
 from app.modules.allocation.model import Allocation, AllocationHistory  # noqa: F401
+from app.modules.activity_log.model import ActivityLog  # noqa: F401
+from app.modules.notification.model import Notification  # noqa: F401
 
 config = context.config
 config.set_main_option("sqlalchemy.url", settings.DATABASE_URL)
