@@ -10,10 +10,6 @@ const AuthLayout = () => {
           <Outlet />
         </div>
       </div>
-      <div className="auth-background">
-        <div className="shape shape-1"></div>
-        <div className="shape shape-2"></div>
-      </div>
     </div>
   );
 };
