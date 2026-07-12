@@ -156,7 +156,6 @@ a:hover {
   
   .btn {
     padding: 0.6rem 1.2rem;
-    width: 100%; /* Full width buttons on mobile by default for better touch targets */
     justify-content: center;
   }
   

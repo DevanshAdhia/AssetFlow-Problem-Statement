@@ -18,6 +18,7 @@ The AssetFlow Admin Dashboard is an enterprise-grade UI prototype built using Re
 - **Social Login:** Integrated UI for "Continue with Google" including native SVG iconography and dividers.
 - **Email Verification:** Interactive "Send OTP" mechanics that lock input fields upon successful verification.
 - **International Phone Support:** Custom dropdown component supporting country flags via FlagCDN (bypassing native Windows emoji limitations).
+- **Viewport Auto-Scaling:** Aggressively optimized paddings, gaps, and layouts (like placing passwords side-by-side) to ensure massive forms fit 100vh perfectly without triggering browser scrollbars.
 
 ### 2. Administrator Terms & Conditions
 - **Enterprise Policy Gate:** Administrators must agree to the Terms & Conditions before accessing the dashboard.
@@ -33,6 +34,11 @@ The AssetFlow Admin Dashboard is an enterprise-grade UI prototype built using Re
 - **Profile Layout:** Displays user details, roles, and recent activity.
 - **Password Management:** Dedicated screens for password resets and updates.
 - **Activity Logs:** Tabular data layout with horizontal scrolling for mobile devices.
+
+### 5. Organization Setup (Screen 3)
+- **Directory Interface:** Comprehensive management console for internal structure.
+- **Department Table:** High-fidelity data grid displaying Department Name, Head, Parent Dept, and Active/Inactive Badges.
+- **Admin Action Panel:** Interactive controls (Filter, Search) and quick-action icons (Edit, Delete) tightly integrated into the data rows.
 
 ## 🛠️ Technical Stack
 - **Frontend Framework:** React 18
