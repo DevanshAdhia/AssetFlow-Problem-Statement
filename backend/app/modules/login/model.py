@@ -3,7 +3,6 @@ from app.db.base import Base, TimestampMixin
 
 
 class Login(Base, TimestampMixin):
-    __tablename__ = "logins"
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String(255), nullable=False, index=True)

@@ -3,7 +3,6 @@ from app.db.base import Base, TimestampMixin
 
 
 class Assest(Base, TimestampMixin):
-    __tablename__ = "assests"
 
     id = Column(Integer, primary_key=True, index=True)
     tag = Column(String(50), nullable=False, unique=True, index=True)
