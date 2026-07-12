@@ -9,6 +9,32 @@ from pydantic import BaseModel, ConfigDict, EmailStr, Field
 from app.modules.signup.schema import UserResponse
 
 
+class ForgotPasswordRequest(BaseModel):
+    """Schema for requesting a password reset link.
+
+    Attributes:
+        email (EmailStr): The account email to send the reset token to.
+    """
+
+    email: EmailStr = Field(..., description="Account email address.")
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class ResetPasswordRequest(BaseModel):
+    """Schema for submitting a new password using a reset token.
+
+    Attributes:
+        token (str): The password reset token received via email.
+        new_password (str): The new password to set.
+    """
+
+    token: str = Field(..., description="Password reset token.")
+    new_password: str = Field(..., min_length=8, description="New account password.")
+
+    model_config = ConfigDict(from_attributes=True)
+
+
 class LoginRequest(BaseModel):
     """Schema for validating email and password login requests.
 

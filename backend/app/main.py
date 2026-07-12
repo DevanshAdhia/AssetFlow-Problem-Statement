@@ -21,6 +21,11 @@ from app.modules.profile.routes import router as profile_router
 from app.modules.allocation.routes import router as allocation_router
 from app.modules.activity_log.routes import router as activity_log_router
 from app.modules.notification.routes import router as notification_router
+from app.modules.asset_manager.routes import router as asset_manager_router
+from app.modules.employee.routes import router as employee_router
+from app.modules.dept_head.routes import router as dept_head_router
+from app.modules.admin_dashboard.routes import router as admin_dashboard_router
+from app.modules.report.routes import router as report_router
 
 
 @asynccontextmanager
@@ -74,3 +79,8 @@ app.include_router(profile_router, prefix="/api/profile", tags=["Profile"])
 app.include_router(allocation_router, prefix="/api/allocations", tags=["Allocations"])
 app.include_router(activity_log_router, prefix="/api/activity-logs", tags=["ActivityLogs"])
 app.include_router(notification_router, prefix="/api/notifications", tags=["Notifications"])
+app.include_router(asset_manager_router, prefix="/api/asset-manager", tags=["AssetManager"])
+app.include_router(employee_router, prefix="/api/employee", tags=["Employee"])
+app.include_router(dept_head_router, prefix="/api/dept-head", tags=["DeptHead"])
+app.include_router(admin_dashboard_router, prefix="/api/admin-dashboard", tags=["AdminDashboard"])
+app.include_router(report_router, prefix="/api/reports", tags=["Reports"])
