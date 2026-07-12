@@ -1,0 +1,10 @@
+.form-row {
+  display: flex;
+  gap: 1rem;
+}
+
+.half-width {
+  flex: 1;
+}
+
+/* Inherits the rest from Login.css */
