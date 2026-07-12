@@ -80,12 +80,7 @@
   transform: rotate(180deg);
 }
 
-.country-select-trigger img, .country-option img {
-  width: 20px;
-  height: 15px;
-  object-fit: cover;
-  border-radius: 2px;
-}
+
 
 .country-options {
   position: absolute;

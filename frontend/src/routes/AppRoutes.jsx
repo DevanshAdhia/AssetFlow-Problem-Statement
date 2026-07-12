@@ -2,24 +2,30 @@ import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import AuthLayout from '../layouts/AuthLayout';
 import DashboardLayout from '../layouts/DashboardLayout';
+import AssetManagerLayout from '../layouts/AssetManagerLayout';
 
-// Pages
+// Admin Pages
 import Login from '../pages/Login/Login';
 import Signup from '../pages/Signup/Signup';
 import ForgotPassword from '../pages/ForgotPassword/ForgotPassword';
 import ResetPassword from '../pages/ResetPassword/ResetPassword';
-import Dashboard from '../pages/Dashboard/Dashboard';
+import Dashboard from '../pages/Admin/Dashboard/Dashboard';
 import Profile from '../pages/Profile/Profile';
 import ChangePassword from '../pages/Profile/ChangePassword';
-import Notifications from '../pages/Notifications/Notifications';
-import ActivityLogs from '../pages/ActivityLogs/ActivityLogs';
-import Reports from '../pages/Reports/Reports';
-import Maintenance from '../pages/Maintenance/Maintenance';
-import Audit from '../pages/Audit/Audit';
-import Allocation from '../pages/Allocation/Allocation';
-import OrganizationSetup from '../pages/OrganizationSetup/OrganizationSetup';
-import Assets from '../pages/Assets/Assets';
-import Bookings from '../pages/Bookings/Bookings';
+import Notifications from '../pages/Admin/Notifications/Notifications';
+import ActivityLogs from '../pages/Admin/ActivityLogs/ActivityLogs';
+import Reports from '../pages/Admin/Reports/Reports';
+import Maintenance from '../pages/Admin/Maintenance/Maintenance';
+import Audit from '../pages/Admin/Audit/Audit';
+import Allocation from '../pages/Admin/Allocation/Allocation';
+import OrganizationSetup from '../pages/Admin/OrganizationSetup/OrganizationSetup';
+import Assets from '../pages/Admin/Assets/Assets';
+import Bookings from '../pages/Admin/Bookings/Bookings';
+
+// Asset Manager Pages
+import AssetManagerDashboard from '../pages/AssetManager/Dashboard';
+import AssetManagerAssets from '../pages/AssetManager/AssetManagerAssets';
+
 import EditProfile from '../pages/Profile/EditProfile';
 import Terms from '../pages/Terms/Terms';
 import Unauthorized from '../pages/Unauthorized/Unauthorized';
@@ -52,6 +58,13 @@ const AppRoutes = () => {
         <Route path="/notifications" element={<Notifications />} />
         <Route path="/activity-logs" element={<ActivityLogs />} />
         <Route path="/reports" element={<Reports />} />
+      </Route>
+
+      {/* Asset Manager Routes */}
+      <Route element={<AssetManagerLayout />}>
+        <Route path="/asset-manager" element={<Navigate to="/asset-manager/dashboard" replace />} />
+        <Route path="/asset-manager/dashboard" element={<AssetManagerDashboard />} />
+        <Route path="/asset-manager/assets" element={<AssetManagerAssets />} />
       </Route>
 
       {/* Error & Public Routes */}

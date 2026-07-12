@@ -7,6 +7,10 @@ import './Profile.css';
 const EditProfile = () => {
   const navigate = useNavigate();
   const [profileImg, setProfileImg] = useState(currentUser.avatar);
+  const [name, setName] = useState(currentUser.name);
+  const [email, setEmail] = useState(currentUser.email);
+  const [phone, setPhone] = useState(currentUser.phone);
+  const [department, setDepartment] = useState(currentUser.department);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -19,8 +23,22 @@ const EditProfile = () => {
 
   const handleSave = (e) => {
     e.preventDefault();
-    // Normally you'd send data to the backend here
-    navigate('/profile');
+    
+    // Create updated user object
+    const updatedUser = {
+      ...currentUser,
+      name,
+      email,
+      phone,
+      department,
+      avatar: profileImg // Keep any uploaded local URL
+    };
+    
+    // Save globally so mockData picks it up on reload
+    localStorage.setItem('auth_user', JSON.stringify(updatedUser));
+    
+    // Hard redirect to force app state update
+    window.location.href = '/profile';
   };
 
   return (
@@ -63,24 +81,25 @@ const EditProfile = () => {
           <div className="form-row">
             <div className="form-group half-width">
               <label className="form-label">Full Name</label>
-              <input type="text" className="form-control" defaultValue={currentUser.name} required />
+              <input type="text" className="form-control" value={name} onChange={e => setName(e.target.value)} required />
             </div>
             
             <div className="form-group half-width">
               <label className="form-label">Email Address</label>
-              <input type="email" className="form-control" defaultValue={currentUser.email} required />
+              <input type="email" className="form-control" value={email} onChange={e => setEmail(e.target.value)} required />
             </div>
           </div>
 
           <div className="form-row">
             <div className="form-group half-width">
               <label className="form-label">Phone Number</label>
-              <input type="tel" className="form-control" defaultValue={currentUser.phone} />
+              <input type="tel" className="form-control" value={phone} onChange={e => setPhone(e.target.value)} />
             </div>
             
             <div className="form-group half-width">
               <label className="form-label">Department</label>
-              <select className="form-control" defaultValue={currentUser.department}>
+              <select className="form-control" value={department} onChange={e => setDepartment(e.target.value)}>
+                <option value="Engineering">Engineering</option>
                 <option value="IT Infrastructure">IT Infrastructure</option>
                 <option value="Human Resources">Human Resources</option>
                 <option value="Operations">Operations</option>
