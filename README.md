@@ -9,7 +9,7 @@
 ### 1. Robust Authentication Flow
 - **Interactive UI:** Split-screen layouts with fully responsive styling.
 - **Realistic Authentication:** Real-world simulated Google Account Picker for SSO onboarding.
-- **Role-Based Routing:** Dropdown role selection embedded directly into the login and signup flow, seamlessly routing users to their specific dashboard (`/admin`, `/employee`, etc.) while hiding demo credentials for a production feel.
+- **Role-Based Routing & Guards:** Dropdown role selection embedded directly into the login and signup flow, seamlessly routing users to their specific dashboard (`/admin`, `/employee`, etc.) while hiding demo credentials for a production feel. Includes **Strict Route Guards** preventing URL manipulation to unauthorized dashboards.
 - **Dynamic Formatting:** Custom-built country code selector integrating real-time flag CDN images.
 
 ### 2. Comprehensive Dashboard
@@ -20,7 +20,7 @@
 ### 3. Administrator & Organization Management
 - **Organization Setup:** Manage departments, internal hierarchy, and team structure via interactive data tables.
 - **Terms & Policy:** Mandatory scroll-tracking acceptance flows for new administrator accounts.
-- **Dynamic Profiles:** Fully integrated profile modules with dynamic avatar uploading (camera button) and password management.
+- **Dynamic Profiles:** Fully integrated, standardized profile modules mirroring the Employee structure perfectly, featuring dynamic avatar uploading (hover/click camera) and password management.
 
 ### 4. Employee & Department Head Portals
 - **My Assets & Bookings:** Employees can track assigned assets and book shared resources via a calendar timeline interface.
@@ -32,7 +32,7 @@
 - **Kanban Maintenance:** Track repairs across pending, approved, and resolved states.
 - **Audit Center:** Live discrepancy reporting for expected vs. reported asset locations.
 - **Rich Analytics:** Lightweight CSS-based heatmaps and utilization charts for actionable insights.
-- **Role-Based Access Control (RBAC):** Distinct locked routing and navigation structures for Admin, Asset Manager, Department Head, and Employee roles.
+- **Role-Based Access Control (RBAC):** Distinct locked routing and navigation structures with hard redirects (`/403`) for Admin, Asset Manager, Department Head, and Employee roles.
 
 ## 🛠️ Technology Stack
 - **Core:** React 18, Vite

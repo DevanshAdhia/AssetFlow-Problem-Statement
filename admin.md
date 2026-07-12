@@ -31,10 +31,11 @@ The AssetFlow Admin Dashboard is an enterprise-grade UI prototype built using Re
 - **Top Navigation:** Contains quick-actions like Notifications and Profile settings.
 
 ### 4. User Profile & Settings
-- **Profile Layout:** Displays user details, roles, and recent activity.
-- **Edit Profile:** Dedicated interface supporting live, interactive image preview uploads using `URL.createObjectURL()` and form state management.
-- **Password Management:** Dedicated screens for password resets and updates.
-- **Activity Logs:** Tabular data layout tracing all system events chronologically.
+- **Standardized Profile Layout:** A completely redesigned profile interface mirroring the Employee dashboard layout, featuring a split-card layout (Avatar + Security vs. Info + Address) for a unified UI.
+- **Dynamic Role Synchronization:** Automatically injects the precise name, email, and Role (e.g., Admin, Asset Manager, Dept Head) from the initial login selection into the UI.
+- **Edit Profile:** Dedicated interface supporting live, interactive image preview uploads via click or hover over the avatar.
+- **Password Management:** Integrated "Change Password" modal with real-time length and match validation.
+- **Strict Route Guards (RBAC):** Implementation of locked route access based on role. Prevents users from manually navigating across dashboards by strictly redirecting them to `/403` if they access an unauthorized layout component.
 
 ### 5. Advanced Modules (Newly Integrated)
 - **Asset Allocation & Transfer:** Interactive form with double-allocation blockage checks and asset history timelines.
