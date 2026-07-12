@@ -1,9 +1,11 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { kpiData, recentActivities } from '../../data/mockData';
 import { Package, Users, Settings, CalendarCheck, Plus, Bookmark, Wrench } from 'lucide-react';
 import './Dashboard.css';
 
 const Dashboard = () => {
+  const navigate = useNavigate();
   return (
     <div className="dashboard-page">
       <div className="page-header">
@@ -107,15 +109,15 @@ const Dashboard = () => {
             <h2>Quick Actions</h2>
           </div>
           <div className="actions-grid">
-            <button className="action-btn">
+            <button className="action-btn" onClick={() => navigate('/assets')}>
               <Plus size={20} />
               <span>Register Asset</span>
             </button>
-            <button className="action-btn">
+            <button className="action-btn" onClick={() => navigate('/bookings')}>
               <Bookmark size={20} />
               <span>Book Resource</span>
             </button>
-            <button className="action-btn">
+            <button className="action-btn" onClick={() => navigate('/maintenance')}>
               <Wrench size={20} />
               <span>Raise Maintenance</span>
             </button>

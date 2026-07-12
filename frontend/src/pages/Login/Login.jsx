@@ -1,16 +1,36 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Lock, Mail } from 'lucide-react';
+import { API_ENDPOINTS } from '../../config/api';
 import './Login.css';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    navigate('/dashboard');
+    setError('');
+    try {
+      const response = await fetch(API_ENDPOINTS.LOGIN, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
+      
+      const data = await response.json();
+      
+      if (response.ok && data.access_token) {
+        localStorage.setItem('token', data.access_token);
+        navigate('/dashboard');
+      } else {
+        setError(data.detail || 'Login failed. Please check your credentials.');
+      }
+    } catch (err) {
+      setError('Network error. Unable to connect to the server.');
+    }
   };
 
   return (
@@ -20,6 +40,7 @@ const Login = () => {
       </div>
       
       <form onSubmit={handleLogin} className="auth-form">
+        {error && <div className="error-message text-danger mb-3 text-sm">{error}</div>}
         <div className="form-group">
           <label className="form-label">Email</label>
           <div className="input-with-icon">

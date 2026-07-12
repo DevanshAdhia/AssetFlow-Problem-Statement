@@ -21,10 +21,62 @@ const mockActiveAllocations = [
 
 const Allocation = () => {
   const [activeTab, setActiveTab] = useState('directory');
+  const [assets, setAssets] = useState(mockAssets);
   const [selectedAsset, setSelectedAsset] = useState(mockAssets[0]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [allocations, setAllocations] = useState(mockActiveAllocations);
+  const [history, setHistory] = useState(mockHistory);
+  
+  const [transferTo, setTransferTo] = useState('');
+  const [transferReason, setTransferReason] = useState('');
 
   const isBlocked = selectedAsset.status === 'Allocated';
+
+  const handleTransfer = (e) => {
+    e.preventDefault();
+    if (!transferTo || !transferReason) {
+      alert("Please fill in destination and reason.");
+      return;
+    }
+    
+    // Create new allocation
+    const newAlloc = {
+      id: Date.now(),
+      tag: selectedAsset.tag,
+      asset: selectedAsset.name,
+      empId: 'EMP-NEW',
+      person: transferTo,
+      department: 'Assigned Dept',
+      date: new Date().toLocaleDateString('en-GB'),
+      approvedBy: 'Admin (System)'
+    };
+    
+    // Update asset status
+    const updatedAsset = { ...selectedAsset, status: 'Allocated', currentHolder: transferTo };
+    setAssets(assets.map(a => a.id === selectedAsset.id ? updatedAsset : a));
+    setSelectedAsset(updatedAsset);
+    
+    setAllocations([...allocations, newAlloc]);
+    setHistory([{ id: Date.now(), date: new Date().toLocaleDateString('en-GB'), action: `Allocated to ${transferTo}`, by: 'Admin' }, ...history]);
+    
+    setTransferTo('');
+    setTransferReason('');
+    setActiveTab('directory');
+  };
+
+  const handleReturn = (id) => {
+    if (!window.confirm("Return this asset?")) return;
+    const alloc = allocations.find(a => a.id === id);
+    setAllocations(allocations.filter(a => a.id !== id));
+    
+    const assetToUpdate = assets.find(a => a.tag === alloc.tag);
+    if (assetToUpdate) {
+      const updated = { ...assetToUpdate, status: 'Available', currentHolder: 'None (Storage)' };
+      setAssets(assets.map(a => a.id === assetToUpdate.id ? updated : a));
+      if (selectedAsset.id === assetToUpdate.id) setSelectedAsset(updated);
+    }
+    setHistory([{ id: Date.now(), date: new Date().toLocaleDateString('en-GB'), action: `Returned from ${alloc.person}`, by: 'Admin' }, ...history]);
+  };
 
   return (
     <div className="allocation-page">
@@ -65,6 +117,7 @@ const Allocation = () => {
                   <th>Department</th>
                   <th>Date Assigned</th>
                   <th>Approved By</th>
+                  <th className="text-right">Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -77,6 +130,9 @@ const Allocation = () => {
                     <td>{alloc.department}</td>
                     <td>{alloc.date}</td>
                     <td className="text-muted text-sm">{alloc.approvedBy}</td>
+                    <td className="text-right">
+                      <button className="btn btn-outline btn-xs" onClick={() => handleReturn(alloc.id)}>Return</button>
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -97,12 +153,15 @@ const Allocation = () => {
               <input type="text" placeholder="Search by tag (e.g. AF-001)" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
             </div>
             <div className="asset-selector flex gap-2">
-              <button className={`btn ${selectedAsset.id === 'a1' ? 'btn-primary' : 'btn-outline'}`} onClick={() => setSelectedAsset(mockAssets[0])}>
-                AF-001 (Allocated)
-              </button>
-              <button className={`btn ${selectedAsset.id === 'a2' ? 'btn-primary' : 'btn-outline'}`} onClick={() => setSelectedAsset(mockAssets[1])}>
-                AF-045 (Available)
-              </button>
+              {assets.map(asset => (
+                <button 
+                  key={asset.id}
+                  className={`btn ${selectedAsset.id === asset.id ? 'btn-primary' : 'btn-outline'}`} 
+                  onClick={() => setSelectedAsset(asset)}
+                >
+                  {asset.tag} ({asset.status})
+                </button>
+              ))}
             </div>
           </div>
 
@@ -130,7 +189,7 @@ const Allocation = () => {
               </div>
             )}
 
-            <form className="transfer-form mt-3" onSubmit={(e) => e.preventDefault()}>
+            <form className="transfer-form mt-3" onSubmit={handleTransfer}>
               <div className="form-group">
                 <label className="form-label">From (Current)</label>
                 <input type="text" className="form-control" value={selectedAsset.currentHolder} disabled />
@@ -138,15 +197,15 @@ const Allocation = () => {
               
               <div className="form-group">
                 <label className="form-label">To (Department / Employee)</label>
-                <input type="text" className="form-control" placeholder="Select destination..." disabled={isBlocked} />
+                <input type="text" className="form-control" placeholder="Select destination..." value={transferTo} onChange={e => setTransferTo(e.target.value)} disabled={isBlocked} />
               </div>
 
               <div className="form-group">
                 <label className="form-label">Reason for Transfer</label>
-                <textarea className="form-control" rows="3" placeholder="Provide justification for this transfer..." disabled={isBlocked}></textarea>
+                <textarea className="form-control" rows="3" placeholder="Provide justification for this transfer..." value={transferReason} onChange={e => setTransferReason(e.target.value)} disabled={isBlocked}></textarea>
               </div>
 
-              <button className="btn btn-primary w-full mt-2" disabled={isBlocked}>
+              <button type="submit" className="btn btn-primary w-full mt-2" disabled={isBlocked}>
                 <Send size={18} /> Submit Transfer Request
               </button>
             </form>
@@ -183,7 +242,7 @@ const Allocation = () => {
               <h2 className="flex-align-center gap-2"><History size={18} /> Allocation History</h2>
             </div>
             <div className="history-timeline mt-3">
-              {mockHistory.map((item, index) => (
+              {history.map((item, index) => (
                 <div key={item.id} className="timeline-item">
                   <div className="timeline-dot"></div>
                   <div className="timeline-content">

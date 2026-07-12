@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { CheckCircle2, ChevronDown } from 'lucide-react';
+import { API_ENDPOINTS } from '../../config/api';
 import '../Login/Login.css'; // Reusing some auth styles
 import './Signup.css';
 
@@ -9,6 +10,13 @@ const Signup = () => {
   const [emailVerified, setEmailVerified] = useState(false);
   const [showOtp, setShowOtp] = useState(false);
   const [otp, setOtp] = useState('');
+  const [email, setEmail] = useState('');
+  const [fullName, setFullName] = useState('');
+  const [phone, setPhone] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [error, setError] = useState('');
+  const [successMsg, setSuccessMsg] = useState('');
   
   // Custom Country Dropdown State
   const [showCountries, setShowCountries] = useState(false);
@@ -22,25 +30,90 @@ const Signup = () => {
     { code: '+81', flag: 'jp', name: 'Japan' }
   ];
 
-  const handleSignup = (e) => {
+  const handleSignup = async (e) => {
     e.preventDefault();
+    setError('');
+    
     if (!emailVerified) {
-      alert("Please verify your email to proceed.");
+      setError("Please verify your email to proceed.");
       return;
     }
-    navigate('/login');
+    
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
+    
+    const fullPhone = `${selectedCountry.code}${phone}`;
+    
+    try {
+      const res = await fetch(API_ENDPOINTS.REGISTER, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email,
+          password,
+          full_name: fullName,
+          phone: fullPhone
+        })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        navigate('/login');
+      } else {
+        setError(data.detail || 'Registration failed.');
+      }
+    } catch (err) {
+      setError('Network error during registration.');
+    }
   };
 
-  const handleSendOtp = () => {
-    setShowOtp(true);
+  const handleSendOtp = async () => {
+    if (!email) {
+      setError('Please enter your email first.');
+      return;
+    }
+    setError('');
+    try {
+      const res = await fetch(API_ENDPOINTS.SEND_OTP, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      });
+      if (res.ok) {
+        setShowOtp(true);
+        setSuccessMsg('OTP sent to your email.');
+      } else {
+        const data = await res.json();
+        setError(data.detail || 'Failed to send OTP.');
+      }
+    } catch (err) {
+      setError('Network error while sending OTP.');
+    }
   };
 
-  const handleVerifyOtp = () => {
+  const handleVerifyOtp = async () => {
+    setError('');
     if (otp.length === 4) {
-      setEmailVerified(true);
-      setShowOtp(false);
+      try {
+        const res = await fetch(API_ENDPOINTS.VERIFY_OTP, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, code: otp })
+        });
+        if (res.ok) {
+          setEmailVerified(true);
+          setShowOtp(false);
+          setSuccessMsg('Email verified successfully!');
+        } else {
+          const data = await res.json();
+          setError(data.detail || 'Invalid OTP.');
+        }
+      } catch (err) {
+        setError('Network error while verifying OTP.');
+      }
     } else {
-      alert("Please enter a valid 4-digit OTP.");
+      setError("Please enter a valid 4-digit OTP.");
     }
   };
 
@@ -52,15 +125,18 @@ const Signup = () => {
       </div>
       
       <form onSubmit={handleSignup} className="auth-form">
+        {error && <div className="error-message text-danger mb-3 text-sm">{error}</div>}
+        {successMsg && <div className="success-message text-success mb-3 text-sm">{successMsg}</div>}
+        
         <div className="form-group">
           <label className="form-label">Full Name</label>
-          <input type="text" className="form-control" placeholder="John Doe" required />
+          <input type="text" className="form-control" placeholder="John Doe" value={fullName} onChange={e => setFullName(e.target.value)} required />
         </div>
 
         <div className="form-group">
           <label className="form-label">Email</label>
           <div className="verify-input-group">
-            <input type="email" className="form-control" placeholder="john@example.com" required disabled={emailVerified} />
+            <input type="email" className="form-control" placeholder="john@example.com" value={email} onChange={e => setEmail(e.target.value)} required disabled={emailVerified} />
             {emailVerified ? (
               <span className="verified-badge"><CheckCircle2 size={18} /> Verified</span>
             ) : (
@@ -124,19 +200,19 @@ const Signup = () => {
               )}
             </div>
 
-            <input type="tel" className="form-control phone-number" placeholder="234 567 8900" required />
+            <input type="tel" className="form-control phone-number" placeholder="234 567 8900" value={phone} onChange={e => setPhone(e.target.value)} required />
           </div>
         </div>
 
         <div className="form-row">
           <div className="form-group half-width">
             <label className="form-label">Password</label>
-            <input type="password" className="form-control" placeholder="Create password" required />
+            <input type="password" className="form-control" placeholder="Create password" value={password} onChange={e => setPassword(e.target.value)} required />
           </div>
 
           <div className="form-group half-width">
             <label className="form-label">Confirm Password</label>
-            <input type="password" className="form-control" placeholder="Confirm password" required />
+            <input type="password" className="form-control" placeholder="Confirm password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} required />
           </div>
         </div>
 

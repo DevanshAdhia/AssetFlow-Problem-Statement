@@ -9,21 +9,74 @@ const resources = [
   { id: 'r4', name: 'Huddle Space A', type: 'Room', capacity: 4, amenities: ['Monitor'], location: 'Floor 1' }
 ];
 
-const mockTimeline = [
-  { time: '09:00 AM', status: 'available' },
-  { time: '10:00 AM', status: 'booked', bookedBy: 'Marketing Team' },
-  { time: '11:00 AM', status: 'booked', bookedBy: 'Marketing Team' },
-  { time: '12:00 PM', status: 'available' },
-  { time: '01:00 PM', status: 'available' },
-  { time: '02:00 PM', status: 'booked', bookedBy: 'Client Meeting' },
-  { time: '03:00 PM', status: 'available' },
-  { time: '04:00 PM', status: 'available' },
-  { time: '05:00 PM', status: 'available' }
-];
-
 const Bookings = () => {
   const [selectedResource, setSelectedResource] = useState(resources[0]);
   const [showModal, setShowModal] = useState(false);
+  const [selectedTimeSlot, setSelectedTimeSlot] = useState('');
+  const [bookingPurpose, setBookingPurpose] = useState('');
+
+  const [timelines, setTimelines] = useState({
+    'r1': [
+      { time: '09:00 AM', status: 'available' },
+      { time: '10:00 AM', status: 'booked', bookedBy: 'Marketing Team' },
+      { time: '11:00 AM', status: 'booked', bookedBy: 'Marketing Team' },
+      { time: '12:00 PM', status: 'available' },
+      { time: '01:00 PM', status: 'available' },
+      { time: '02:00 PM', status: 'booked', bookedBy: 'Client Meeting' },
+      { time: '03:00 PM', status: 'available' },
+      { time: '04:00 PM', status: 'available' },
+      { time: '05:00 PM', status: 'available' }
+    ]
+  });
+
+  const getTimeline = (resId) => {
+    return timelines[resId] || [
+      { time: '09:00 AM', status: 'available' },
+      { time: '10:00 AM', status: 'available' },
+      { time: '11:00 AM', status: 'available' },
+      { time: '12:00 PM', status: 'available' },
+      { time: '01:00 PM', status: 'available' },
+      { time: '02:00 PM', status: 'available' },
+      { time: '03:00 PM', status: 'available' },
+      { time: '04:00 PM', status: 'available' },
+      { time: '05:00 PM', status: 'available' }
+    ];
+  };
+
+  const handleBook = () => {
+    if (!selectedTimeSlot || !bookingPurpose) {
+      alert("Please select a time and enter a purpose.");
+      return;
+    }
+    const currentTimeline = getTimeline(selectedResource.id);
+    const updatedTimeline = currentTimeline.map(slot => 
+      slot.time === selectedTimeSlot 
+        ? { ...slot, status: 'booked', bookedBy: bookingPurpose } 
+        : slot
+    );
+    setTimelines({
+      ...timelines,
+      [selectedResource.id]: updatedTimeline
+    });
+    setShowModal(false);
+    setSelectedTimeSlot('');
+    setBookingPurpose('');
+  };
+
+  const cancelBooking = (time) => {
+    if (window.confirm('Cancel this booking?')) {
+      const currentTimeline = getTimeline(selectedResource.id);
+      const updatedTimeline = currentTimeline.map(slot => 
+        slot.time === time 
+          ? { time, status: 'available' } 
+          : slot
+      );
+      setTimelines({
+        ...timelines,
+        [selectedResource.id]: updatedTimeline
+      });
+    }
+  };
 
   return (
     <div className="bookings-page">
@@ -92,7 +145,7 @@ const Bookings = () => {
               </div>
               
               <div className="time-slots">
-                {mockTimeline.map((slot, index) => (
+                {getTimeline(selectedResource.id).map((slot, index) => (
                   <div key={index} className={`time-slot-row ${slot.status}`}>
                     <div className="slot-time flex-align-center gap-2 font-medium">
                       <Clock size={16} className={slot.status === 'booked' ? 'text-danger' : 'text-success'} />
@@ -109,8 +162,10 @@ const Bookings = () => {
                       )}
                     </div>
                     <div className="slot-action">
-                      {slot.status === 'available' && (
-                        <button className="btn btn-primary btn-xs" onClick={() => setShowModal(true)}>Reserve</button>
+                      {slot.status === 'available' ? (
+                        <button className="btn btn-primary btn-xs" onClick={() => { setSelectedTimeSlot(slot.time); setShowModal(true); }}>Reserve</button>
+                      ) : (
+                        <button className="btn btn-outline btn-xs text-danger border-danger" onClick={() => cancelBooking(slot.time)}>Cancel</button>
                       )}
                     </div>
                   </div>
@@ -143,9 +198,10 @@ const Bookings = () => {
                 </div>
                 <div className="form-group">
                   <label className="form-label">Time</label>
-                  <select className="form-control">
-                    {mockTimeline.filter(s => s.status === 'available').map((s, idx) => (
-                      <option key={idx}>{s.time}</option>
+                  <select className="form-control" value={selectedTimeSlot} onChange={e => setSelectedTimeSlot(e.target.value)}>
+                    <option value="">Select a time</option>
+                    {getTimeline(selectedResource.id).filter(s => s.status === 'available').map((s, idx) => (
+                      <option key={idx} value={s.time}>{s.time}</option>
                     ))}
                   </select>
                 </div>
@@ -153,11 +209,11 @@ const Bookings = () => {
 
               <div className="form-group mt-3">
                 <label className="form-label">Booking Purpose</label>
-                <input type="text" className="form-control" placeholder="e.g. Weekly Sync with Marketing" />
+                <input type="text" className="form-control" placeholder="e.g. Weekly Sync with Marketing" value={bookingPurpose} onChange={e => setBookingPurpose(e.target.value)} />
               </div>
             </div>
             <div className="modal-footer mt-4 flex gap-2">
-              <button className="btn btn-primary flex-1" onClick={() => setShowModal(false)}>Confirm Booking</button>
+              <button className="btn btn-primary flex-1" onClick={handleBook}>Confirm Booking</button>
               <button className="btn btn-outline" onClick={() => setShowModal(false)}>Cancel</button>
             </div>
           </div>

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Search, Filter, Plus, Edit2, Trash2, QrCode } from 'lucide-react';
 import './Assets.css';
 
-const mockAssets = [
+const initialAssets = [
   { id: 1, tag: 'AF-001', name: 'Dell XPS 15 Laptop', category: 'Electronics', status: 'Allocated', location: 'IT Dept (Floor 2)' },
   { id: 2, name: 'Sony 4K Monitor', tag: 'AF-045', category: 'Electronics', status: 'Available', location: 'Storage Room A' },
   { id: 3, name: 'Ergonomic Office Chair', tag: 'AF-102', category: 'Furniture', status: 'In Repair', location: 'Maintenance Bay' },
@@ -11,13 +11,20 @@ const mockAssets = [
 ];
 
 const Assets = () => {
+  const [assets, setAssets] = useState(initialAssets);
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('All');
   const [statusFilter, setStatusFilter] = useState('All');
   const [showModal, setShowModal] = useState(false);
   const [newAssetStatus, setNewAssetStatus] = useState('Available');
 
-  const filteredAssets = mockAssets.filter(asset => {
+  const [newAssetName, setNewAssetName] = useState('');
+  const [newAssetCategory, setNewAssetCategory] = useState('Electronics');
+  const [newAssetSerial, setNewAssetSerial] = useState('');
+  const [newAssetLocation, setNewAssetLocation] = useState('Main HQ - IT Dept');
+  const [newAssetAssignee, setNewAssetAssignee] = useState('');
+
+  const filteredAssets = assets.filter(asset => {
     const matchesSearch = asset.tag.toLowerCase().includes(searchTerm.toLowerCase()) || 
                           asset.name.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = categoryFilter === 'All' || asset.category === categoryFilter;
@@ -25,6 +32,41 @@ const Assets = () => {
     
     return matchesSearch && matchesCategory && matchesStatus;
   });
+
+  const handleDelete = (id) => {
+    if (window.confirm('Are you sure you want to delete this asset?')) {
+      setAssets(assets.filter(a => a.id !== id));
+    }
+  };
+
+  const handleEdit = (asset) => {
+    const newName = window.prompt('Edit Asset Name:', asset.name);
+    if (newName) {
+      setAssets(assets.map(a => a.id === asset.id ? { ...a, name: newName } : a));
+    }
+  };
+
+  const handleAdd = () => {
+    if (!newAssetName) {
+      alert("Asset name is required.");
+      return;
+    }
+    const newId = Date.now();
+    const newTag = `AF-${Math.floor(Math.random() * 1000).toString().padStart(3, '0')}`;
+    const newAsset = {
+      id: newId,
+      tag: newTag,
+      name: newAssetName,
+      category: newAssetCategory,
+      status: newAssetStatus,
+      location: newAssetLocation,
+      assignee: newAssetStatus === 'Allocated' ? newAssetAssignee : null
+    };
+    setAssets([newAsset, ...assets]);
+    setShowModal(false);
+    setNewAssetName('');
+    setNewAssetSerial('');
+  };
 
   const getStatusBadge = (status) => {
     switch (status) {
@@ -101,8 +143,8 @@ const Assets = () => {
                   <td>{asset.location}</td>
                   <td className="text-right">
                     <div className="action-buttons">
-                      <button className="icon-btn edit-btn" title="Edit Asset"><Edit2 size={16}/></button>
-                      <button className="icon-btn delete-btn" title="Delete Asset"><Trash2 size={16}/></button>
+                      <button className="icon-btn edit-btn" title="Edit Asset" onClick={() => handleEdit(asset)}><Edit2 size={16}/></button>
+                      <button className="icon-btn delete-btn" title="Delete Asset" onClick={() => handleDelete(asset.id)}><Trash2 size={16}/></button>
                     </div>
                   </td>
                 </tr>
@@ -127,11 +169,11 @@ const Assets = () => {
               <div className="grid-form">
                 <div className="form-group">
                   <label className="form-label">Asset Name</label>
-                  <input type="text" className="form-control" placeholder="e.g. MacBook Pro M3" />
+                  <input type="text" className="form-control" placeholder="e.g. MacBook Pro M3" value={newAssetName} onChange={e => setNewAssetName(e.target.value)} />
                 </div>
                 <div className="form-group">
                   <label className="form-label">Category</label>
-                  <select className="form-control">
+                  <select className="form-control" value={newAssetCategory} onChange={e => setNewAssetCategory(e.target.value)}>
                     <option>Electronics</option>
                     <option>Furniture</option>
                     <option>Vehicles</option>
@@ -139,11 +181,11 @@ const Assets = () => {
                 </div>
                 <div className="form-group">
                   <label className="form-label">Serial Number</label>
-                  <input type="text" className="form-control" placeholder="e.g. SN-998822" />
+                  <input type="text" className="form-control" placeholder="e.g. SN-998822" value={newAssetSerial} onChange={e => setNewAssetSerial(e.target.value)} />
                 </div>
                 <div className="form-group">
                   <label className="form-label">Location</label>
-                  <select className="form-control">
+                  <select className="form-control" value={newAssetLocation} onChange={e => setNewAssetLocation(e.target.value)}>
                     <option>Main HQ - IT Dept</option>
                     <option>Storage Room A</option>
                   </select>
@@ -165,7 +207,7 @@ const Assets = () => {
               {newAssetStatus === 'Allocated' && (
                 <div className="form-group mt-3" style={{ animation: 'fadeIn 0.2s ease' }}>
                   <label className="form-label text-primary">Assign To (Employee / Asset Manager)</label>
-                  <select className="form-control border-primary">
+                  <select className="form-control border-primary" value={newAssetAssignee} onChange={e => setNewAssetAssignee(e.target.value)}>
                     <option value="">Select recipient...</option>
                     <option value="emp1">Alex Johnson (Dept Head - IT)</option>
                     <option value="emp2">Sarah Smith (Asset Manager - HR)</option>
@@ -175,7 +217,7 @@ const Assets = () => {
               )}
             </div>
             <div className="modal-footer mt-4 flex gap-2">
-              <button className="btn btn-primary flex-1" onClick={() => setShowModal(false)}>Register Asset</button>
+              <button className="btn btn-primary flex-1" onClick={handleAdd}>Register Asset</button>
               <button className="btn btn-outline" onClick={() => setShowModal(false)}>Cancel</button>
             </div>
           </div>
