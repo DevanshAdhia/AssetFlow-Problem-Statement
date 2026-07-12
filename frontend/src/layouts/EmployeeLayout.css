@@ -1,0 +1,76 @@
+/* ── Employee Layout — inherits global Admin CSS variables ── */
+@import './DashboardLayout.css';
+
+.emp-page { padding: 1.5rem; width: 100%; }
+.emp-page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.emp-page-title  { font-size: 1.45rem; font-weight: 700; color: var(--text-main); margin: 0; }
+.emp-page-subtitle { font-size: 0.875rem; color: var(--text-muted); margin: 4px 0 0; }
+.emp-header-actions { display: flex; gap: 0.6rem; align-items: center; flex-wrap: wrap; }
+
+.emp-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+.emp-kpi-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  transition: transform 0.15s, box-shadow 0.15s;
+  border-left: 4px solid var(--primary);
+}
+.emp-kpi-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.emp-kpi-label { font-size: 0.78rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; }
+.emp-kpi-value { font-size: 2rem; font-weight: 800; line-height: 1; color: var(--secondary); }
+
+.emp-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+}
+.emp-card-header {
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.emp-card-title { font-size: 1rem; font-weight: 700; color: var(--secondary); margin: 0; }
+.emp-card-body { padding: 1.5rem; }
+
+/* Empty state */
+.emp-empty-state {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 0.75rem; padding: 3rem; color: var(--text-muted); text-align: center;
+}
+
+/* Tabs */
+.emp-tabs { display: flex; gap: 0.25rem; border-bottom: 2px solid var(--border); margin-bottom: 1.25rem; }
+.emp-tab {
+  padding: 0.65rem 1.1rem; font-size: 0.875rem; font-weight: 600;
+  background: none; border: none; cursor: pointer; color: var(--text-muted);
+  border-bottom: 2px solid transparent; margin-bottom: -2px; font-family: inherit;
+  transition: all 0.15s; border-radius: 8px 8px 0 0;
+}
+.emp-tab.active { color: var(--primary); border-bottom-color: var(--primary); }
+.emp-tab:hover:not(.active) { color: var(--text-main); background: var(--bg-color); }
+
+@media (max-width: 768px) {
+  .emp-page { padding: 1rem; }
+}

@@ -47,7 +47,7 @@ const ROLE_ROUTES = {
   Admin:             '/dashboard',
   'Asset Manager':   '/asset-manager/dashboard',
   'Department Head': '/dept-head/dashboard',
-  Employee:          '/dashboard',
+  Employee:          '/employee/dashboard',
 };
 
 const buildAvatar = (name) =>

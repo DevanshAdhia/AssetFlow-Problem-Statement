@@ -46,6 +46,19 @@ import DHNotifications from '../pages/DeptHead/DHNotifications';
 import DHActivityLogs from '../pages/DeptHead/DHActivityLogs';
 import DHProfile from '../pages/DeptHead/DHProfile';
 
+// Employee Pages
+import EmployeeLayout from '../layouts/EmployeeLayout';
+import EmpDashboard from '../pages/Employee/EmpDashboard';
+import EmpAssets from '../pages/Employee/EmpAssets';
+import EmpBookings from '../pages/Employee/EmpBookings';
+import EmpMyBookings from '../pages/Employee/EmpMyBookings';
+import EmpMaintenance from '../pages/Employee/EmpMaintenance';
+import EmpReturns from '../pages/Employee/EmpReturns';
+import EmpTransfers from '../pages/Employee/EmpTransfers';
+import EmpNotifications from '../pages/Employee/EmpNotifications';
+import EmpActivityLogs from '../pages/Employee/EmpActivityLogs';
+import EmpProfile from '../pages/Employee/EmpProfile';
+
 import EditProfile from '../pages/Profile/EditProfile';
 import Terms from '../pages/Terms/Terms';
 import Unauthorized from '../pages/Unauthorized/Unauthorized';
@@ -109,6 +122,21 @@ const AppRoutes = () => {
         <Route path="/dept-head/notifications" element={<DHNotifications />} />
         <Route path="/dept-head/activity-logs" element={<DHActivityLogs />} />
         <Route path="/dept-head/profile" element={<DHProfile />} />
+      </Route>
+
+      {/* Employee Routes */}
+      <Route element={<EmployeeLayout />}>
+        <Route path="/employee" element={<Navigate to="/employee/dashboard" replace />} />
+        <Route path="/employee/dashboard" element={<EmpDashboard />} />
+        <Route path="/employee/assets" element={<EmpAssets />} />
+        <Route path="/employee/bookings" element={<EmpBookings />} />
+        <Route path="/employee/my-bookings" element={<EmpMyBookings />} />
+        <Route path="/employee/maintenance" element={<EmpMaintenance />} />
+        <Route path="/employee/returns" element={<EmpReturns />} />
+        <Route path="/employee/transfers" element={<EmpTransfers />} />
+        <Route path="/employee/notifications" element={<EmpNotifications />} />
+        <Route path="/employee/activity" element={<EmpActivityLogs />} />
+        <Route path="/employee/profile" element={<EmpProfile />} />
       </Route>
 
       {/* Error & Public Routes */}
