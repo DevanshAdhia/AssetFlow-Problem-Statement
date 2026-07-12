@@ -14,6 +14,7 @@ import ChangePassword from '../pages/Profile/ChangePassword';
 import Notifications from '../pages/Notifications/Notifications';
 import ActivityLogs from '../pages/ActivityLogs/ActivityLogs';
 import OrganizationSetup from '../pages/OrganizationSetup/OrganizationSetup';
+import EditProfile from '../pages/Profile/EditProfile';
 import Terms from '../pages/Terms/Terms';
 import Unauthorized from '../pages/Unauthorized/Unauthorized';
 import NotFound from '../pages/NotFound/NotFound';
@@ -35,6 +36,7 @@ const AppRoutes = () => {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/setup" element={<OrganizationSetup />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/edit-profile" element={<EditProfile />} />
         <Route path="/change-password" element={<ChangePassword />} />
         <Route path="/notifications" element={<Notifications />} />
         <Route path="/activity-logs" element={<ActivityLogs />} />

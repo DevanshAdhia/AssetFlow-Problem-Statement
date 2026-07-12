@@ -49,7 +49,7 @@ const Profile = () => {
           </div>
 
           <div className="profile-actions">
-            <button className="btn btn-primary">Edit Profile</button>
+            <button className="btn btn-primary" onClick={() => navigate('/edit-profile')}>Edit Profile</button>
             <button className="btn btn-outline" onClick={() => navigate('/change-password')}>Change Password</button>
           </div>
         </div>
