@@ -54,6 +54,33 @@ const Dashboard = () => {
         </div>
       </div>
 
+      {/* Action Required Section */}
+      <div className="card action-required-card border-warning">
+        <div className="card-header">
+          <h2 className="text-warning flex-align-center gap-2">
+            <Settings size={20} /> Action Required
+          </h2>
+        </div>
+        <div className="action-items-list">
+          <div className="action-alert-item">
+            <span className="alert-dot bg-danger"></span>
+            <div className="alert-content">
+              <h4>3 assets missing for specs</h4>
+              <p>Flagged for immediate follow-up and audit verification.</p>
+            </div>
+            <button className="btn btn-outline btn-sm">Review</button>
+          </div>
+          <div className="action-alert-item">
+            <span className="alert-dot bg-warning"></span>
+            <div className="alert-content">
+              <h4>5 Pending Transfers</h4>
+              <p>Department allocation transfers awaiting administrator approval.</p>
+            </div>
+            <button className="btn btn-outline btn-sm">Approve</button>
+          </div>
+        </div>
+      </div>
+
       <div className="dashboard-content-grid">
         {/* Recent Activities */}
         <div className="card recent-activities">
