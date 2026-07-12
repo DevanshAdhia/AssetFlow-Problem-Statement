@@ -19,6 +19,7 @@ import Audit from '../pages/Audit/Audit';
 import Allocation from '../pages/Allocation/Allocation';
 import OrganizationSetup from '../pages/OrganizationSetup/OrganizationSetup';
 import Assets from '../pages/Assets/Assets';
+import Bookings from '../pages/Bookings/Bookings';
 import EditProfile from '../pages/Profile/EditProfile';
 import Terms from '../pages/Terms/Terms';
 import Unauthorized from '../pages/Unauthorized/Unauthorized';
@@ -42,6 +43,7 @@ const AppRoutes = () => {
         <Route path="/setup" element={<OrganizationSetup />} />
         <Route path="/assets" element={<Assets />} />
         <Route path="/allocation" element={<Allocation />} />
+        <Route path="/bookings" element={<Bookings />} />
         <Route path="/maintenance" element={<Maintenance />} />
         <Route path="/audit" element={<Audit />} />
         <Route path="/profile" element={<Profile />} />
