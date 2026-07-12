@@ -22,11 +22,17 @@
 - **Terms & Policy:** Mandatory scroll-tracking acceptance flows for new administrator accounts.
 - **Profile Customization:** Dynamic image uploading featuring instant blob-preview URLs.
 
-### 4. Advanced Operations & Auditing
+### 4. Employee Self-Service Portal
+- **My Assets & Bookings:** Employees can track assigned assets and book shared resources via a calendar timeline interface.
+- **Maintenance & Transfers:** Built-in modal workflows for raising tickets and requesting asset transfers.
+- **Dynamic Activity History:** Accordion-based (drop down/up) audit trail of all employee actions.
+- **Live Profile Synchronization:** Instant profile updates synchronized across the app using custom local storage event dispatchers.
+
+### 5. Advanced Operations & Auditing (Admin & Managers)
 - **Kanban Maintenance:** Track repairs across pending, approved, and resolved states.
 - **Audit Center:** Live discrepancy reporting for expected vs. reported asset locations.
 - **Rich Analytics:** Lightweight CSS-based heatmaps and utilization charts for actionable insights.
-- **Double-Allocation Check:** Smart transfer forms that visually block requests for already-assigned assets.
+- **Role-Based Access Control (RBAC):** Distinct locked routing and navigation structures for Admin, Asset Manager, Department Head, and Employee roles.
 
 ## 🛠️ Technology Stack
 - **Core:** React 18, Vite
