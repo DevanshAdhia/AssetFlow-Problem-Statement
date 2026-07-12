@@ -141,6 +141,31 @@ a:hover {
   flex-direction: column;
 }
 
+/* Status / Utility Colors */
+.text-primary { color: var(--primary) !important; }
+.text-success { color: var(--success) !important; }
+.text-warning { color: var(--warning) !important; }
+.text-danger { color: var(--danger) !important; }
+.text-info { color: #0EA5E9 !important; }
+
+.bg-primary { background-color: var(--primary) !important; }
+.bg-success { background-color: var(--success) !important; }
+.bg-warning { background-color: var(--warning) !important; }
+.bg-danger { background-color: var(--danger) !important; }
+
+.bg-primary-light { background-color: rgba(37, 99, 235, 0.1) !important; }
+.bg-success-light { background-color: rgba(34, 197, 94, 0.1) !important; }
+.bg-warning-light { background-color: rgba(245, 158, 11, 0.1) !important; }
+.bg-danger-light { background-color: rgba(239, 68, 68, 0.1) !important; }
+.bg-info-light { background-color: rgba(14, 165, 233, 0.1) !important; }
+
+.border-primary { border-color: var(--primary) !important; }
+.border-success { border-color: var(--success) !important; }
+.border-warning { border-color: var(--warning) !important; }
+.border-danger { border-color: var(--danger) !important; }
+.border-gray { border-color: var(--border) !important; }
+.bg-gray-light { background-color: var(--bg-color) !important; }
+
 /* Global Responsive Overrides */
 @media (max-width: 768px) {
   :root {
@@ -175,6 +200,55 @@ a:hover {
   .kpi-grid, .profile-details-grid {
     grid-template-columns: 1fr !important;
   }
+
+  /* Structural & Flex Overrides for Mobile */
+  .flex-between {
+    flex-direction: column;
+    align-items: flex-start !important;
+    gap: 1rem;
+  }
+  
+  .page-header.flex-between, .card-header.flex-between {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  /* Make all grid forms stack vertically */
+  .grid-form, .grid-form.col-2, .grid-form.col-3 {
+    grid-template-columns: 1fr !important;
+    gap: 1rem;
+  }
+
+  /* Table Responsiveness */
+  .table-container {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-top: 1rem;
+  }
+  
+  .data-table {
+    min-width: 600px; /* Force table width so it scrolls rather than squishes */
+  }
+
+  /* Modal scaling */
+  .modal-content, .modal-content.large-modal {
+    width: 95% !important;
+    max-height: 90vh;
+    padding: 1rem !important;
+    margin: auto;
+  }
+  
+  .header-actions {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .header-actions .btn {
+    width: 100%;
+  }
 }
 
 @media (min-width: 769px) and (max-width: 1024px) {
@@ -184,5 +258,9 @@ a:hover {
   }
   .content-area, .terms-content {
     padding: 1.5rem !important;
+  }
+  
+  .grid-form.col-3 {
+    grid-template-columns: repeat(2, 1fr) !important;
   }
 }

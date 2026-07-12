@@ -18,7 +18,7 @@ const Profile = () => {
         <div className="profile-content">
           <div className="profile-avatar-wrapper">
             <img src={currentUser.avatar} alt="Profile" className="profile-avatar-large" />
-            <span className="status-badge">{currentUser.status}</span>
+            <span className="profile-status-badge">{currentUser.status}</span>
           </div>
           
           <div className="profile-details-grid">

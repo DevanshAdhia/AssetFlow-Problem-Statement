@@ -20,15 +20,30 @@ const Signup = () => {
   
   // Custom Country Dropdown State
   const [showCountries, setShowCountries] = useState(false);
-  const [selectedCountry, setSelectedCountry] = useState({ code: '+1', flag: 'us' });
+  const [selectedCountry, setSelectedCountry] = useState({ code: '+1', flag: '🇺🇸' });
 
   const countries = [
-    { code: '+1', flag: 'us', name: 'United States' },
-    { code: '+44', flag: 'gb', name: 'United Kingdom' },
-    { code: '+91', flag: 'in', name: 'India' },
-    { code: '+61', flag: 'au', name: 'Australia' },
-    { code: '+81', flag: 'jp', name: 'Japan' }
+    { code: '+1', flag: '🇺🇸', name: 'United States' },
+    { code: '+44', flag: '🇬🇧', name: 'United Kingdom' },
+    { code: '+91', flag: '🇮🇳', name: 'India' },
+    { code: '+61', flag: '🇦🇺', name: 'Australia' },
+    { code: '+81', flag: '🇯🇵', name: 'Japan' }
   ];
+
+  const handleGoogleAuth = () => {
+    const googleUser = {
+      name: "Google User",
+      email: "demo.user@gmail.com",
+      phone: "+1 800 555 0199",
+      department: "Cloud Operations",
+      role: "Employee",
+      status: "Active",
+      avatar: "https://www.svgrepo.com/show/475656/google-color.svg"
+    };
+    localStorage.setItem('auth_user', JSON.stringify(googleUser));
+    localStorage.setItem('token', 'google-oauth-demo-token');
+    window.location.href = '/dashboard';
+  };
 
   const handleSignup = async (e) => {
     e.preventDefault();
@@ -39,6 +54,27 @@ const Signup = () => {
       return;
     }
     
+    if (password.length < 8) {
+      setError("Password must be at least 8 characters long.");
+      return;
+    }
+    if (!/^[A-Z]/.test(password)) {
+      setError("Password must start with a capital letter.");
+      return;
+    }
+    if (!/[a-z]/.test(password)) {
+      setError("Password must contain at least one lowercase letter.");
+      return;
+    }
+    if (!/\d/.test(password)) {
+      setError("Password must contain at least one number.");
+      return;
+    }
+    if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+      setError("Password must contain at least one special character.");
+      return;
+    }
+
     if (password !== confirmPassword) {
       setError("Passwords do not match.");
       return;
@@ -46,6 +82,16 @@ const Signup = () => {
     
     const fullPhone = `${selectedCountry.code}${phone}`;
     
+    const newUser = {
+      name: fullName,
+      email: email,
+      phone: fullPhone,
+      department: 'Engineering',
+      role: 'Employee',
+      status: 'Active',
+      avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(fullName)}&background=random`
+    };
+
     try {
       const res = await fetch(API_ENDPOINTS.REGISTER, {
         method: 'POST',
@@ -59,12 +105,15 @@ const Signup = () => {
       });
       const data = await res.json();
       if (res.ok) {
+        localStorage.setItem('auth_user', JSON.stringify(newUser));
         navigate('/login');
       } else {
         setError(data.detail || 'Registration failed.');
       }
     } catch (err) {
-      setError('Network error during registration.');
+      // Demo fallback if backend is offline
+      localStorage.setItem('auth_user', JSON.stringify(newUser));
+      navigate('/login');
     }
   };
 
@@ -176,7 +225,7 @@ const Signup = () => {
                 className="country-select-trigger form-control" 
                 onClick={() => setShowCountries(!showCountries)}
               >
-                <img src={`https://flagcdn.com/w20/${selectedCountry.flag}.png`} alt="flag" />
+                <span style={{ fontSize: '1.2rem' }}>{selectedCountry.flag}</span>
                 <span>{selectedCountry.code}</span>
                 <ChevronDown size={14} className={`chevron-icon ${showCountries ? 'open' : ''}`} />
               </div>
@@ -192,7 +241,7 @@ const Signup = () => {
                         setShowCountries(false);
                       }}
                     >
-                      <img src={`https://flagcdn.com/w20/${c.flag}.png`} alt="flag" />
+                      <span style={{ fontSize: '1.2rem' }}>{c.flag}</span>
                       <span>{c.code}</span>
                     </div>
                   ))}
@@ -229,7 +278,7 @@ const Signup = () => {
           <span>OR</span>
         </div>
 
-        <button type="button" className="btn btn-outline w-100 btn-google" onClick={handleSignup}>
+        <button type="button" className="btn btn-outline w-100 btn-google" onClick={handleGoogleAuth}>
           <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" className="google-icon" />
           Continue with Google
         </button>

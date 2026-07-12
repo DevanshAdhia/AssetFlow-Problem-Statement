@@ -1,4 +1,6 @@
-export const currentUser = {
+const storedUser = JSON.parse(localStorage.getItem('auth_user') || 'null');
+
+export const currentUser = storedUser || {
   name: "Bharat Rathor",
   email: "bharat@example.com",
   phone: "+91 9876543210",

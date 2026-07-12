@@ -10,6 +10,21 @@ const Login = () => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
+  const handleGoogleAuth = () => {
+    const googleUser = {
+      name: "Google User",
+      email: "demo.user@gmail.com",
+      phone: "+1 800 555 0199",
+      department: "Cloud Operations",
+      role: "Employee",
+      status: "Active",
+      avatar: "https://www.svgrepo.com/show/475656/google-color.svg"
+    };
+    localStorage.setItem('auth_user', JSON.stringify(googleUser));
+    localStorage.setItem('token', 'google-oauth-demo-token');
+    window.location.href = '/dashboard';
+  };
+
   const handleLogin = async (e) => {
     e.preventDefault();
     setError('');
@@ -24,12 +39,43 @@ const Login = () => {
       
       if (response.ok && data.access_token) {
         localStorage.setItem('token', data.access_token);
-        navigate('/dashboard');
+        
+        // If they don't have an auth_user, generate a basic one
+        if (!localStorage.getItem('auth_user')) {
+          localStorage.setItem('auth_user', JSON.stringify({
+            name: email.split('@')[0],
+            email: email,
+            phone: '+1 234 567 8900',
+            department: 'Engineering',
+            role: 'Employee',
+            status: 'Active',
+            avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(email.split('@')[0])}&background=random`
+          }));
+        }
+        
+        // Use window.location to force a reload so mockData.js grabs the new auth_user
+        window.location.href = '/dashboard';
       } else {
         setError(data.detail || 'Login failed. Please check your credentials.');
       }
     } catch (err) {
-      setError('Network error. Unable to connect to the server.');
+      // Fallback for UI Demo
+      const storedUser = JSON.parse(localStorage.getItem('auth_user') || 'null');
+      if (storedUser && storedUser.email === email) {
+        localStorage.setItem('token', 'demo-token');
+      } else {
+        localStorage.setItem('auth_user', JSON.stringify({
+          name: email.split('@')[0],
+          email: email,
+          phone: '+1 234 567 8900',
+          department: 'Engineering',
+          role: 'Employee',
+          status: 'Active',
+          avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(email.split('@')[0])}&background=random`
+        }));
+        localStorage.setItem('token', 'demo-token');
+      }
+      window.location.href = '/dashboard';
     }
   };
 
@@ -85,7 +131,7 @@ const Login = () => {
           <span>OR</span>
         </div>
 
-        <button type="button" className="btn btn-outline w-100 btn-google" onClick={() => navigate('/dashboard')}>
+        <button type="button" className="btn btn-outline w-100 btn-google" onClick={handleGoogleAuth}>
           <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" className="google-icon" />
           Continue with Google
         </button>
