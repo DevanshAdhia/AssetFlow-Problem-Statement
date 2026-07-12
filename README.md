@@ -22,6 +22,12 @@
 - **Terms & Policy:** Mandatory scroll-tracking acceptance flows for new administrator accounts.
 - **Profile Customization:** Dynamic image uploading featuring instant blob-preview URLs.
 
+### 4. Advanced Operations & Auditing
+- **Kanban Maintenance:** Track repairs across pending, approved, and resolved states.
+- **Audit Center:** Live discrepancy reporting for expected vs. reported asset locations.
+- **Rich Analytics:** Lightweight CSS-based heatmaps and utilization charts for actionable insights.
+- **Double-Allocation Check:** Smart transfer forms that visually block requests for already-assigned assets.
+
 ## 🛠️ Technology Stack
 - **Core:** React 18, Vite
 - **Routing:** React Router DOM v6
@@ -56,6 +62,7 @@ npm run dev
 Open your browser and navigate to `http://localhost:5175/` (or the port specified in your terminal).
 
 ## 📄 Documentation Structure
+- `API_CONTRACT.md`: Complete JSON API endpoint spec designed for Backend Developer integration.
 - `admin.md`: Deep dive into specific admin features and layout behaviors (Intended for internal team).
 - `README.md`: Public-facing project overview (this file).
 

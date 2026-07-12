@@ -34,7 +34,14 @@ The AssetFlow Admin Dashboard is an enterprise-grade UI prototype built using Re
 - **Profile Layout:** Displays user details, roles, and recent activity.
 - **Edit Profile:** Dedicated interface supporting live, interactive image preview uploads using `URL.createObjectURL()` and form state management.
 - **Password Management:** Dedicated screens for password resets and updates.
-- **Activity Logs:** Tabular data layout with horizontal scrolling for mobile devices.
+- **Activity Logs:** Tabular data layout tracing all system events chronologically.
+
+### 5. Advanced Modules (Newly Integrated)
+- **Asset Allocation & Transfer:** Interactive form with double-allocation blockage checks and asset history timelines.
+- **Maintenance Management (Kanban):** Drag-and-drop style columns (Pending, Approved, etc.) with automation alerts masking assets during maintenance.
+- **Asset Audit:** Discrepancy reporting matrix tracking expected vs. reported locations, complete with auto-generated PDF triggers.
+- **Reports & Analytics:** CSS-based, lightweight data visualizations including Heatmaps, Bar Charts (Used vs. Idle), and Maintenance Frequency charts.
+- **Categorized Notifications:** Tab-filtered notification center segregating general alerts, approvals, and bookings.
 
 ### 5. Organization Setup (Screen 3)
 - **Directory Interface:** Comprehensive management console for internal structure.
