@@ -71,6 +71,13 @@ const DeptHeadLayout = () => {
     };
   }, []);
 
+  // Role-Based Access Control Guard
+  useEffect(() => {
+    if (user.role !== 'Department Head') {
+      navigate('/403');
+    }
+  }, [user.role, navigate]);
+
   useEffect(() => {
     const handler = (e) => {
       if (profileRef.current && !profileRef.current.contains(e.target)) setProfileOpen(false);

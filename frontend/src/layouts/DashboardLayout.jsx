@@ -45,6 +45,13 @@ const DashboardLayout = () => {
     };
   }, []);
 
+  // Role-Based Access Control Guard
+  useEffect(() => {
+    if (user.role !== 'Admin') {
+      navigate('/403');
+    }
+  }, [user.role, navigate]);
+
   const handleLogout = () => {
     localStorage.removeItem('auth_user');
     localStorage.removeItem('token');

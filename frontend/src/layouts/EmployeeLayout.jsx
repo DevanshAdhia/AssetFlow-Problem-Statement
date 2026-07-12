@@ -44,6 +44,13 @@ const EmployeeLayout = () => {
     };
   }, []);
 
+  // Role-Based Access Control Guard
+  useEffect(() => {
+    if (user.role !== 'Employee') {
+      navigate('/403');
+    }
+  }, [user.role, navigate]);
+
   const handleLogout = () => {
     localStorage.removeItem('auth_user');
     localStorage.removeItem('token');
