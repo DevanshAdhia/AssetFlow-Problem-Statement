@@ -20,7 +20,12 @@ import './DashboardLayout.css';
 const getAuthUser = () => {
   try {
     const u = JSON.parse(localStorage.getItem('auth_user'));
-    return u || { name: 'Admin User', role: 'Admin', email: '', avatar: null };
+    return {
+      name: u?.name || u?.full_name || 'Admin User',
+      role: u?.role || 'Admin',
+      email: u?.email || '',
+      avatar: u?.avatar || null
+    };
   } catch {
     return { name: 'Admin User', role: 'Admin', email: '', avatar: null };
   }

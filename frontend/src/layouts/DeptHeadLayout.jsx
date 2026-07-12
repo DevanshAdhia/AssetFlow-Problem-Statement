@@ -11,7 +11,12 @@ import './DeptHeadLayout.css';
 const getUser = () => {
   try {
     const u = JSON.parse(localStorage.getItem('auth_user'));
-    return u || { name: 'Dept Head', role: 'Department Head', department: 'Engineering', avatar: null };
+    return {
+      name: u?.name || u?.full_name || 'Dept Head',
+      role: u?.role || 'Department Head',
+      department: u?.department || 'Engineering',
+      avatar: u?.avatar || null
+    };
   } catch { return { name: 'Dept Head', role: 'Department Head', department: 'Engineering', avatar: null }; }
 };
 

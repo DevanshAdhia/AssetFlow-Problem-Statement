@@ -20,9 +20,13 @@ import './EmployeeLayout.css';
 const getAuthUser = () => {
   try {
     const u = JSON.parse(localStorage.getItem('auth_user'));
-    return u || { name: 'Employee User', role: 'Employee', email: '', avatar: null };
+    return {
+      name: u?.name || u?.full_name || 'Employee',
+      role: u?.role || 'Employee',
+      avatar: u?.avatar || null
+    };
   } catch {
-    return { name: 'Employee User', role: 'Employee', email: '', avatar: null };
+    return { name: 'Employee', role: 'Employee', avatar: null };
   }
 };
 
