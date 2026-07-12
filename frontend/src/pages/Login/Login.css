@@ -113,3 +113,37 @@
 .auth-footer a {
   font-weight: 600;
 }
+
+/* Demo quick-login pills */
+.demo-pills {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  padding: 0.6rem 0.8rem;
+  background: rgba(37,99,235,0.05);
+  border: 1px solid rgba(37,99,235,0.15);
+  border-radius: 8px;
+}
+
+.demo-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.25rem 0.65rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--primary);
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: inherit;
+}
+.demo-pill:hover {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+}

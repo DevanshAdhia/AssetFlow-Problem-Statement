@@ -1,16 +1,21 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Camera, Upload, ArrowLeft } from 'lucide-react';
-import { currentUser } from '../../data/mockData';
 import './Profile.css';
+
+const getUser = () => {
+  try { return JSON.parse(localStorage.getItem('auth_user')) || {}; }
+  catch { return {}; }
+};
 
 const EditProfile = () => {
   const navigate = useNavigate();
-  const [profileImg, setProfileImg] = useState(currentUser.avatar);
-  const [name, setName] = useState(currentUser.name);
-  const [email, setEmail] = useState(currentUser.email);
-  const [phone, setPhone] = useState(currentUser.phone);
-  const [department, setDepartment] = useState(currentUser.department);
+  const storedUser = getUser();
+  const [profileImg, setProfileImg] = useState(storedUser.avatar || '');
+  const [name, setName] = useState(storedUser.name || '');
+  const [email, setEmail] = useState(storedUser.email || '');
+  const [phone, setPhone] = useState(storedUser.phone || '');
+  const [department, setDepartment] = useState(storedUser.department || 'Engineering');
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -26,19 +31,19 @@ const EditProfile = () => {
     
     // Create updated user object
     const updatedUser = {
-      ...currentUser,
+      ...storedUser,
       name,
       email,
       phone,
       department,
-      avatar: profileImg // Keep any uploaded local URL
+      avatar: profileImg
     };
     
-    // Save globally so mockData picks it up on reload
+    // Save globally
     localStorage.setItem('auth_user', JSON.stringify(updatedUser));
+    window.dispatchEvent(new Event('storage'));
     
-    // Hard redirect to force app state update
-    window.location.href = '/profile';
+    navigate(-1);
   };
 
   return (

@@ -1,30 +1,57 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
-import { 
-  LayoutDashboard, 
-  Settings, 
-  Box, 
+import {
+  LayoutDashboard,
+  Settings,
+  Box,
   ArrowRightLeft,
-  Calendar, 
-  Wrench, 
+  Calendar,
+  Wrench,
   ShieldCheck,
-  FileText, 
-  Bell, 
-  User, 
+  FileText,
+  Bell,
+  User,
   LogOut,
   Search,
   Menu
 } from 'lucide-react';
-import { currentUser } from '../data/mockData';
 import './DashboardLayout.css';
+
+const getAuthUser = () => {
+  try {
+    const u = JSON.parse(localStorage.getItem('auth_user'));
+    return u || { name: 'Admin User', role: 'Admin', email: '', avatar: null };
+  } catch {
+    return { name: 'Admin User', role: 'Admin', email: '', avatar: null };
+  }
+};
+
+const buildInitialsAvatar = (name) =>
+  `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=2563EB&color=fff&bold=true&size=80`;
 
 const DashboardLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [user, setUser] = useState(getAuthUser());
   const navigate = useNavigate();
 
+  // Re-read user on focus (after edit-profile saves)
+  useEffect(() => {
+    const onFocus = () => setUser(getAuthUser());
+    window.addEventListener('focus', onFocus);
+    window.addEventListener('storage', onFocus);
+    return () => {
+      window.removeEventListener('focus', onFocus);
+      window.removeEventListener('storage', onFocus);
+    };
+  }, []);
+
   const handleLogout = () => {
+    localStorage.removeItem('auth_user');
+    localStorage.removeItem('token');
     navigate('/login');
   };
+
+  const avatarSrc = user.avatar || buildInitialsAvatar(user.name);
 
   return (
     <div className="dashboard-layout">
@@ -104,8 +131,16 @@ const DashboardLayout = () => {
               <span className="badge">3</span>
             </button>
             <div className="user-profile" onClick={() => navigate('/profile')}>
-              <img src={currentUser.avatar} alt="User Avatar" className="avatar" />
-              <span className="user-name">{currentUser.name}</span>
+              <img
+                src={avatarSrc}
+                alt={user.name}
+                className="avatar"
+                onError={e => { e.target.src = buildInitialsAvatar(user.name); }}
+              />
+              <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.2 }}>
+                <span className="user-name">{user.name}</span>
+                <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>{user.role}</span>
+              </div>
             </div>
           </div>
         </header>

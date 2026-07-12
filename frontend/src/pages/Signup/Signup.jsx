@@ -32,13 +32,14 @@ const Signup = () => {
 
   const handleGoogleAuth = () => {
     const googleUser = {
-      name: "Google User",
-      email: "demo.user@gmail.com",
+      name: "Google Demo User",
+      email: "demo@gmail.com",
       phone: "+1 800 555 0199",
       department: "Cloud Operations",
       role: "Employee",
       status: "Active",
-      avatar: "https://www.svgrepo.com/show/475656/google-color.svg"
+      avatar: `https://ui-avatars.com/api/?name=Google+Demo+User&background=2563EB&color=fff&bold=true&size=128`,
+      joinDate: new Date().toISOString().split('T')[0],
     };
     localStorage.setItem('auth_user', JSON.stringify(googleUser));
     localStorage.setItem('token', 'google-oauth-demo-token');
@@ -86,10 +87,11 @@ const Signup = () => {
       name: fullName,
       email: email,
       phone: fullPhone,
-      department: 'Engineering',
+      department: 'General',
       role: 'Employee',
       status: 'Active',
-      avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(fullName)}&background=random`
+      avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(fullName)}&background=2563EB&color=fff&bold=true&size=128`,
+      joinDate: new Date().toISOString().split('T')[0],
     };
 
     try {

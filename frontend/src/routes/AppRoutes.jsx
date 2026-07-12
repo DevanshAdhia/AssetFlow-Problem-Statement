@@ -77,6 +77,8 @@ const AppRoutes = () => {
         <Route path="/asset-manager/reports" element={<AssetManagerReports />} />
         <Route path="/asset-manager/notifications" element={<AssetManagerNotifications />} />
         <Route path="/asset-manager/activity-logs" element={<AssetManagerActivityLogs />} />
+        <Route path="/asset-manager/profile" element={<Profile />} />
+        <Route path="/asset-manager/edit-profile" element={<EditProfile />} />
       </Route>
 
       {/* Error & Public Routes */}
